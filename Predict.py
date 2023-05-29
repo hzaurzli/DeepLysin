@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 import joblib
 from sklearn.linear_model import LogisticRegression as LR
-import time
+import time,os
 
 
 def get_base_proba(test_features,feature_index):
@@ -49,10 +49,9 @@ def input_args():
     return parser.parse_args()
 
 if __name__ == '__main__':
-    Path(os.path.abspath(Args.model_path) + '/meta/').mkdir(exist_ok=True,parents=True)
-    
+    args = input_args()
+    Path(os.path.abspath(args.model_path) + '/meta/').mkdir(exist_ok=True,parents=True)
     start_time = time.time()
-    
     clf_feature_order = {
       "AAE" : ["AAE_ERT"],
       "AAI" : ["AAI_XGB"],
@@ -62,21 +61,20 @@ if __name__ == '__main__':
       "GTPC" : ["GTPC_ANN","GTPC_XGB"]
     }
     
-    AAE_ERT = joblib.load(os.path.abspath(Args.model_path) + '/base/AAE_ERT.m')
-    AAI_XGB = joblib.load(os.path.abspath(Args.model_path) + '/base/AAI_XGB.m')
-    BPNC_ANN = joblib.load(os.path.abspath(Args.model_path) + '/base/BPNC_ANN.m')
-    CTD_LR = joblib.load(os.path.abspath(Args.model_path) + '/base/CTD_LR.m')
-    DPC_ANN = joblib.load(os.path.abspath(Args.model_path) + '/base/DPC_ANN.m')
-    DPC_KNN = joblib.load(os.path.abspath(Args.model_path) + '/base/DPC_KNN.m')
-    GTPC_ANN = joblib.load(os.path.abspath(Args.model_path) + '/base/GTPC_ANN.m')
-    GTPC_XGB = joblib.load(os.path.abspath(Args.model_path) + '/base/GTPC_XGB.m')
+    AAE_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/AAE_ERT.m')
+    AAI_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/AAI_XGB.m')
+    BPNC_ANN = joblib.load(os.path.abspath(args.model_path) + '/base/BPNC_ANN.m')
+    CTD_LR = joblib.load(os.path.abspath(args.model_path) + '/base/CTD_LR.m')
+    DPC_ANN = joblib.load(os.path.abspath(args.model_path) + '/base/DPC_ANN.m')
+    DPC_KNN = joblib.load(os.path.abspath(args.model_path) + '/base/DPC_KNN.m')
+    GTPC_ANN = joblib.load(os.path.abspath(args.model_path) + '/base/GTPC_ANN.m')
+    GTPC_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/GTPC_XGB.m')
     
-    if Path(os.path.abspath(Args.model_path) + '/meta/Meta.m').exists() is False:
-        X_train = pd.read_csv(os.path.abspath(Args.model_path) + '/Features/Base_features.csv')
+    if Path(os.path.abspath(args.model_path) + '/meta/Meta.m').exists() is False:
+        X_train = pd.read_csv(os.path.abspath(args.model_path) + '/Features/Base_features.csv')
         y = np.array([1 if i<(int(args.pos_num)) else 0 for i in range(int(args.pos_num)+int(args.neg_num))],dtype=int)
         meta_model(X_train,y)
     print('**********  Start  **********')
-    args = input_args()
     test_result = meta_pred(args.file)[:,-1]
     np.savetxt(args.out,test_result,fmt='%.4f',delimiter=',')
     stoptime = time.time()
