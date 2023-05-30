@@ -83,5 +83,5 @@ optional arguments:
 
 
 # Example
-python3 PredNeuroP.py -f ./datasets/test_lysin.fa -o data.csv -pr 2100 -nr 2051 -pe 900 -ne 879 -m ./Models/
+python3 Predict.py -f ./datasets/test_lysin.fa -o data.csv -pr 2100 -nr 2051 -pe 900 -ne 879 -m ./Models/
 ```
