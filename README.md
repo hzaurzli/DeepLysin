@@ -87,5 +87,10 @@ optional arguments:
 python3 Predict.py -f ./datasets/test_lysin.fa -o data.csv -pr 2100 -nr 2051 -pe 900 -ne 879 -m ./Models/
 ```
 
+# Reference database download
+Baidu：
+  Links：https://pan.baidu.com/s/1coUbBGpiSHmxgy418XWQDw 
+  Password：smrz
+
 # Cite
 If this software is useful, please cite [https://github.com/hzaurzli/DeepLysin](https://github.com/hzaurzli/DeepLysin)
