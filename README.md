@@ -32,6 +32,7 @@ python3 Sample_selection.py -a ./datasets/pos_lysin.fa -tr ./datasets/pos_train_
 ## For negative sample
 python3 Sample_selection.py -a ./datasets/neg_lysin.fa -tr ./datasets/neg_train_lysin.fa -te ./datasets/neg_test_lysin.fa -n 2051 -s 12345
 ## Make training set and testing set
+cd datasets
 cat pos_train_lysin.fa neg_train_lysin.fa > train_lysin.fa
 cat pos_test_lysin.fa neg_test_lysin.fa > test_lysin.fa
 
