@@ -87,6 +87,12 @@ optional arguments:
 python3 Predict.py -f ./datasets/test_lysin.fa -o data.csv -pr 2100 -nr 2051 -pe 900 -ne 879 -m ./Models/
 ```
 
+### 3. Prediction
+```
+# Example
+python3 Predict.py -f ./datasets/target_lysin.fa -o data.csv -m ./Models/
+```
+
 # Reference database download
 Baidu：
   Links：https://pan.baidu.com/s/1coUbBGpiSHmxgy418XWQDw 
