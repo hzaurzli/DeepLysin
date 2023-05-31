@@ -43,10 +43,10 @@ def input_args():
     parser.add_argument("--file", "-f", required = True,
                         help = "input test file(.fasta)")
     parser.add_argument("--out", "-o", required=True, help="Output path and filename")
-    parser.add_argument("--pos_train_num", "-pr", required=True, help="Train positive sample number")
-    parser.add_argument("--neg_train_num", "-nr", required=True, help="Train negative sample number")
-    parser.add_argument("--pos_test_num", "-pe", required=True, help="Test positive sample number")
-    parser.add_argument("--neg_test_num", "-ne", required=True, help="Test negative sample number")
+    parser.add_argument("--pos_train_num", "-pr", required=True, type=int, default=2100, help="Train positive sample number")
+    parser.add_argument("--neg_train_num", "-nr", required=True, type=int, default=2051, help="Train negative sample number")
+    parser.add_argument("--pos_test_num", "-pe", required=False, help="Test positive sample number")
+    parser.add_argument("--neg_test_num", "-ne", required=False, help="Test negative sample number")
     parser.add_argument("--model_path", "-m", required=True, help="Model path")
     return parser.parse_args()
 
@@ -83,9 +83,10 @@ if __name__ == '__main__':
     print('********** Finished **********')
     print(f'Result file saved in {args.out}')
     print(f'time cost:{stoptime-start_time}s')
-
-    from Metric import scores
-    y = np.array([1 if i < (int(args.pos_test_num)) else 0 for i in range(int(args.pos_test_num)+int(args.neg_test_num))], dtype=int)
-    metr1,metr2 = scores(y,test_result)
-    print(metr1)
-    print(metr2)
+    
+    if args.pos_test_num and args.neg_test_num !=None:
+        from Metric import scores
+        y = np.array([1 if i < (int(args.pos_test_num)) else 0 for i in range(int(args.pos_test_num)+int(args.neg_test_num))], dtype=int)
+        metr1,metr2 = scores(y,test_result)
+        print(metr1)
+        print(metr2)
