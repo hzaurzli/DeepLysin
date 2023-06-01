@@ -2,7 +2,7 @@
 DeepLysin,
 
 # Pipeline
-![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/97353455-fce7-4e1e-bdcf-52bb4bb26b0d)
+![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/ffc8dbd6-4f2d-4394-a765-6d01734fe307)
 
 # Usage
 ### 1. Training
