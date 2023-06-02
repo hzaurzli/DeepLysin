@@ -14,7 +14,7 @@ import argparse
 Randon_seed = 100
 
 
-def base_clf(clf,X_train,y_train,model_name,n_folds=10):
+def base_clf(clf,X_train,y_train,model_name,path,n_folds=10):
     ntrain = X_train.shape[0]
     nclass = len(np.unique(y_train))
     kf = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=Randon_seed)
@@ -27,11 +27,11 @@ def base_clf(clf,X_train,y_train,model_name,n_folds=10):
         clf.fit(kf_X_train, kf_y_train)
         base_train[test_index] = clf.predict_proba(kf_X_test)
     clf.fit(X_train,y_train)
-    joblib.dump(clf,f'./Models/base/{model_name}')
+    joblib.dump(clf, path + '/base/{model_name}')
     return base_train[:,-1]
     
 
-def process_train(fastafile, pos_num, neg_num):
+def process_train(fastafile, pos_num, neg_num, path):
     seqs = readFasta(fastafile)
     y_true = np.array([1 if i<int(pos_num) else 0 for i in range(int(pos_num)+int(neg_num))],dtype=int)
     train_features,feature_index = all_feature(seqs)
@@ -41,7 +41,7 @@ def process_train(fastafile, pos_num, neg_num):
         features = train_features[:,idx]
         for j in v:
             model = eval(j)
-            base_proba = base_clf(model,features,y_true,f'{k}_{j[:-4]}.m')
+            base_proba = base_clf(model,features,y_true,f'{k}_{j[:-4]}.m',path)
             base_feature.append(base_proba)
     return np.array(base_feature).T,y_true
 
@@ -75,7 +75,7 @@ if __name__ == '__main__':
         "GTPC" : ["ANN_clf","XGB_clf"]
     }
 
-    meta_features,y = process_train(Args.file, Args.pos_num, Args.neg_num)
+    meta_features,y = process_train(Args.file, Args.pos_num, Args.neg_num, os.path.abspath(Args.model_path))
     df = pd.DataFrame(meta_features)
     Path(os.path.abspath(Args.model_path) +'/Features/').mkdir(exist_ok=True,parents=True)
     df.to_csv(os.path.abspath(Args.model_path) + '/Features/Base_features.csv',index=False)
