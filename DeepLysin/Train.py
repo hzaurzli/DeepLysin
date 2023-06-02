@@ -27,7 +27,7 @@ def base_clf(clf,X_train,y_train,model_name,path,n_folds=10):
         clf.fit(kf_X_train, kf_y_train)
         base_train[test_index] = clf.predict_proba(kf_X_test)
     clf.fit(X_train,y_train)
-    joblib.dump(clf, path + '/base/{model_name}')
+    joblib.dump(clf, path + f'/base/{model_name}')
     return base_train[:,-1]
     
 
