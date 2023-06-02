@@ -1,5 +1,5 @@
 # DeepLysin
-DeepLysin,
+DeepLysin, easy and fast digging lysin from phages and prophages 
 
 # Pipeline
 ![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/ffc8dbd6-4f2d-4394-a765-6d01734fe307)
