@@ -34,7 +34,7 @@ def base_clf(clf,X_train,y_train,model_name,path,n_folds=10):
 def process_train(fastafile, pos_num, neg_num, path):
     seqs = readFasta(fastafile)
     y_true = np.array([1 if i<int(pos_num) else 0 for i in range(int(pos_num)+int(neg_num))],dtype=int)
-    train_features,feature_index = all_feature(seqs)
+    train_features,feature_index = all_feature(seqs, path)
     print(y_true)
     base_feature = []
     for idx,(k,v) in zip(feature_index,clf_feature_order.items()):
@@ -59,6 +59,31 @@ if __name__ == '__main__':
     start_time = time.time()
     njob = 8
     Path(os.path.abspath(Args.model_path) +'/base/').mkdir(exist_ok=True,parents=True)
+    Path(os.path.abspath(Args.model_path) +'/Features/').mkdir(exist_ok=True,parents=True)
+    Path(os.path.abspath(Args.model_path) +'/Features/' + 'AAEindex/').mkdir(exist_ok=True,parents=True)
+    
+    with open(os.path.abspath(Args.model_path) +'/Features/AAEindex/AAindex_1.txt','w') as w1:
+      line = 'AccNo	A	R	N	D	C	Q	E	G	H	I	L	K	M	F	P	S	T	W	Y	V' + '\n'
+      line = line + 'EISD840101	0.25	-1.76	-0.64	-0.72	0.04	-0.69	-0.62	0.16	-0.40	0.73	0.53	-1.10	0.26	0.61	-0.07	-0.26	-0.18	0.37	0.02	0.54' + '\n'
+      line = line + 'HOPT810101	-0.5	3.0	0.2	3.0	-1.0	0.2	3.0	0.0	-0.5	-1.8	-1.8	3.0	-1.3	-2.5	0.0	0.3	-0.4	-3.4	-2.3	-1.5' + '\n'
+      line = line + 'CHAM810101	0.52	0.68	0.76	0.76	0.62	0.68	0.68	0.00	0.70	1.02	0.98	0.68	0.78	0.70	0.36	0.53	0.50	0.70	0.70	0.76' + '\n'
+      line = line + 'EISD860101	0.67	-2.1	-0.6	-1.2	0.38	-0.22	-0.76	0.	0.64	1.9	1.9	-0.57	2.4	2.3	1.2	0.01	0.52	2.6	1.6	1.5' + '\n'
+      line = line + 'KYTJ820101	1.8	-4.5	-3.5	-3.5	2.5	-3.5	-3.5	-0.4	-3.2	4.5	3.8	-3.9	1.9	2.8	-1.6	-0.8	-0.7	-0.9	-1.3	4.2' + '\n'
+      line = line + 'MITS020101	0	2.45	0	0	0	1.25	1.27	0	1.45	0	0	3.67	0	0	0	0	0	6.93	5.06	0' + '\n'
+      line = line + 'DAWD720101	2.5	7.5	5.0	2.5	3.0	6.0	5.0	0.5	6.0	5.5	5.5	7.0	6.0	6.5	5.5	3.0	5.0	7.0	7.0	5.0' + '\n'
+      line = line + 'GRAR740102	8.1	10.5	11.6	13.0	5.5	10.5	12.3	9.0	10.4	5.2	4.9	11.3	5.7	5.2	8.0	9.2	8.6	5.4	6.2	5.9' + '\n'
+      line = line + 'BIGC670101	52.6	109.1	75.7	68.4	68.3	89.7	84.7	36.3	91.9	102.0	102.0	105.1	97.7	113.9	73.6	54.9	71.2	135.4	116.2	85.1'
+      w1.write(line)
+    w1.close()
+    
+    with open(os.path.abspath(Args.model_path) +'/Features/AAEindex/AAindex_2.txt','w') as w2:
+      line = 'AccNo	A	R	N	D	C	Q	E	G	H	I	L	K	M	F	P	S	T	W	Y	V' + '\n'
+      line = line + 'FAUJ880109	0.	4.	2.	1.	0.	2.	1.	0.	1.	0.	0.	2.	0.	0.	0.	1.	1.	1.	1.	0.' + '\n'
+      line = line + 'KLEP840101	0.	1.	0.	-1.	0.	0.	-1.	0.	0.	0.	0.	1.	0.	0.	0.	0.	0.	0.	0.	0.' + '\n'
+      line = line + 'FASG760101	89.09	174.20	132.12	133.10	121.15	146.15	147.13	75.07	155.16	131.17	131.17	146.19	149.21	165.19	115.13	105.09	119.12	204.24	181.19	117.15' + '\n'
+      w2.write(line)
+    w2.close()
+    
     
     ERT_clf = ERT(n_estimators=100, random_state = Randon_seed, n_jobs=njob)
     LR_clf = LR(solver='liblinear',random_state=Randon_seed)
@@ -77,7 +102,6 @@ if __name__ == '__main__':
 
     meta_features,y = process_train(Args.file, Args.pos_num, Args.neg_num, os.path.abspath(Args.model_path))
     df = pd.DataFrame(meta_features)
-    Path(os.path.abspath(Args.model_path) +'/Features/').mkdir(exist_ok=True,parents=True)
     df.to_csv(os.path.abspath(Args.model_path) + '/Features/Base_features.csv',index=False)
     stop_time = time.time()
     print(f'time:{stop_time-start_time}s')

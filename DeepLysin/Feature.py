@@ -63,10 +63,10 @@ def AAE(seq):
 
 
 # AAI
-def AAI_1(fastas):
+def AAI_1(fastas,path):
     encodings = []
-    fileAAindex1 = open(R'Features/pre/AAindex_1.txt')
-    fileAAindex2 = open(R'Features/pre/AAindex_2.txt')
+    fileAAindex1 = open(path + '/' + R'Features/AAEindex/AAindex_1.txt')
+    fileAAindex2 = open(path + '/' + R'Features/AAEindex/AAindex_2.txt')
     records1 = fileAAindex1.readlines()[1:]
     records2 = fileAAindex2.readlines()[1:]
     AAindex1 = []
@@ -94,15 +94,15 @@ def AAI_1(fastas):
     return encodings
 
 
-def AAI(seqs):
+def AAI(seqs, path):
     encodings = []
     for fastas in seqs:
         fastas_NT5 = "%s" % fastas[:5]
         fastas_CT5 = "%s" % fastas[-5:]
 
-        encodings_full = AAI_1(fastas)
-        encodings_CT5 = AAI_1(fastas_CT5)
-        encodings_NT5 = AAI_1(fastas_NT5)
+        encodings_full = AAI_1(fastas, path)
+        encodings_CT5 = AAI_1(fastas_CT5, path)
+        encodings_NT5 = AAI_1(fastas_NT5, path)
         encodings.append(encodings_full + encodings_NT5 + encodings_CT5)
     return encodings
 
@@ -270,7 +270,7 @@ def normalization(data):
     _range = np.max(data) - np.min(data)
     return (data - np.min(data)) / _range
 
-def all_feature(fastas):
+def all_feature(fastas,path):
     # feature_AAE = normalization(np.array(AAE(fastas)))
     # feature_AAI = normalization(np.array(AAI(fastas)))
     # feature_BPNC = normalization(np.array(BPNC(fastas)))
@@ -279,7 +279,7 @@ def all_feature(fastas):
     # feature_GTPC = normalization(np.array(GTPC(fastas)))
 
     feature_AAE = np.array(AAE(fastas))
-    feature_AAI = np.array(AAI(fastas))
+    feature_AAI = np.array(AAI(fastas,path))
     feature_BPNC = np.array(BPNC(fastas))
     feature_CTD = np.array(CTD(fastas))
     feature_DPC = np.array(DPC(fastas))
@@ -313,6 +313,7 @@ def input_args():
                         help = "select the sunsets of features(example:AAE or ALL)")
     parser.add_argument("--label", "-l", required=True, choices=[0,1], type=int,
                         help = "sample label,1 or 0")
+    parser.add_argument("--model_path", "-m", required=True, help="Model path")
     parser.add_argument("--out", "-o", required=True, help="output path and filename")
     return parser.parse_args()
 
@@ -329,7 +330,7 @@ if __name__ == '__main__':
     }
     fastas = readFasta(args.file)
     if args.method == 'ALL':
-        method,feature_subset_index = all_feature(fastas)
+        method,feature_subset_index = all_feature(fastas, os.path.abspath(Args.model_path))
         print(feature_subset_index)
     else:
         method = Select_feature.get(args.method, None)
