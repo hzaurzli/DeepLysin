@@ -1,6 +1,6 @@
 import argparse
 from pathlib import Path
-from Base_classifier import Randon_seed
+from Train import Randon_seed
 from Feature import all_feature,readFasta
 import pandas as pd
 import numpy as np
@@ -24,11 +24,11 @@ def meta_model(X,y,path):
     meta_clf.fit(X,y)
     joblib.dump(meta_clf,path)
 
-def meta_pred(fastafile, path):
+def meta_pred(fastafile, path_meta, path):
     seqs = readFasta(fastafile)
-    test_full_features, feature_index = all_feature(seqs)
+    test_full_features, feature_index = all_feature(seqs, path)
     base_feature = get_base_proba(test_full_features,feature_index)
-    meta_clf = joblib.load(path)
+    meta_clf = joblib.load(path_meta)
     result = meta_clf.predict_proba(base_feature)
     return result
 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
         y = np.array([1 if i<(int(args.pos_train_num)) else 0 for i in range(int(args.pos_train_num)+int(args.neg_train_num))],dtype=int)
         meta_model(X_train, y, os.path.abspath(args.model_path) + '/meta/Meta.m')
     print('**********  Start  **********')
-    test_result = meta_pred(args.file, os.path.abspath(args.model_path) + '/meta/Meta.m')[:,-1]
+    test_result = meta_pred(args.file, os.path.abspath(args.model_path) + '/meta/Meta.m', os.path.abspath(args.model_path))[:,-1]
     np.savetxt(args.out,test_result,fmt='%.4f',delimiter=',')
     stoptime = time.time()
     print('********** Finished **********')
