@@ -5,6 +5,7 @@ DeepLysin, easy and fast digging lysin from phages and prophages
 ![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/ffc8dbd6-4f2d-4394-a765-6d01734fe307)
 
 # Usage
+## A.Basic usage
 ### 1. Training
 **Step 1: random sample**
 ```
@@ -93,10 +94,96 @@ python3 Predict.py -f ./datasets/test_lysin.fa -o data.csv -pr 2100 -nr 2051 -pe
 python3 Predict.py -f ./datasets/target_lysin.fa -o data.csv -m ./Models/
 ```
 
+## B.Custom usage
+### 1. Training
+**Step 1: random sample**
+```
+usage: Sample_selection.py [-h] -a ALL_FA [-tr TRAIN] [-te TEST]
+                           [-p PART_SAMPLE] -num NUMBER -s SEED
+Sample fasta file
+optional arguments:
+  -h, --help            show this help message and exit
+  -a ALL_FA, --all_fa ALL_FA
+                        All the fasta dataset for your study
+  -tr TRAIN, --train TRAIN
+                        Training dataset
+  -te TEST, --test TEST
+                        Testing dataset
+  -p PART_SAMPLE, --part_sample PART_SAMPLE
+                        Part of all datasets that you can sample randomly
+  -num NUMBER, --number NUMBER
+                        Dataset size(number) for training dataset,remain for
+                        testing dataset.Or for part dataset
+  -s SEED, --seed SEED  Random seed
+  
+# Example for devide training set and testing set
+## For positive sample
+python3 Sample_selection.py -a ./datasets/pos_lysin.fa -tr ./datasets/pos_train_lysin.fa -te ./datasets/pos_test_lysin.fa -n 2100 -s 12345
+## For negative sample
+python3 Sample_selection.py -a ./datasets/neg_lysin.fa -tr ./datasets/neg_train_lysin.fa -te ./datasets/neg_test_lysin.fa -n 2051 -s 12345
+## Make training set and testing set
+cd datasets
+cat pos_train_lysin.fa neg_train_lysin.fa > train_lysin.fa
+cat pos_test_lysin.fa neg_test_lysin.fa > test_lysin.fa
+
+
+# Example to make part dataset
+python3 Sample_selection.py -a ./datasets/pos_lysin.fa -p ./datasets/part.fa -n 500 -s 12345
+```
+
+**Step 2: training model**
+```
+usage: Usage Tip;
+Classifier training
+optional arguments:
+  -h, --help            show this help message and exit
+  --file FILE, -f FILE  input file(.fasta)
+  --pos_num POS_NUM, -p POS_NUM
+                        positive sample number
+  --neg_num NEG_NUM, -n NEG_NUM
+                        negative sample number
+  --model_path MODEL_PATH, -m MODEL_PATH
+                        Model path
+  --model_list MODEL_LIST [MODEL_LIST ...]
+                        <Required> Base model
+  --feature_list FEATURE_LIST [FEATURE_LIST ...]
+                        <Required> Base feature
+
+
+
+# Example
+## Make model fold to save model
+mkdir Models
+## Training
+python3 Train_costom.py -f ./datasets/train_lysin.fa -p 2100 -n 2051 -m ./ANN_clf/ --model_list ANN_clf --feature_list AAE
+```
+##### Model type
+| Model    |     Param     |
+|----------|:-------------:|
+| Extremely randomized trees |  ERT_clf |
+| logistic regression |    LR_clf   |
+| Artificial neural network | ANN_clf |
+| Extreme gradient boosting | XGB_clf |
+| K-nearest neighbor | KNN_clf |
+
+##### Feature type
+| Feature    |     Param     |
+|----------|:-------------:|
+| Amino acid index |  AAI |
+| In grouped amino acid composition |  GAAC  |
+| Grouped dipeptide composition | GDPC |
+| Composition–transition–distribution | CTD |
+| Amino acid entropy | AAE |
+| Amino acid composition | AAC |
+| Dipeptide composition | DPC |
+| Binary Profile-Based feature | BPNC |
+
+
+
 # Reference database download
 Baidu：
   Links：https://pan.baidu.com/s/1coUbBGpiSHmxgy418XWQDw 
   Password：smrz
 
-# Cite
+# Cition
 If this software is useful, please cite [https://github.com/hzaurzli/DeepLysin](https://github.com/hzaurzli/DeepLysin)
