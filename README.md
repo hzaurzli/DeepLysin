@@ -155,7 +155,7 @@ optional arguments:
 ## Make model fold to save model
 mkdir Models
 ## Training
-python3 Train_costom.py -f ./datasets/train_lysin.fa -p 2100 -n 2051 -m ./ANN_clf/ --model_list ANN_clf XGB_clf --feature_list AAE AAI
+python3 Train_costom.py -f ./datasets/train_lysin.fa -p 2100 -n 2051 -m ./Model/ --model_list ANN_clf XGB_clf --feature_list AAE AAI
 ```
 ##### Model type
 | Model    |     Param     |
