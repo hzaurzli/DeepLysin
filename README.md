@@ -204,14 +204,14 @@ optional arguments:
 # Example
 python3 Predict_costom.py -f ./datasets/test_lysin.fa -o data.csv -pr 2100 -nr 2051 -pe 900 -ne 879 -m ./Models/ --feature_model AAE_ERT AAI_XGB BPNC_ANN CTD_LR DPC_ANN DPC_KNN GTPC_ANN GTPC_XGB
 ```
-```--feature_model``` ***is the combination of models and parameters, please see model type and feature type***
+```--feature_model``` ***is the combination of models and features, please see model type and feature type***
 
 ### 3. Prediction
 ```
 # Example
 python3 Predict_costom.py -f ./datasets/target_lysin.fa -o data.csv -m ./Models/ --feature_model AAE_ERT AAI_XGB BPNC_ANN CTD_LR DPC_ANN DPC_KNN GTPC_ANN GTPC_XGB
 ```
-```--feature_model``` ***is the combination of models and parameters, please see model type and feature type***
+```--feature_model``` ***is the combination of models and features, please see model type and feature type***
 
 
 # Reference database download
