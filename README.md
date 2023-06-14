@@ -2,7 +2,7 @@
 DeepLysin, easy and fast digging lysin from phages and prophages 
 
 # Pipeline
-![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/ffc8dbd6-4f2d-4394-a765-6d01734fe307)
+![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/8c83ce86-5343-41d9-ae29-21ec4f9cce13)
 
 # Usage
 ## A.Basic usage
