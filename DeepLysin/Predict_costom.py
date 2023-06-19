@@ -48,27 +48,31 @@ def input_args():
     parser.add_argument("--pos_test_num", "-pe", required=False, help="Test positive sample number")
     parser.add_argument("--neg_test_num", "-ne", required=False, help="Test negative sample number")
     parser.add_argument("--model_path", "-m", required=True, help="Model path")
+    parser.add_argument('--feature_model', nargs='+', help='<Required> Base feature model', required=True)
     return parser.parse_args()
 
 if __name__ == '__main__':
     args = input_args()
     Path(os.path.abspath(args.model_path) + '/meta/').mkdir(exist_ok=True,parents=True)
     start_time = time.time()
-    clf_feature_order = {
-        "AAE" : ["AAE_ERT","AAE_KNN","AAE_XGB"],
-        "CTD" : ["CTD_ERT","CTD_ANN","CTD_XGB"],
-        "DPC" : ["DPC_ERT","DPC_XGB"]
-    }
     
-    AAE_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/AAE_ERT.m')
-    AAE_KNN = joblib.load(os.path.abspath(args.model_path) + '/base/AAE_KNN.m')
-    AAE_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/AAE_XGB.m')
-    CTD_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/CTD_ERT.m')
-    CTD_ANN = joblib.load(os.path.abspath(args.model_path) + '/base/CTD_ANN.m')
-    CTD_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/CTD_XGB.m')
-    DPC_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/DPC_ERT.m')
-    DPC_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/DPC_XGB.m')
+    fmodel = args.feature_model
+    clf_feature_order = {}
     
+    for i in fmodel:
+      feature = i.split('_')[0]
+      model = i.split('_')[1]
+      if feature in clf_feature_order.keys():
+        clf_feature_order[feature].append(feature + '_' + model)
+      else:
+        clf_feature_order[feature] = []
+        clf_feature_order[feature].append(feature + '_' + model)
+        
+    for key in clf_feature_order:
+      for item in clf_feature_order[key]:
+        exec(item + ' = joblib.load(' + '"' + args.model_path + '/base/' + item + '.m")')
+    
+
     if Path(os.path.abspath(args.model_path) + '/meta/Meta.m').exists() is False:
         X_train = pd.read_csv(os.path.abspath(args.model_path) + '/Features/Base_features.csv')
         y = np.array([1 if i<(int(args.pos_train_num)) else 0 for i in range(int(args.pos_train_num)+int(args.neg_train_num))],dtype=int)
