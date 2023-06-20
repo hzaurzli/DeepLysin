@@ -58,7 +58,7 @@ if __name__ == '__main__':
     clf_feature_order = {
         "AAC" : ["AAC_ERT","AAC_ANN","AAC_XGB"],
         "BPNC" : ["BPNC_KNN","BPNC_ANN","BPNC_XGB"],
-        "CTD" : ["BPNC_ANN","BPNC_XGB"]
+        "CTD" : ["CTD_ANN","CTD_XGB"]
     }
 
     AAC_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/AAC_ERT.m')
