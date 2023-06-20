@@ -56,9 +56,9 @@ if __name__ == '__main__':
     start_time = time.time()
     
     clf_feature_order = {
-        "AAC" : ["ERT_clf","ANN_clf","XGB_clf"],
-        "BPNC" : ["KNN_clf","ANN_clf","XGB_clf"],
-        "CTD" : ["ANN_clf","XGB_clf"]
+        "AAC" : ["AAC_ERT","AAC_ANN","AAC_XGB"],
+        "BPNC" : ["BPNC_KNN","BPNC_ANN","BPNC_XGB"],
+        "CTD" : ["BPNC_ANN","BPNC_XGB"]
     }
 
     AAC_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/AAC_ERT.m')
