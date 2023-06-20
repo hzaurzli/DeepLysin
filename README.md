@@ -171,11 +171,9 @@ python3 Train_costom.py -f ./datasets/train_lysin.fa -p 2100 -n 2051 -m ./Model/
 |----------|:-------------:|
 | Amino acid index |  AAI |
 | In grouped amino acid composition |  GAAC  |
-| Grouped dipeptide composition | GDPC |
 | Composition–transition–distribution | CTD |
 | Amino acid entropy | AAE |
 | Amino acid composition | AAC |
-| Dipeptide composition | DPC |
 | Binary Profile-Based feature | BPNC |
 
 
