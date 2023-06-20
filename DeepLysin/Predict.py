@@ -54,20 +54,21 @@ if __name__ == '__main__':
     args = input_args()
     Path(os.path.abspath(args.model_path) + '/meta/').mkdir(exist_ok=True,parents=True)
     start_time = time.time()
-    clf_feature_order = {
-        "AAE" : ["AAE_ERT","AAE_KNN","AAE_XGB"],
-        "CTD" : ["CTD_ERT","CTD_ANN","CTD_XGB"],
-        "DPC" : ["DPC_ERT","DPC_XGB"]
-    }
     
-    AAE_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/AAE_ERT.m')
-    AAE_KNN = joblib.load(os.path.abspath(args.model_path) + '/base/AAE_KNN.m')
-    AAE_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/AAE_XGB.m')
-    CTD_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/CTD_ERT.m')
+    clf_feature_order = {
+        "AAC" : ["ERT_clf","ANN_clf","XGB_clf"],
+        "BPNC" : ["KNN_clf","ANN_clf","XGB_clf"],
+        "CTD" : ["ANN_clf","XGB_clf"]
+    }
+
+    AAC_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/AAC_ERT.m')
+    AAC_ANN = joblib.load(os.path.abspath(args.model_path) + '/base/AAC_ANN.m')
+    AAC_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/AAC_XGB.m')
+    BPNC_KNN = joblib.load(os.path.abspath(args.model_path) + '/base/BPNC_KNN.m')
+    BPNC_ANN = joblib.load(os.path.abspath(args.model_path) + '/base/BPNC_ANN.m')
+    BPNC_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/BPNC_XGB.m')
     CTD_ANN = joblib.load(os.path.abspath(args.model_path) + '/base/CTD_ANN.m')
     CTD_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/CTD_XGB.m')
-    DPC_ERT = joblib.load(os.path.abspath(args.model_path) + '/base/DPC_ERT.m')
-    DPC_XGB = joblib.load(os.path.abspath(args.model_path) + '/base/DPC_XGB.m')
     
     if Path(os.path.abspath(args.model_path) + '/meta/Meta.m').exists() is False:
         X_train = pd.read_csv(os.path.abspath(args.model_path) + '/Features/Base_features.csv')
