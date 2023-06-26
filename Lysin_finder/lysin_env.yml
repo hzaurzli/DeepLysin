@@ -1,4 +1,4 @@
-name: lyase_env
+name: lysin_finder_env
 channels:
   - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - conda-forge
