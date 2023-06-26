@@ -161,7 +161,7 @@ def Gene_element_abstract(ppn_out,ppn_fa,ppn_ffn):
     out_file.close()
 
 
-def molecular_weight(protein_fa,protein_filter_fa):
+def molecular_weight(protein_fa,protein_filter_fa,MW):
     protein_fa_info = open(protein_fa, "r")
     out_file = open(protein_filter_fa, "a")
     molecular_weight = open("./molecular_weight.txt", "w")
@@ -173,7 +173,7 @@ def molecular_weight(protein_fa,protein_filter_fa):
         if 'X' not in protein_seq and '*' not in protein_seq[:-1]:
             X = ProteinAnalysis(protein_seq)
             MW_cal = "%0.2f" % X.molecular_weight()
-            if float(MW_cal) <= 40000:
+            if float(MW_cal) <= float(MW):
                 element_record = SeqRecord(Seq_use, id=ID_contig, description=Desp)
                 SeqIO.write(element_record, out_file, "fasta")
                 molecular_weight.write(ID_contig + "\t" + MW_cal + "\n")
@@ -312,6 +312,7 @@ if __name__ == "__main__":
     parser.add_argument("-cd", "--cazy_db", required=True, type=str, help="hmmer database path")
     parser.add_argument("-rl", "--reported_lyase", required=True, type=str, help="reported lyase structures(hmm files)")
     parser.add_argument("-wkdir", "--workdir", required=True, type=str, help="Work directory")
+    parser.add_argument("-m", "--MW", required=False, type=float, help="proteins molecular weight")
     Args = parser.parse_args()
 
     tl = tools()
@@ -415,7 +416,7 @@ if __name__ == "__main__":
     tl.run(cmd_4)
 
     # step 7 calculate molecular weight
-    molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa')
+    molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MW))
 
     # step 8 scan CAZY database
     cazy_db = Args.cazy_db
