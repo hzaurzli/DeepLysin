@@ -39,10 +39,10 @@ class tools:
         self.prokka = 'prokka'
         self.phispy = 'PhiSpy.py'
         self.phanotate = 'phanotate.py'
-        self.cdHit = '/home/runzeli/software/cdhit/cd-hit/cd-hit'
+        self.cdHit = 'cd-hit'
         self.rundbcan = 'run_dbcan.py'
         self.hmmsearch = 'hmmsearch'
-        self.tmhmm = '/home/runzeli/software/tmhmm/tmhmm-2.0c/bin/tmhmm'
+        self.tmhmm = './tmhmm/tmhmm-2.0c/bin/tmhmm'
 
 
     def run(self, cmd, wkdir=None):
