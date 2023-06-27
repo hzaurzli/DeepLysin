@@ -36,7 +36,7 @@ python phage_lysin.py
   -m 400000                                  # proteins molecular weight
 ```
 
-## Step 2: DeepLysin scoring
+## Step 2: DeepLysin bactericidal activity scoring
 
 ## Usage
 ### A.Basic usage
