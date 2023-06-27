@@ -27,13 +27,13 @@ source activate lysin_env
 
 # run
 python phage_lysin.py
-  -p /.../input_path/ # genome sequnce path
-  -t Bacteria # prokka kingdom type    
-  -hd ./db/hmm/lysin_reported.hmm # cdhit cluster cutoff
-  -cd ./db/cazy/db/ # cazy database path
-  -rl ./db/hmm/lysin_reported.txt # reported lyase structures(hmm files)
-  -wkdir ./test/ # work directory
-  -m 400000 # proteins molecular weight
+  -p /.../input_path/                        # genome sequnce path
+  -t Bacteria                                # prokka kingdom type    
+  -hd ./db/hmm/lysin_reported.hmm            # cdhit cluster cutoff
+  -cd ./db/cazy/db/                          # cazy database path
+  -rl ./db/hmm/lysin_reported.txt            # reported lyase structures(hmm files)
+  -wkdir ./test/                             # work directory
+  -m 400000                                  # proteins molecular weight
 ```
 
 ## Step 2: DeepLysin scoring
