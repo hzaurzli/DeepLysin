@@ -309,9 +309,9 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--cdhit_cutoff", default=0.95,required=False, type=float, help="cdhit cluster cutoff")
     parser.add_argument("-hc", "--hmmer_cutoff", default=1e-5,required=False, type=float, help="hmmer search cutoff")
     parser.add_argument("-hd", "--hmmer_db", required=True, type=str, help="hmmer database path")
-    parser.add_argument("-cd", "--cazy_db", required=True, type=str, help="hmmer database path")
+    parser.add_argument("-cd", "--cazy_db", required=True, type=str, help="cazy database path")
     parser.add_argument("-rl", "--reported_lyase", required=True, type=str, help="reported lyase structures(hmm files)")
-    parser.add_argument("-wkdir", "--workdir", required=True, type=str, help="Work directory")
+    parser.add_argument("-wkdir", "--workdir", required=True, type=str, help="work directory")
     parser.add_argument("-m", "--MW", required=False, type=float, help="proteins molecular weight")
     Args = parser.parse_args()
 
