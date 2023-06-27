@@ -8,10 +8,10 @@ DeepLysin, easy and fast digging lysin from phages and prophages
 ### Install the software
 ```
 # install env
-conda env create -f lysin_env.yml
+conda env create -f lysin_finder_env.yml
 
 # activate env
-source activate lysin_env
+source activate lysin_finder_env
 ```
 
 If your perl version is not 5.22, please install perl=5.22
