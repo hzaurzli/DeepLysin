@@ -1,3 +1,35 @@
+# Lysin_finder
+## Install the software
+```
+# install env
+conda env create -f lysin_env.yml
+
+# activate env
+source activate lysin_env
+```
+
+If your perl version is not 5.22, please install perl=5.22
+```
+# install perl 5.22
+conda install -c anaconda perl=5.22
+```
+
+## Find putative lysins
+```
+# activate env
+source activate lysin_env
+
+# run
+python phage_lysin.py
+  -p /.../input_path/
+  -t Bacteria
+  -hd ./db/hmm/lysin_reported.hmm
+  -cd ./db/cazy/db/
+  -rl ./db/hmm/lysin_reported.txt
+  -wkdir ./test/
+  -m 400000
+```
+
 # DeepLysin
 DeepLysin, easy and fast digging lysin from phages and prophages 
 
