@@ -37,9 +37,10 @@ python phage_lysin.py
 ```
 
 ## Step 2: DeepLysin scoring
-# Usage
-## A.Basic usage
-### 1. Training
+
+## Usage
+### A.Basic usage
+#### 1. Training
 **Step 1: random sample**
 ```
 usage: Sample_selection.py [-h] -a ALL_FA [-tr TRAIN] [-te TEST]
@@ -97,7 +98,7 @@ mkdir Models
 python3 Train.py -f ./datasets/train_lysin.fa -p 2100 -n 2051 -m ./Models/ 
 ```
 
-### 2. Testing
+#### 2. Testing
 ```
 usage: Usage Tip;
 Prediction
@@ -121,14 +122,14 @@ optional arguments:
 python3 Predict.py -f ./datasets/test_lysin.fa -o data.csv -pr 2100 -nr 2051 -pe 900 -ne 879 -m ./Models/
 ```
 
-### 3. Prediction
+#### 3. Prediction
 ```
 # Example
 python3 Predict.py -f ./datasets/target_lysin.fa -o data.csv -m ./Models/
 ```
 
-## B.Custom usage
-### 1. Training
+### B.Custom usage
+#### 1. Training
 **Step 1: random sample**
 ```
 usage: Sample_selection.py [-h] -a ALL_FA [-tr TRAIN] [-te TEST]
@@ -210,7 +211,7 @@ python3 Train_costom.py -f ./datasets/train_lysin.fa -p 2100 -n 2051 -m ./Model/
 | Binary Profile-Based feature | BPNC |
 
 
-### 2. Testing
+#### 2. Testing
 ```
 usage: Usage Tip;
 Prediction
@@ -237,7 +238,7 @@ python3 Predict_costom.py -f ./datasets/test_lysin.fa -o data.csv -pr 2100 -nr 2
 ```
 ```--feature_model``` ***is the combination of models and features, please see model type and feature type***
 
-### 3. Prediction
+#### 3. Prediction
 ```
 # Example
 python3 Predict_costom.py -f ./datasets/target_lysin.fa -o data.csv -m ./Models/ --feature_model AAE_ERT AAI_XGB BPNC_ANN CTD_LR DPC_ANN DPC_KNN GTPC_ANN GTPC_XGB
