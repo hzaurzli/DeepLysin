@@ -1,5 +1,11 @@
-# Lysin_finder
-## Install the software
+# DeepLysin
+DeepLysin, easy and fast digging lysin from phages and prophages 
+
+# Pipeline
+![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/4a8cb2cf-da78-4d32-8bea-6eec9096e761)
+
+## Step 1: Lysin_finder: Find putative lysins
+### Install the software
 ```
 # install env
 conda env create -f lysin_env.yml
@@ -30,13 +36,7 @@ python phage_lysin.py
   -m 400000
 ```
 
-# DeepLysin
-DeepLysin, easy and fast digging lysin from phages and prophages 
-
-# Pipeline
-![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/4a8cb2cf-da78-4d32-8bea-6eec9096e761)
-
-
+## Step 2: DeepLysin scoring
 # Usage
 ## A.Basic usage
 ### 1. Training
