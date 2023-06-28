@@ -173,7 +173,7 @@ def molecular_weight(protein_fa,protein_filter_fa,MWU,MWL):
         if 'X' not in protein_seq and '*' not in protein_seq[:-1]:
             X = ProteinAnalysis(protein_seq)
             MW_cal = "%0.2f" % X.molecular_weight()
-            if float(MW_cal) <= float(MWU) and float(MW_cal) => float(MWL):
+            if float(MW_cal) <= float(MWU) and float(MW_cal) >= float(MWL):
                 element_record = SeqRecord(Seq_use, id=ID_contig, description=Desp)
                 SeqIO.write(element_record, out_file, "fasta")
                 molecular_weight.write(ID_contig + "\t" + MW_cal + "\n")
