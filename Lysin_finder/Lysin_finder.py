@@ -362,7 +362,7 @@ if __name__ == "__main__":
     parser.add_argument("-cd", "--cazy_db", required=True, type=str, help="cazy database path")
     parser.add_argument("-wkdir", "--workdir", required=True, type=str, help="work directory")
     parser.add_argument("-mu", "--MWU", required=False, default=40000, type=float, help="upper proteins molecular weight")
-    parser.add_argument("-ml", "--MWL", required=False, default=20000, type=float, help="lower proteins molecular weight")
+    parser.add_argument("-ml", "--MWL", required=False, default=10000, type=float, help="lower proteins molecular weight")
     parser.add_argument("-hde", "--hmmer_db_EAD", required=True, type=str, help="EAD hmmer database path")
     parser.add_argument("-rle", "--reported_lysin_EAD", required=True, type=str, help="reported lysin EAD structures(hmm files)")
     Args = parser.parse_args()
@@ -531,19 +531,19 @@ if __name__ == "__main__":
     else:
         os.mkdir('./hmmer_out_EAD/')
 
-    hmmer_db = Args.hmmer_db
-    if hmmer_db[0] == '.':
-        if hmmer_db[1] == '/':
-            hmmer_db_suffix = hmmer_db[1:]
-        elif hmmer_db[1] == '.':
-            curr_dir_hmmerdb = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-            hmmer_db_suffix = hmmer_db[2:]
+    hmmer_db_EAD = Args.hmmer_db_EAD
+    if hmmer_db_EAD[0] == '.':
+        if hmmer_db_EAD[1] == '/':
+            hmmer_db_EAD_suffix = hmmer_db_EAD[1:]
+        elif hmmer_db_EAD[1] == '.':
+            curr_dir_hmmerdb_EAD = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+            hmmer_db_EAD_suffix = hmmer_db_EAD[2:]
     else:
-        hmmer_db_suffix = hmmer_db
-        curr_dir_hmmerdb = ''
+        hmmer_db_EAD_suffix = hmmer_db_EAD
+        curr_dir_hmmerdb_EAD = ''
 
     cmd_7 = tl.run_hmmsearch('./hmmer_out_EAD/all_protein_filter_hmmer_out_EAD.txt', Args.hmmer_cutoff,
-                             curr_dir_hmmerdb + hmmer_db_suffix,
+                             curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
                              './all_protein_pfam_protein.fasta')
     tl.run(cmd_7)
 
@@ -552,13 +552,13 @@ if __name__ == "__main__":
         if reported_lysin_EAD[1] == '/':
             reported_lysin_EAD_suffix = reported_lysin_EAD[1:]
         elif reported_lysin_EAD[1] == '.':
-            curr_dir_rp = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+            curr_dir_rpe = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
             reported_lysin_EAD_suffix = reported_lysin_EAD[2:]
     else:
         reported_lysin_EAD_suffix = reported_lysin_EAD
-        curr_dir_rp = ''
+        curr_dir_rpe = ''
 
-    find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rp + reported_lysin_EAD_suffix)
+    find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rpe + reported_lysin_EAD_suffix)
 
     # step 11 combine results of CAZY and pfam and cdhit clustering
     os.system('cat all_protein_filter_cazyme.fasta all_protein_pfam_protein_EAD.fasta > cazyme_pfam.fasta')
@@ -571,7 +571,7 @@ if __name__ == "__main__":
     detete_TMhelix('./cazyme_pfam_cdhit.fasta','./cazyme_pfam_TMhelix.out')
 
     
-    os.system('rm -r ./CAZY_out/ ./hmmer_out/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./TMHMM*/')
+    os.system('rm -r ./CAZY_out/ ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./TMHMM*/')
     os.remove('./all_protein_cdhit.faa')
     os.remove('./all_protein_cdhit.faa.clstr')
     os.remove('./all_protein_cdhit_filter.faa')
