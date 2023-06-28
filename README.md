@@ -253,7 +253,7 @@ python3 Predict_costom.py -f ./datasets/target_lysin.fa -o data.csv -m ./Models/
 
 # Reference database download
 Baidu：
-  Links：https://pan.baidu.com/s/1coUbBGpiSHmxgy418XWQDw 
+  Links：https://pan.baidu.com/s/1coUbBGpiSHmxgy418XWQDw
   Password：smrz
 
 # Cition
