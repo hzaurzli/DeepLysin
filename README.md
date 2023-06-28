@@ -27,16 +27,18 @@ source activate lysin_finder_env
 
 # run
 python lysin_finder.py
-  -p /.../input_path/                        # genome sequnce path
-  -t Bacteria                                # prokka kingdom type    
-  -hd ./db/hmm/lysin_reported.hmm            # hmmer database path
-  -rl ./db/hmm/lysin_reported.txt            # reported lysin structures(hmm files)
-  -cd ./db/cazy/db/                          # cazy database path
-  -wkdir ./test/                             # work directory
-  -ml 100000                                 # lower proteins molecular weight
-  -mu 400000                                 # upper proteins molecular weight
-  -hde ./db/hmm/lysin_EAD_reported.hmm       # EAD hmmer database path
-  -rle ./db/hmm/lysin_EAD_reported.txt       # reported lysin EAD structures(hmm files)
+  -p /.../input_path/                               # genome sequnce path
+  -t Bacteria                                       # prokka kingdom type    
+  -hd ./db/hmm/lysin_reported.hmm                   # hmmer database path
+  -rl ./db/hmm/lysin_reported.txt                   # reported lysin structures(hmm files)
+  -cd ./db/cazy/db/                                 # cazy database path
+  -wkdir ./test/                                    # work directory
+  -ml 100000                                        # lower proteins molecular weight
+  -mu 400000                                        # upper proteins molecular weight
+  -hde ./db/hmm/lysin_EAD_reported.hmm              # EAD hmmer database path
+  -rle ./db/hmm/lysin_EAD_reported.txt              # reported lysin EAD structures(hmm files)
+  -hdp ./db/hmm/lysin_peptidases_reported.hmm       # peptidases hmmer database path
+  -rlp ./db/hmm/lysin_peptidases_reported.txt       # reported lysin peptidases structures(hmm files)
 ```
 
 ## Step 2: DeepLysin bactericidal activity scoring
