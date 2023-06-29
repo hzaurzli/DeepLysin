@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Lysin_finder.py 
+#  lysin_finder.py 
 #
 #  Copyright 2022 Small runze
 #  <small.runze@gmail.com> Small runze
