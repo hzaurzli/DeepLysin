@@ -25,6 +25,7 @@ import argparse
 import os,sys,re
 import subprocess as sub
 from subprocess import *
+import subprocess as sub
 import glob
 import shutil
 from Bio import SeqIO
@@ -35,14 +36,14 @@ from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
 
 class tools:
-    def __init__(self):
+    def __init__(self,tmhmm):
         self.prokka = 'prokka'
         self.phispy = 'PhiSpy.py'
         self.phanotate = 'phanotate.py'
         self.cdHit = 'cd-hit'
         self.rundbcan = 'run_dbcan.py'
         self.hmmsearch = 'hmmsearch'
-        self.tmhmm = './tmhmm/tmhmm-2.0c/bin/tmhmm'
+        self.tmhmm = tmhmm
 
 
     def run(self, cmd, wkdir=None):
@@ -386,7 +387,7 @@ def detete_TMhelix(cdhit_fasta,cazyme_pfam_TMhelix):
         if (protein_type_dele == "TMhelix") and (gen_id_dele_last in info_list):
             info_list.remove(gen_id_dele_last)
 
-    out_file = open("putative_lyase.fa", "a")
+    out_file = open("putative_lysins.fa", "a")
     for record in SeqIO.parse(input_file, 'fasta'):
         Contig_ID = record.id
         Desp = record.description
@@ -430,7 +431,9 @@ if __name__ == "__main__":
     else:
         os.mkdir(os.path.dirname(os.path.abspath(Args.workdir)) +'/' + resultdir + '/')
     
-    tl = tools()
+    
+    path_t = os.path.dirname(sub.getoutput('find ~/ -name lysin_finder.py'))
+    tl = tools(path_t + '/tmhmm/tmhmm-2.0c/bin/tmhmm')
     # step 1 prokka annotates ORFs
     curr_dir = sub.getoutput('pwd')
     os.chdir(Args.workdir)
@@ -551,7 +554,6 @@ if __name__ == "__main__":
     find_cazyme('./all_protein_cdhit_filter.faa','./CAZY_out/overview.txt')
 
     # step 9 hmmsearch reported lysin structure in pfam
-    tl = tools()
     if os.path.isdir('./hmmer_out/') == True:
         pass
     else:
@@ -561,6 +563,7 @@ if __name__ == "__main__":
     if hmmer_db[0] == '.':
         if hmmer_db[1] == '/':
             hmmer_db_suffix = hmmer_db[1:]
+            curr_dir_hmmerdb = curr_dir
         elif hmmer_db[1] == '.':
             curr_dir_hmmerdb = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
             hmmer_db_suffix = hmmer_db[2:]
@@ -577,6 +580,7 @@ if __name__ == "__main__":
     if reported_lysin[0] == '.':
         if reported_lysin[1] == '/':
             reported_lysin_suffix = reported_lysin[1:]
+            curr_dir_rp = curr_dir
         elif reported_lysin[1] == '.':
             curr_dir_rp = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
             reported_lysin_suffix = reported_lysin[2:]
@@ -588,7 +592,6 @@ if __name__ == "__main__":
     
     
     # step 10 Filter sequence without EAD
-    tl = tools()
     if os.path.isdir('./hmmer_out_EAD/') == True:
         pass
     else:
@@ -598,6 +601,7 @@ if __name__ == "__main__":
     if hmmer_db_EAD[0] == '.':
         if hmmer_db_EAD[1] == '/':
             hmmer_db_EAD_suffix = hmmer_db_EAD[1:]
+            curr_dir_hmmerdb_EAD = curr_dir
         elif hmmer_db_EAD[1] == '.':
             curr_dir_hmmerdb_EAD = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
             hmmer_db_EAD_suffix = hmmer_db_EAD[2:]
@@ -614,6 +618,7 @@ if __name__ == "__main__":
     if reported_lysin_EAD[0] == '.':
         if reported_lysin_EAD[1] == '/':
             reported_lysin_EAD_suffix = reported_lysin_EAD[1:]
+            curr_dir_rpe = curr_dir
         elif reported_lysin_EAD[1] == '.':
             curr_dir_rpe = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
             reported_lysin_EAD_suffix = reported_lysin_EAD[2:]
@@ -625,7 +630,6 @@ if __name__ == "__main__":
     
         
     # step 11 Find peptidases
-    tl = tools()
     if os.path.isdir('./hmmer_out_peptidases/') == True:
         pass
     else:
@@ -635,6 +639,7 @@ if __name__ == "__main__":
     if hmmer_db_peptidases[0] == '.':
         if hmmer_db_peptidases[1] == '/':
             hmmer_db_peptidases_suffix = hmmer_db_peptidases[1:]
+            curr_dir_hmmerdb_peptidases = curr_dir
         elif hmmer_db_peptidases[1] == '.':
             curr_dir_hmmerdb_peptidases = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
             hmmer_db_peptidases_suffix = hmmer_db_peptidases[2:]
@@ -651,6 +656,7 @@ if __name__ == "__main__":
     if reported_lysin_peptidases[0] == '.':
         if reported_lysin_peptidases[1] == '/':
             reported_lysin_peptidases_suffix = reported_lysin_peptidases[1:]
+            curr_dir_rpp = curr_dir
         elif reported_lysin_peptidases[1] == '.':
             curr_dir_rpp = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
             reported_lysin_peptidases_suffix = reported_lysin_peptidases[2:]
@@ -676,10 +682,10 @@ if __name__ == "__main__":
     os.remove('./all_protein_cdhit.faa.clstr')
     os.remove('./all_protein_cdhit_filter.faa')
     os.remove('./all_protein.faa')
-    os.remove('./all_protein_filter_cazyme.fasta')
+    # os.remove('./all_protein_filter_cazyme.fasta')
     os.remove('./all_protein_final_tmhmm_shortout.txt')
     os.remove('./all_protein_pfam_protein.fasta')
     os.remove('./cazyme_pfam_cdhit.fasta')
     os.remove('./cazyme_pfam_cdhit.fasta.clstr')
-    os.remove('./cazyme_pfam.fasta')
+    # os.remove('./cazyme_pfam.fasta')
     os.remove('./cazyme_pfam_TMhelix.out')
