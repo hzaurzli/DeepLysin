@@ -35,10 +35,10 @@ python lysin_finder.py
   -wkdir ./test/                                    # work directory
   -ml 100000                                        # lower proteins molecular weight
   -mu 400000                                        # upper proteins molecular weight
-  -hde ./db/hmm/lysin_EAD_reported.hmm              # EAD hmmer database path
-  -rle ./db/hmm/lysin_EAD_reported.txt              # reported lysin EAD structures(hmm files)
-  -hdp ./db/hmm/lysin_peptidases_reported.hmm       # peptidases hmmer database path
-  -rlp ./db/hmm/lysin_peptidases_reported.txt       # reported lysin peptidases structures(hmm files)
+  -hde ./db/hmm/lysin_reported_EAD.hmm              # EAD hmmer database path
+  -rle ./db/hmm/lysin_reported_EAD.txt              # reported lysin EAD structures(hmm files)
+  -hdp ./db/hmm/lysin_reported_peptidases.hmm       # peptidases hmmer database path
+  -rlp ./db/hmm/lysin_reported_peptidases.txt       # reported lysin peptidases structures(hmm files)
 ```
 
 ## Step 2: DeepLysin bactericidal activity scoring
