@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  lysin_finder.py 
+#  Lysin_finder.py 
 #
 #  Copyright 2022 Small runze
 #  <small.runze@gmail.com> Small runze
@@ -417,7 +417,19 @@ if __name__ == "__main__":
     parser.add_argument("-hdp", "--hmmer_db_peptidases", required=True, type=str, help="peptidases hmmer database path")
     parser.add_argument("-rlp", "--reported_lysin_peptidases", required=True, type=str, help="reported lysin peptidases structures(hmm files)")
     Args = parser.parse_args()
-
+    
+    if Args.workdir[-1] == '/':
+        resultdir = os.path.basename(Args.workdir[:-1])
+    elif Args.workdir[-1] == "\\":
+        resultdir = os.path.basename(Args.workdir[:-1])
+    else:
+        resultdir = os.path.basename(Args.workdir)
+    
+    if os.path.isdir(os.path.dirname(os.path.abspath(Args.workdir)) +'/' + resultdir + '/') == True:
+        pass
+    else:
+        os.mkdir(os.path.dirname(os.path.abspath(Args.workdir)) +'/' + resultdir + '/')
+    
     tl = tools()
     # step 1 prokka annotates ORFs
     curr_dir = sub.getoutput('pwd')
