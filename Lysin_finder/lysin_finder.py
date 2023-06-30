@@ -680,7 +680,7 @@ if __name__ == "__main__":
     os.system('rm -r ./CAZY_out/ ./hmmer_out/ ./hmmer_out_EAD/ ./hmmer_out_peptidases/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./TMHMM*/')
     os.remove('./all_protein_cdhit.faa')
     os.remove('./all_protein_cdhit.faa.clstr')
-    os.remove('./all_protein_cdhit_filter.faa')
+    # os.remove('./all_protein_cdhit_filter.faa')
     os.remove('./all_protein.faa')
     # os.remove('./all_protein_filter_cazyme.fasta')
     os.remove('./all_protein_final_tmhmm_shortout.txt')
