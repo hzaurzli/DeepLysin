@@ -21,7 +21,7 @@ conda install -c anaconda perl=5.22
 ```
 
 ### Find putative lysins
-***Notice:*** **Genome fasta file suffix is ```.fna```**
+***Notice:*** **Genome fasta file suffix is ```.fna```, to see example in Data fold**
 ```
 # activate env
 source activate lysin_finder_env
