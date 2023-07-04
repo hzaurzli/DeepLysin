@@ -21,14 +21,14 @@ conda install -c anaconda perl=5.22
 ```
 
 ### Find putative lysins
-**Genome fasta file suffix is ```.fna```**
+***Notice:*** **Genome fasta file suffix is ```.fna```**
 ```
 # activate env
 source activate lysin_finder_env
 
 # run
 python lysin_finder.py
-  -p /.../input_path/                               # genome sequnce path
+  -p /.../input_path/                               # genome sequnce path,Genome fasta file suffix is '.fna'
   -t Bacteria                                       # prokka kingdom type    
   -hd ./db/hmm/lysin_reported.hmm                   # hmmer database path
   -rl ./db/hmm/lysin_reported.txt                   # reported lysin structures(hmm files)
