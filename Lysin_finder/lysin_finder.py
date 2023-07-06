@@ -666,26 +666,24 @@ if __name__ == "__main__":
 
     find_pfam_peptidases('./all_protein_cdhit_filter.faa', curr_dir_rpp + reported_lysin_peptidases_suffix)
 
-    # step 12 combine results of CAZY and pfam and cdhit clustering
-    os.system('cat all_protein_filter_cazyme.fasta all_protein_pfam_protein_EAD.fasta all_protein_pfam_protein_peptidases.fasta > cazyme_pfam.fasta')
-    cmd_9 = tl.run_cdhit('./cazyme_pfam.fasta', './cazyme_pfam_cdhit.fasta', Args.cdhit_cutoff)
-    tl.run(cmd_9)
+    # step 12 combine results of CAZY and pfam
+    os.system('cat all_protein_filter_cazyme.fasta all_protein_pfam_protein_EAD.fasta all_protein_pfam_protein_peptidases.fasta > cazyme_pfam_EAD_peptidases.fasta')
 
     # step 13 remove TMhelix
-    cmd_10 = tl.run_tmhmm('./cazyme_pfam_cdhit.fasta','./cazyme_pfam_TMhelix.out')
-    tl.run(cmd_10)
-    detete_TMhelix('./cazyme_pfam_cdhit.fasta','./cazyme_pfam_TMhelix.out')
+    cmd_9 = tl.run_tmhmm('./cazyme_pfam_EAD_peptidases.fasta','./cazyme_pfam_TMhelix.out')
+    tl.run(cmd_9)
+    detete_TMhelix('./cazyme_pfam_EAD_peptidases.fasta','./cazyme_pfam_TMhelix.out')
 
     
     os.system('rm -r ./CAZY_out/ ./hmmer_out/ ./hmmer_out_EAD/ ./hmmer_out_peptidases/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./TMHMM*/')
     os.remove('./all_protein_cdhit.faa')
     os.remove('./all_protein_cdhit.faa.clstr')
-    # os.remove('./all_protein_cdhit_filter.faa')
+    os.remove('./all_protein_cdhit_filter.faa')
     os.remove('./all_protein.faa')
     # os.remove('./all_protein_filter_cazyme.fasta')
     os.remove('./all_protein_final_tmhmm_shortout.txt')
     os.remove('./all_protein_pfam_protein.fasta')
     os.remove('./cazyme_pfam_cdhit.fasta')
     os.remove('./cazyme_pfam_cdhit.fasta.clstr')
-    # os.remove('./cazyme_pfam.fasta')
+    # os.remove('./cazyme_pfam_EAD_peptidases.fasta')
     os.remove('./cazyme_pfam_TMhelix.out')
