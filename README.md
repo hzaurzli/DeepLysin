@@ -39,6 +39,7 @@ options:
 ```
 For example, if fasta file's suffix is '.fasta', run ```python rename_suffix.py -p ./data/ -s fasta```, that can change suffix '.fasta' into '.fna'
 
+And then, run ```lysin_finder.py```:
 ```
 # activate env
 source activate lysin_finder_env
