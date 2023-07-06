@@ -22,6 +22,7 @@ conda install -c anaconda perl=5.22
 
 ### Find putative lysins
 ***Notice:*** **Genome fasta file suffix is ```.fna```, to see example in Data fold**
+
 **If Genome fasta file suffix is not ```.fna```, you can run :**
 ```
 # Rename
