@@ -5,7 +5,7 @@ DeepLysin, easy and fast digging lysin from phages and prophages
 ![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/4a8cb2cf-da78-4d32-8bea-6eec9096e761)
 
 ## Step 1: Lysin_finder: Find putative lysins
-### Install the softwar
+### Install the software
 ```
 # install env
 conda env create -f lysin_finder_env.yml
