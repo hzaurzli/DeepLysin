@@ -474,8 +474,7 @@ if __name__ == "__main__":
         os.mkdir('./phispy_out/')
     for i in os.listdir('./prokka_result/'):
         cmd_2 = tl.run_phispy('./prokka_result/' + i + '/' + i + '.gbk',
-                          './phispy_out/' + i,
-                          i,0)
+                          './phispy_out/' + i, i,0)
         tl.run(cmd_2)
 
     # step 3 select 1,2,3,4 colum for coordinate.tsv
