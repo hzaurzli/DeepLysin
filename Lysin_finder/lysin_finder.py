@@ -206,6 +206,21 @@ def find_cazyme(cdhit_filter,cazy_overview):
     info_file.close()
 
 
+
+def fasta2dict(fasta_name):
+    with open(fasta_name) as fa:
+        fa_dict = {}
+        for line in fa:
+            line = line.replace('\n', '')
+            if line.startswith('>'):
+              seq_name = line[0:]
+              fa_dict[seq_name] = ''
+            else:
+              fa_dict[seq_name] += line.replace('\n', '')
+    return fa_dict
+
+    
+
 def find_pfam(cdhit_filter,lyase_list):
     input_file = open(cdhit_filter, "r")
     info_file = open('./hmmer_out/all_protein_filter_hmmer_out.txt', "r")
@@ -522,7 +537,16 @@ if __name__ == "__main__":
 
 
         # step 5 ppn faa together
-        os.system('cat ./orf_ffn/* > all_protein.faa')
+        os.system('cat ./orf_ffn/* > all_protein_ut.faa')
+        
+        fa_dict = fasta2dict('./all_protein_ut.faa')
+
+        with open('./all_protein.faa','w') as f:
+            for key in fa_dict:
+                if '*' not in fa_dict[key]:
+                    line = key + '\n' + fa_dict[key] + '\n'
+                    f.write(line)
+        f.close()
 
         # step 6 cdhit cluster
         cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa',Args.cdhit_cutoff)
@@ -690,6 +714,7 @@ if __name__ == "__main__":
         os.remove('./cazyme_pfam_EAD_peptidases_cdhit.fasta.clstr')
         os.remove('./cazyme_pfam_EAD_peptidases.fasta')
         os.remove('./cazyme_pfam_EAD_peptidases_cdhit_TMhelix.out')
+        os.remove('./all_protein_ut.faa')
 
     elif Args.bacteriaORphage == 'P':
         if Args.workdir[-1] == '/':
@@ -756,7 +781,16 @@ if __name__ == "__main__":
 
 
         # step 3 phage faa together
-        os.system('cat ./phage_faa/* > all_protein.faa')
+        os.system('cat ./phage_faa/* > all_protein_ut.faa')
+        
+        fa_dict = fasta2dict('./all_protein_ut.faa')
+
+        with open('./all_protein.faa','w') as f:
+            for key in fa_dict:
+                if '*' not in fa_dict[key]:
+                    line = key + '\n' + fa_dict[key] + '\n'
+                    f.write(line)
+        f.close()
 
         # step 4 cdhit cluster
         cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa',Args.cdhit_cutoff)
@@ -924,6 +958,7 @@ if __name__ == "__main__":
         os.remove('./cazyme_pfam_EAD_peptidases_cdhit.fasta.clstr')
         os.remove('./cazyme_pfam_EAD_peptidases.fasta')
         os.remove('./cazyme_pfam_EAD_peptidases_cdhit_TMhelix.out')
+        os.remove('./all_protein_ut.faa')
 
     else:
         raise('Error, please check parameter "--bp"')
