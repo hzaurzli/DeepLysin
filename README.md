@@ -58,6 +58,7 @@ python lysin_finder.py
   -rle ./db/hmm/lysin_reported_EAD.txt              # reported lysin EAD structures(hmm files)
   -hdp ./db/hmm/lysin_reported_peptidases.hmm       # peptidases hmmer database path
   -rlp ./db/hmm/lysin_reported_peptidases.txt       # reported lysin peptidases structures(hmm files)
+  -bp B                                             # 'B' for bacteria, 'P' for phage
 ```
 
 ## Step 2: DeepLysin bactericidal activity scoring
