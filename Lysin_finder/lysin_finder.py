@@ -786,9 +786,10 @@ if __name__ == "__main__":
         
         fa_dict = fasta2dict('./all_protein_ut.faa')
 
+        filters = ["B","Z","J","O","U","X",'*']
         with open('./all_protein.faa','w') as f:
             for key in fa_dict:
-                if '*' not in fa_dict[key]:
+                if all(f not in fa_dict[key] for f in filters):
                     line = key + '\n' + fa_dict[key] + '\n'
                     f.write(line)
         f.close()
