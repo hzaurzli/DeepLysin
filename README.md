@@ -17,8 +17,30 @@ source activate lysin_finder_env
 
 If your perl version is not 5.22, please install perl=5.22
 ```
+# activate env
+source activate lysin_finder_env
+
 # install perl 5.22
 conda install -c anaconda perl=5.22
+```
+
+If you don't have SignalP 6.0, please download from https://services.healthtech.dtu.dk/services/SignalP-6.0/
+```
+# activate env
+source activate lysin_finder_env
+
+# install torch==1.7.1
+pip install torch==1.7.1
+
+# unzip 
+tar zxvf signalp-6.0g.fast.tar.gz
+cd signalp6_fast/
+
+# pip install
+pip install signalp-6-package/
+
+# test
+signalp6 --help
 ```
 
 ### Find putative lysins
