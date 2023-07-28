@@ -2,23 +2,22 @@
 DeepLysin, easy and fast digging lysin from phages and prophages
 
 # Pipeline (Linux only, Internet)
-![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/ebcd10cf-e6c2-46af-99db-8947e20c5782)
-
+![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/298776eb-6732-4ce9-bd60-2b56de136a63)
 
 ## Step 1: Lysin_finder: Find putative lysins
 ### Install the software
 ```
 # install env
-conda env create -f lysin_finder_env.yml
+conda env create -f lysins_finder_env.yml
 
 # activate env
-source activate lysin_finder_env
+source activate lysins_finder_env
 ```
 
 If your perl version is not 5.22, please install perl=5.22
 ```
 # activate env
-source activate lysin_finder_env
+source activate lysins_finder_env
 
 # install perl 5.22
 conda install -c anaconda perl=5.22
@@ -27,7 +26,7 @@ conda install -c anaconda perl=5.22
 If you don't have SignalP 6.0, please download from https://services.healthtech.dtu.dk/services/SignalP-6.0/
 ```
 # activate env
-source activate lysin_finder_env
+source activate lysins_finder_env
 
 # install torch==1.7.1
 pip install torch==1.7.1
@@ -65,10 +64,10 @@ For example, if fasta file's suffix is '.fasta', run ```python rename_suffix.py 
 And then, run ```lysin_finder.py```:
 ```
 # activate env
-source activate lysin_finder_env
+source activate lysins_finder_env
 
 # run
-python lysin_finder.py
+python lysins_finder.py
   -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
   -t Bacteria                                       # prokka kingdom type    
   -hd ./db/hmm/lysin_reported.hmm                   # hmmer database path
