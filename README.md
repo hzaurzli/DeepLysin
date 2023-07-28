@@ -4,7 +4,7 @@ DeepLysin, easy and fast digging lysin from phages and prophages
 # Pipeline (Linux only, Internet)
 ![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/bc5e89f5-a063-492c-9a8b-f11d2bb0ec58)
 
-## Step 1: Lysin_finder: Find putative lysins
+## Step 1: Lysins_finder: Find putative lysins
 ### Install the software
 ```
 # install env
@@ -61,7 +61,7 @@ options:
 ```
 For example, if fasta file's suffix is '.fasta', run ```python rename_suffix.py -p ./data/ -s fasta```, that can change suffix '.fasta' into '.fna'
 
-And then, run ```lysin_finder.py```:
+And then, run ```lysins_finder.py```:
 ```
 # activate env
 source activate lysins_finder_env
