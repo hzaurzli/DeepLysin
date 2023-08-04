@@ -2,7 +2,7 @@
 DeepLysin, easy and fast digging lysin from phages and prophages
 
 # Pipeline (Linux only, Internet)
-![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/befe22d3-2070-42bc-8a33-bc979b2fd304)
+![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/1c96a843-88c7-4b75-94fa-c1f0788ce4ec)
 
 ## Step 1: Lysins_finder: Find putative lysins
 ### Install the software
