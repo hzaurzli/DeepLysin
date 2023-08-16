@@ -306,7 +306,7 @@ def input_args():
     """
 
     parser = argparse.ArgumentParser(usage="Usage Tip;",
-                                     description = "PreNeuroP Feature Extraction")
+                                     description = "DeepLysin Feature Extraction")
     parser.add_argument("--file", "-f", required = True,
                         help = "input file(.fasta)")
     parser.add_argument("--method", "-m", default='ALL',
