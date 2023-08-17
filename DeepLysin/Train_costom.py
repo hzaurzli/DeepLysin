@@ -64,7 +64,7 @@ if __name__ == '__main__':
     Path(os.path.abspath(Args.model_path) +'/Features/').mkdir(exist_ok=True,parents=True)
     Path(os.path.abspath(Args.model_path) +'/Features/' + 'AAEindex/').mkdir(exist_ok=True,parents=True)
     
-    with open(os.path.abspath(Args.model_path) +'/Features/AAEindex/AAindex_1.txt','w') as w1:
+    with open(os.path.abspath(Args.model_path) +'/Features/AAIindex/AAindex_1.txt','w') as w1:
       line = 'AccNo	A	R	N	D	C	Q	E	G	H	I	L	K	M	F	P	S	T	W	Y	V' + '\n'
       line = line + 'EISD840101	0.25	-1.76	-0.64	-0.72	0.04	-0.69	-0.62	0.16	-0.40	0.73	0.53	-1.10	0.26	0.61	-0.07	-0.26	-0.18	0.37	0.02	0.54' + '\n'
       line = line + 'HOPT810101	-0.5	3.0	0.2	3.0	-1.0	0.2	3.0	0.0	-0.5	-1.8	-1.8	3.0	-1.3	-2.5	0.0	0.3	-0.4	-3.4	-2.3	-1.5' + '\n'
@@ -78,7 +78,7 @@ if __name__ == '__main__':
       w1.write(line)
     w1.close()
     
-    with open(os.path.abspath(Args.model_path) +'/Features/AAEindex/AAindex_2.txt','w') as w2:
+    with open(os.path.abspath(Args.model_path) +'/Features/AAIindex/AAindex_2.txt','w') as w2:
       line = 'AccNo	A	R	N	D	C	Q	E	G	H	I	L	K	M	F	P	S	T	W	Y	V' + '\n'
       line = line + 'FAUJ880109	0.	4.	2.	1.	0.	2.	1.	0.	1.	0.	0.	2.	0.	0.	0.	1.	1.	1.	1.	0.' + '\n'
       line = line + 'KLEP840101	0.	1.	0.	-1.	0.	0.	-1.	0.	0.	0.	0.	1.	0.	0.	0.	0.	0.	0.	0.	0.' + '\n'
