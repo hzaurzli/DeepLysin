@@ -65,8 +65,8 @@ def AAE(seq):
 # AAI
 def AAI_1(fastas,path):
     encodings = []
-    fileAAindex1 = open(path + '/' + R'Features/AAEindex/AAindex_1.txt')
-    fileAAindex2 = open(path + '/' + R'Features/AAEindex/AAindex_2.txt')
+    fileAAindex1 = open(path + '/' + R'Features/AAIindex/AAindex_1.txt')
+    fileAAindex2 = open(path + '/' + R'Features/AAIindex/AAindex_2.txt')
     records1 = fileAAindex1.readlines()[1:]
     records2 = fileAAindex2.readlines()[1:]
     AAindex1 = []
