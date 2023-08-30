@@ -62,7 +62,7 @@ if __name__ == '__main__':
     njob = 8
     Path(os.path.abspath(Args.model_path) +'/base/').mkdir(exist_ok=True,parents=True)
     Path(os.path.abspath(Args.model_path) +'/Features/').mkdir(exist_ok=True,parents=True)
-    Path(os.path.abspath(Args.model_path) +'/Features/' + 'AAEindex/').mkdir(exist_ok=True,parents=True)
+    Path(os.path.abspath(Args.model_path) +'/Features/' + 'AAIindex/').mkdir(exist_ok=True,parents=True)
     
     with open(os.path.abspath(Args.model_path) +'/Features/AAIindex/AAindex_1.txt','w') as w1:
       line = 'AccNo	A	R	N	D	C	Q	E	G	H	I	L	K	M	F	P	S	T	W	Y	V' + '\n'
