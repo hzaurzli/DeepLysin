@@ -239,7 +239,7 @@ python3 Train_costom.py -f ./datasets/train_lysin.fa -p 2100 -n 2051 -m ./Model/
 | Model    |     Param     |
 |----------|:-------------:|
 | Extremely randomized trees |  ERT_clf |
-| logistic regression |    LR_clf   |
+| Logistic regression |    LR_clf   |
 | Artificial neural network | ANN_clf |
 | Extreme gradient boosting | XGB_clf |
 | K-nearest neighbor | KNN_clf |
