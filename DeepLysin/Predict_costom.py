@@ -57,22 +57,40 @@ if __name__ == '__main__':
     start_time = time.time()
     
     fmodel = args.feature_model
-    clf_feature_order = {}
+    dict_clf = {}
     
     for i in fmodel:
       feature = i.split('_')[0]
       model = i.split('_')[1]
-      if feature in clf_feature_order.keys():
-        clf_feature_order[feature].append(feature + '_' + model)
+      if feature in dict_clf.keys():
+        dict_clf[feature].append(feature + '_' + model)
       else:
-        clf_feature_order[feature] = []
-        clf_feature_order[feature].append(feature + '_' + model)
+        dict_clf[feature] = []
+        dict_clf[feature].append(feature + '_' + model)
+        
+    for key in dict_clf:
+      dict_tmp = {}
+      for item in dict_clf[key]:
+          feature = item.split('_')[0]
+          model = item.split('_')[1]
+          dict_tmp[model] = feature
+      dict_2 = dict(sorted(dict_tmp.items(), key=lambda i: i[0]))
+  
+      lis = []
+      for i in dict_2:
+          word = dict_2[i] + '_' + i
+          lis.append(word)
+      dict_clf[dict_2[i]] = lis
+      
+    clf_feature_order = dict(sorted(dict_clf.items(), key=lambda i: i[0]))
+    print(clf_feature_order)
         
     for key in clf_feature_order:
       for item in clf_feature_order[key]:
         exec(item + ' = joblib.load(' + '"' + args.model_path + '/base/' + item + '.m")')
+        
+    print(clf_feature_order)
     
-
     if Path(os.path.abspath(args.model_path) + '/meta/Meta.m').exists() is False:
         X_train = pd.read_csv(os.path.abspath(args.model_path) + '/Features/Base_features.csv')
         y = np.array([1 if i<(int(args.pos_train_num)) else 0 for i in range(int(args.pos_train_num)+int(args.neg_train_num))],dtype=int)

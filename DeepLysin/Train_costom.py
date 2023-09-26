@@ -96,13 +96,15 @@ if __name__ == '__main__':
     base_model = Args.model_list
     base_feature = Args.feature_list
     
-    
-    clf_feature_order = {}
+    dict_clf = {}
+    base_model = sorted(base_model, key=str.lower)
     
     for i in base_feature:
-      clf_feature_order[i] = base_model
+      dict_clf[i] = base_model
     
+    clf_feature_order = dict(sorted(dict_clf.items(), key=lambda i:i[0]))
     print(clf_feature_order)
+    
     meta_features,y = process_train(Args.file, Args.pos_num, Args.neg_num, os.path.abspath(Args.model_path))
     df = pd.DataFrame(meta_features)
     df.to_csv(os.path.abspath(Args.model_path) + '/Features/Base_features.csv',index=False)
