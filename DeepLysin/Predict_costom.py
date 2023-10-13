@@ -87,7 +87,7 @@ if __name__ == '__main__':
         
     for key in clf_feature_order:
       for item in clf_feature_order[key]:
-        exec(item + ' = joblib.load(' + '"' + args.model_path + '/base/' + item + '.m")')
+        exec(item + ' = joblib.load(' + '"' + os.path.abspath(args.model_path) + '/base/' + item + '.m")')
         
     print(clf_feature_order)
     
