@@ -83,7 +83,6 @@ if __name__ == '__main__':
       dict_clf[dict_2[i]] = lis
       
     clf_feature_order = dict(sorted(dict_clf.items(), key=lambda i: i[0]))
-    print(clf_feature_order)
         
     for key in clf_feature_order:
       for item in clf_feature_order[key]:
