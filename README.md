@@ -2,7 +2,7 @@
 DeepLysin, easy and fast digging lysin from phages and prophages
 
 # Pipeline (Linux only, Internet)
-![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/e6c2be9f-0c5e-44ab-a3fe-742fd765766a)
+![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/c5bb238a-84c4-43a0-8e73-4b43420ff283)
 
 ## Step 1: Lysins_finder: Find putative lysins
 ### Install the software
@@ -40,6 +40,15 @@ pip install signalp-6-package/
 
 # test
 signalp6 --help
+```
+
+Install DeepTMHMM
+```
+# activate env
+source activate lysin_finder_env
+
+# install
+pip3 install -U pybiolib
 ```
 
 ### Find putative lysins
