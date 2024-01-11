@@ -468,6 +468,23 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
               w.write(line)
       w.close()
 
+def fasta2dict(fasta_name):
+    with open(fasta_name) as fa:
+        fa_dict = {}
+        for line in fa:
+            # 去除末尾换行符
+            line = line.replace('\n', '')
+            if line.startswith('>'):
+                # 去除 > 号
+                seq_name = line[1:]
+                seq_name = seq_name.replace(' ', '')
+                seq_name = seq_name.replace('\t', '')
+                fa_dict[seq_name] = ''
+            else:
+                # 去除末尾换行符并连接多行序列
+                fa_dict[seq_name] += line.replace('\n', '')
+    return fa_dict
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Lysins finder")
@@ -719,6 +736,43 @@ if __name__ == "__main__":
             tl.run(cmd_8)
             remove_TMhelix('./biolib_results/predicted_topologies.3line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
 
+        dic_fa = {}
+        with open('./putative_lysins.fa') as f:
+            lines = f.readlines()  # 读取所有行
+            first_line = lines[0]
+            if first_line.startswith('>'):
+                state = 'Y'
+                dic_fa = fasta2dict('./putative_lysins.fa')
+            else:
+                state = 'N'
+        f.close()
+    
+        if state == 'Y':
+          f1 = open('./molecular_weight.txt')
+          with open('./MW_Length.txt', 'w') as w1:
+            for i in f1:
+              name = i.strip().split('\t')[0]
+              mw = i.strip().split('\t')[1]
+              if name in dic_fa.keys():
+                line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
+                w1.write(line)
+          w1.close()
+          os.system("sed -i '$d' %s" % ('./MW_Length.txt'))
+          
+          f2 = open('./hmmer_out/all_protein_filter_hmmer_out2.txt')
+          with open('./Domain_Info.txt', 'w') as w2:
+            for i in f2:
+              name = i.strip().split(' ')[0]
+              other = i.strip().split(' ')[1::]
+              if name in dic_fa.keys():
+                line = name + ' ' + ' '.join(other) + '\n'
+                w2.write(line)
+          w2.close()
+          os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
+                
+        else:
+          print(state)
+
         
         os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
         os.system('rm -r ./pfam_EAD_cdhit*')
@@ -730,6 +784,7 @@ if __name__ == "__main__":
         os.remove('./all_protein_pfam_protein_EAD.fasta')
         os.remove('./pfam_EAD.fasta')
         os.remove('./all_protein_ut.faa')
+        os.remove('./molecular_weight.txt')
 
     elif Args.bacteriaORphage == 'P':
         if Args.workdir[-1] == '/':
@@ -933,6 +988,43 @@ if __name__ == "__main__":
             tl.run(cmd_8)
             remove_TMhelix('./biolib_results/predicted_topologies.3line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
 
+        dic_fa = {}
+        with open('./putative_lysins.fa') as f:
+            lines = f.readlines()  # 读取所有行
+            first_line = lines[0]
+            if first_line.startswith('>'):
+                state = 'Y'
+                dic_fa = fasta2dict('./putative_lysins.fa')
+            else:
+                state = 'N'
+        f.close()
+    
+        if state == 'Y':
+          f1 = open('./molecular_weight.txt')
+          with open('./MW_Length.txt', 'w') as w1:
+            for i in f1:
+              name = i.strip().split('\t')[0]
+              mw = i.strip().split('\t')[1]
+              if name in dic_fa.keys():
+                line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
+                w1.write(line)
+          w1.close()
+          os.system("sed -i '$d' %s" % ('./MW_Length.txt'))
+          
+          f2 = open('./hmmer_out/all_protein_filter_hmmer_out2.txt')
+          with open('./Domain_Info.txt', 'w') as w2:
+            for i in f2:
+              name = i.strip().split(' ')[0]
+              other = i.strip().split(' ')[1::]
+              if name in dic_fa.keys():
+                line = name + ' ' + ' '.join(other) + '\n'
+                w2.write(line)
+          w2.close()
+          os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
+                
+        else:
+          print(state)
+
         
         os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
         os.system('rm -r ./pfam_EAD_cdhit*')
@@ -944,6 +1036,7 @@ if __name__ == "__main__":
         os.remove('./all_protein_pfam_protein_EAD.fasta')
         os.remove('./pfam_EAD.fasta')
         os.remove('./all_protein_ut.faa')
+        os.remove('./molecular_weight.txt')
 
     else:
         raise('Error, please check parameter "--bp"')
