@@ -598,6 +598,18 @@ if __name__ == "__main__":
                     f.write(line)
         f.close()
 
+        os.system('cat %s > %s' % ('./all_protein.faa', './all_protein_tmp.txt'))
+        with open('./all_protein.faa', 'w') as w:
+          f = open('./all_protein_tmp.txt')
+          for line in f:
+            if line.startswith('>'):
+              first_line = line[1::].strip()
+              name = first_line.split(' ')[0]
+              w.write('>' + name + '\n')
+            else:
+              w.write(line)
+        w.close()
+
         # step 6 cdhit cluster
         cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa',Args.cdhit_cutoff)
         tl.run(cmd_4)
@@ -766,6 +778,25 @@ if __name__ == "__main__":
             cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
                               './prokka_result/' + name + '/',name,type_annotation)
             tl.run(cmd_1)
+
+        
+        for i in os.listdir('./prokka_result/'):
+          for j in os.listdir('./prokka_result/' + i):
+            if j.endswith('.faa'):
+              os.system('cat %s > %s' % ('./prokka_result/' + i + '/' + j, './prokka_result/' + i + '/tmp.txt'))
+              with open('./prokka_result/' + i + '/' + j, 'w') as w:
+                f = open('./prokka_result/' + i + '/tmp.txt')
+                for line in f:
+                  if line.startswith('>'):
+                    print(line)
+                    first_line = line[1::].strip()
+                    key = first_line.split(' ')[0].split('_')[0]
+                    num = first_line.split(' ')[0].split('_')[1]
+                    name = j.split('.')[0]
+                    w.write('>' + name + '_' + num + '\n')
+                  else:
+                    w.write(line)
+              w.close()
         
 
         # step 2 move faa into phage_faa fold
