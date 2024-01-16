@@ -38,6 +38,9 @@ cd signalp6_fast/
 # pip install
 pip install signalp-6-package/
 
+# move distilled_model_signalp6.pt
+cp /signalp6_fast/signalp-6-package/models/distilled_model_signalp6.pt /miniconda3/envs/lysin_finder_env/lib/python3.7/site-packages/signalp/model_weights/distilled_model_signalp6.pt
+
 # test
 signalp6 --help
 ```
