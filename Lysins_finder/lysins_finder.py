@@ -807,7 +807,7 @@ if __name__ == "__main__":
           a = []
           b = []
           for lines in f3:
-            if lines[0] != "#":
+            if lines[0] != "#" and lines != '':
               line = lines.strip().split('\t')
               id_3 = line[0]
               if float(line[5]) > 0.5:
@@ -1128,7 +1128,7 @@ if __name__ == "__main__":
           a = []
           b = []
           for lines in f3:
-            if lines[0] != "#":
+            if lines[0] != "#" and lines != '':
               line = lines.strip().split('\t')
               id_3 = line[0]
               if float(line[5]) > 0.5:
