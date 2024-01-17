@@ -1121,7 +1121,7 @@ if __name__ == "__main__":
           for lines in f2:
             line = lines.strip().split('\t')
             id_2 = line[0]
-            pf = line[1] + '&&' + line[2] + '&&' + line[3] + '&&'  + line[4]
+            pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
             if id_2 in dic_info.keys():
               dic_info[id_2].append(pf)
         
