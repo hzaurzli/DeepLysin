@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Lysin_finder.py 
+#  Lysins_finder.py 
 #
 #  Copyright 2022 Small runze
 #  <small.runze@gmail.com> Small runze
@@ -840,6 +840,7 @@ if __name__ == "__main__":
             dic_info[i].append('NULL')
                   
           print(dic_info)
+        
           
           
           if Args.ref != '':
@@ -885,16 +886,19 @@ if __name__ == "__main__":
         else:
           print(state)
           
-        # os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-        # os.system('rm -r ./pfam_EAD_cdhit*')
-        # os.remove('./all_protein_cdhit.faa')
-        # os.remove('./all_protein_cdhit.faa.clstr')
-        # os.remove('./all_protein_cdhit_filter.faa')
-        # os.remove('./all_protein.faa')
-        # os.remove('./all_protein_pfam_protein.fasta')
-        # os.remove('./all_protein_pfam_protein_EAD.fasta')
-        # os.remove('./pfam_EAD.fasta')
-        # os.remove('./all_protein_ut.faa')
+        os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+        os.system('rm -r ./pfam_EAD_cdhit*')
+        os.remove('./all_protein_cdhit.faa')
+        os.remove('./all_protein_cdhit.faa.clstr')
+        os.remove('./all_protein_cdhit_filter.faa')
+        os.remove('./all_protein.faa')
+        os.remove('./all_protein_pfam_protein.fasta')
+        os.remove('./all_protein_pfam_protein_EAD.fasta')
+        os.remove('./pfam_EAD.fasta')
+        os.remove('./all_protein_ut.faa')
+        os.remove('./MW_Length.txt')
+        os.remove('./Domain_Info.txt')
+        os.remove('./molecular_weight.txt')
 
     elif Args.bacteriaORphage == 'P':
         if Args.workdir[-1] == '/':
@@ -1236,16 +1240,19 @@ if __name__ == "__main__":
           print(state)
           
           
-        # os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-        # os.system('rm -r ./pfam_EAD_cdhit*')
-        # os.remove('./all_protein_cdhit.faa')
-        # os.remove('./all_protein_cdhit.faa.clstr')
-        # os.remove('./all_protein_cdhit_filter.faa')
-        # os.remove('./all_protein.faa')
-        # os.remove('./all_protein_pfam_protein.fasta')
-        # os.remove('./all_protein_pfam_protein_EAD.fasta')
-        # os.remove('./pfam_EAD.fasta')
-        # os.remove('./all_protein_ut.faa')
+        os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+        os.system('rm -r ./pfam_EAD_cdhit*')
+        os.remove('./all_protein_cdhit.faa')
+        os.remove('./all_protein_cdhit.faa.clstr')
+        os.remove('./all_protein_cdhit_filter.faa')
+        os.remove('./all_protein.faa')
+        os.remove('./all_protein_pfam_protein.fasta')
+        os.remove('./all_protein_pfam_protein_EAD.fasta')
+        os.remove('./pfam_EAD.fasta')
+        os.remove('./all_protein_ut.faa')
+        os.remove('./MW_Length.txt')
+        os.remove('./Domain_Info.txt')
+        os.remove('./molecular_weight.txt')
 
     else:
         raise('Error, please check parameter "--bp"')
