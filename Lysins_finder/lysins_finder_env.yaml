@@ -1,4 +1,4 @@
-name: lysin_finder_env
+name: lysins_finder_env
 channels:
   - https://mirrors.bfsu.edu.cn/anaconda/pkgs/main
   - conda-forge
@@ -25,15 +25,14 @@ dependencies:
   - bx-python=0.9.0=py37hfa8f21c_0
   - bzip2=1.0.8=h7f98852_4
   - c-ares=1.18.1=h7f98852_0
-  - ca-certificates=2023.5.7=hbcca054_0
+  - ca-certificates=2023.11.17=hbcca054_0
   - cairo=1.16.0=ha61ee94_1013
   - cd-hit=4.8.1=h5b5514e_7
-  - certifi=2023.5.7=pyhd8ed1ab_0
+  - certifi=2023.11.17=pyhd8ed1ab_0
   - clustalw=2.1=h9f5acd7_7
   - curl=7.83.1=h7bff187_0
   - cycler=0.11.0=pyhd8ed1ab_0
   - diamond=2.0.15=hb97b32f_1
-  - emboss=6.6.0=haa49230_5
   - entrez-direct=16.2=he881be0_1
   - expat=2.4.8=h27087fc_0
   - fastpath=1.9=py37h5e8e339_1
@@ -114,7 +113,7 @@ dependencies:
   - numpy=1.21.6=py37h976b520_0
   - openjdk=17.0.3=h1e1ecb3_1
   - openjpeg=2.5.0=h7d73246_1
-  - openssl=1.1.1u=hd590300_0
+  - openssl=1.1.1w=hd590300_0
   - packaging=21.3=pyhd8ed1ab_0
   - paml=4.9=hec16e2b_7
   - pandas=1.3.5=py37h8c16a72_0
@@ -219,7 +218,6 @@ dependencies:
   - perl-xml-simple=2.25=pl5321hdfd78af_2
   - perl-xml-xpathengine=0.14=pl5321hdfd78af_3
   - phanotate=1.5.0=h96cfd12_2
-  - pharokka=0.1.9=hdfd78af_0
   - phispy=4.2.21=py37h96cfd12_1
   - pillow=9.2.0=py37h850a105_2
   - pip=22.2.2=pyhd8ed1ab_0
@@ -289,6 +287,9 @@ dependencies:
       - pyyaml==6.0.1
       - requests==2.31.0
       - rich==13.7.0
+      - signalp6==6.0+g
+      - torch==1.7.1
+      - tqdm==4.66.1
       - urllib3==2.0.7
       - websocket-client==1.6.1
       - zipp==3.15.0
