@@ -866,7 +866,7 @@ if __name__ == "__main__":
 
 
             with open('./putative_lysins_info.txt','w') as w:
-              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Signalp' + '\t' + 'Domains' + '\t' + 'Reference similarity' + '\n'
+              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
               w.write(line)
               for key in dic_info:
                 line = key + '\t' + '\t'.join(dic_info[key][0:3]) + '\t' + ';'.join(dic_info[key][3::]) + '\t' + '\t'.join(dic_ref[key]) + '\n'
@@ -876,7 +876,7 @@ if __name__ == "__main__":
                     
           elif Args.ref == '':
             with open('./putative_lysins_info.txt','w') as w:
-              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Signalp' + '\t' + 'Domains' + '\n'
+              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
               w.write(line)
               for key in dic_info:
                 line = key + '\t' + '\t'.join(dic_info[key][0:3]) + '\t' + ';'.join(dic_info[key][3::]) + '\n'
