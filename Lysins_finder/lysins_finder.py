@@ -869,7 +869,7 @@ if __name__ == "__main__":
               line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
               w.write(line)
               for key in dic_info:
-                line = key + '\t' + '\t'.join(dic_info[key][0:3]) + '\t' + ';'.join(dic_info[key][3::]) + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
                 w.write(line)
             w.close()
             
@@ -879,7 +879,7 @@ if __name__ == "__main__":
               line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
               w.write(line)
               for key in dic_info:
-                line = key + '\t' + '\t'.join(dic_info[key][0:3]) + '\t' + ';'.join(dic_info[key][3::]) + '\n'
+                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
                 w.write(line)
             w.close()
               
@@ -1226,7 +1226,7 @@ if __name__ == "__main__":
               line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
               w.write(line)
               for key in dic_info:
-                line = key + '\t' + '\t'.join(dic_info[key][0:3]) + '\t' + ';'.join(dic_info[key][3::]) + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
                 w.write(line)
             w.close()
             
@@ -1236,7 +1236,7 @@ if __name__ == "__main__":
               line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
               w.write(line)
               for key in dic_info:
-                line = key + '\t' + '\t'.join(dic_info[key][0:3]) + '\t' + ';'.join(dic_info[key][3::]) + '\n'
+                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
                 w.write(line)
             w.close()
             
