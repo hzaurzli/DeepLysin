@@ -1024,6 +1024,11 @@ if __name__ == "__main__":
                                  './all_protein_cdhit_filter.faa')
         tl.run(cmd_5)
 
+        cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
+                                   curr_dir_hmmerdb + hmmer_db_suffix,
+                                   './all_protein_cdhit_filter.faa')
+        tl.run(cmd_5_p)
+
         reported_lysin = Args.reported_lysin
         if reported_lysin[0] == '.':
             if reported_lysin[1] == '/':
