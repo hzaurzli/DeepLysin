@@ -96,7 +96,39 @@ if __name__ == '__main__':
         meta_model(X_train, y, os.path.abspath(args.model_path) + '/meta/Meta.m')
     print('**********  Start  **********')
     test_result = meta_pred(args.file, os.path.abspath(args.model_path) + '/meta/Meta.m', os.path.abspath(args.model_path))[:,-1]
-    np.savetxt(args.out,test_result,fmt='%.4f',delimiter=',')
+    np.savetxt(os.path.dirname(os.path.abspath(args.out)) + '/tmpLysinActivity.txt',test_result,fmt='%.4f',delimiter=',')
+    
+    with open(args.file) as fa:
+      fa_dict = {}
+      for line in fa:
+          line = line.replace('\n', '')
+          if line.startswith('>'):
+              seq_name = line[1:]
+              fa_dict[seq_name] = ''
+          else:
+              fa_dict[seq_name] += line.replace('\n', '')
+    fa.close()
+
+    lis = []
+    with open(os.path.dirname(os.path.abspath(args.out)) + '/tmpLysinActivity.txt') as ac:
+      for i in ac:
+          i = i.replace('\n', '')
+          lis.append(i)
+    ac.close()
+
+    for i_1 in range(0, len(lis)):
+      key = list(fa_dict.keys())[i_1]
+      val = [fa_dict.get(key, [])] + [lis[i_1]]
+      fa_dict[key] = val
+
+    with open(args.out, 'w') as f:
+      for key in fa_dict:
+          lines = key + '\t' + fa_dict[key][0] + '\t' + fa_dict[key][1] + '\n'
+          print(lines)
+          f.write(lines)
+    f.close()
+
+    os.remove(os.path.dirname(os.path.abspath(args.out)) + '/tmpLysinActivity.txt')
     stoptime = time.time()
     print('********** Finished **********')
     print(f'Result file saved in {args.out}')
