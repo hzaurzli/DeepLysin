@@ -550,8 +550,9 @@ if __name__ == "__main__":
 
         type_annotation = Args.type
         for i in os.listdir(curr_dir_target + target_suffix):
-            name = i.split('.')[0]
-            suffix = i.split('.')[1]
+            lis = i.split('.')[:-1]
+            name = '.'.join(lis)
+            suffix = i.split('.')[-1]
             cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
                               './prokka_result/' + name + '/',name,type_annotation)
             tl.run(cmd_1)
@@ -942,8 +943,9 @@ if __name__ == "__main__":
 
         type_annotation = Args.type
         for i in os.listdir(curr_dir_target + target_suffix):
-            name = i.split('.')[0]
-            suffix = i.split('.')[1]
+            lis = i.split('.')[:-1]
+            name = '.'.join(lis)
+            suffix = i.split('.')[-1]
             cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
                               './prokka_result/' + name + '/',name,type_annotation)
             tl.run(cmd_1)
@@ -960,7 +962,8 @@ if __name__ == "__main__":
                     first_line = line[1::].strip()
                     key = first_line.split(' ')[0].split('_')[0]
                     num = first_line.split(' ')[0].split('_')[1]
-                    name = j.split('.')[0]
+                    lis = j.split('.')[:-1]
+                    name = '.'.join(lis)
                     w.write('>' + name + '_' + num + '\n')
                   else:
                     w.write(line)
