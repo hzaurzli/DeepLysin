@@ -449,7 +449,7 @@ def dict_slice(adict, start, end):
 
 def Split_fa(fasta_name,tot, num_1, num_2):    
     dict = fasta2dict(fasta_name)
-    for i in range(1,num_1):
+    for i in range(1,num_1 + 1):
       dic = dict_slice(dict, int(str(i) + '00') - 100, int(str(i) + '00'))
       with open('./pfam_EAD_cdhit-' + str(i) + '00.fasta','w') as w:
         for key in dic:
@@ -457,7 +457,7 @@ def Split_fa(fasta_name,tot, num_1, num_2):
           w.write(line)
       w.close()
     
-    with open('./pfam_EAD_cdhit-' + str(int(str(num_1) + '00')) + '.fasta','w') as w:
+    with open('./pfam_EAD_cdhit-' + str(int(str(num_1 + 1) + '00')) + '.fasta','w') as w:
       dic = dict_slice(dict, int(str(num_1) + '00'), int(str(num_1) + '00') + int(num_2))
       for key in dic:
         line = key + '\n' + dic[key] + '\n'
@@ -737,7 +737,7 @@ if __name__ == "__main__":
             num_2 = int(tot)%100
             Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
           
-            for i in range(1, int(num_1) + 1):
+            for i in range(1, int(num_1) + 2):
                cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
                tl.run(cmd_8)
                
@@ -1098,7 +1098,7 @@ if __name__ == "__main__":
             num_2 = int(tot)%100
             Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
           
-            for i in range(1, int(num_1) + 1):
+            for i in range(1, int(num_1) + 2):
                cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
                tl.run(cmd_8)
                
