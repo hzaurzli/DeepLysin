@@ -471,7 +471,7 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
   for i in f:
     if i.startswith('>'):
       type = i.strip().split(' ')[2]
-      if type == 'GLOB':
+      if type == 'GLOB' or type == 'SP':
         id = i[1::].strip().split(' ')[0]
         lis.append(id)
 
