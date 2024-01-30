@@ -457,12 +457,13 @@ def Split_fa(fasta_name,tot, num_1, num_2):
           w.write(line)
       w.close()
     
-    with open('./pfam_EAD_cdhit-' + str(int(str(num_1 + 1) + '00')) + '.fasta','w') as w:
-      dic = dict_slice(dict, int(str(num_1) + '00'), int(str(num_1) + '00') + int(num_2))
-      for key in dic:
-        line = key + '\n' + dic[key] + '\n'
-        w.write(line)
-    w.close()
+   if num_2 != 0:
+      with open('./pfam_EAD_cdhit-' + str(int(str(num_1 + 1) + '00')) + '.fasta','w') as w:
+        dic = dict_slice(dict, int(str(num_1) + '00'), int(str(num_1) + '00') + int(num_2))
+        for key in dic:
+          line = key + '\n' + dic[key] + '\n'
+          w.write(line)
+      w.close()
     
     
 def remove_TMhelix(TMhelix_path,fa,fa_out):
