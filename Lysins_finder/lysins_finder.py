@@ -22,7 +22,8 @@
 
 
 import argparse
-import os,sys,re
+import os,sys,re,time
+import random
 import subprocess as sub
 from subprocess import *
 import subprocess as sub
@@ -739,6 +740,8 @@ if __name__ == "__main__":
             Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
           
             for i in range(1, int(num_1) + 2):
+               time_sleep = random.uniform(60, 180)
+               time.sleep(time_sleep)
                cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
                tl.run(cmd_8)
                
@@ -1100,6 +1103,8 @@ if __name__ == "__main__":
             Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
           
             for i in range(1, int(num_1) + 2):
+               time_sleep = random.uniform(60, 180)
+               time.sleep(time_sleep)
                cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
                tl.run(cmd_8)
                
