@@ -48,7 +48,7 @@ signalp6 --help
 Install DeepTMHMM
 ```
 # activate env
-source activate lysin_finder_env
+source activate lysins_finder_env
 
 # install
 pip3 install -U pybiolib
