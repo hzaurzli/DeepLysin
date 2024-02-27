@@ -450,7 +450,7 @@ def dict_slice(adict, start, end):
 
 def Split_fa(fasta_name,tot, num_1, num_2):    
     dict = fasta2dict(fasta_name)
-    for i in range(1,num_1 + 1):
+    for i in range(1,num_1):
       dic = dict_slice(dict, int(str(i) + '00') - 100, int(str(i) + '00'))
       with open('./pfam_EAD_cdhit-' + str(i) + '00.fasta','w') as w:
         for key in dic:
@@ -458,7 +458,7 @@ def Split_fa(fasta_name,tot, num_1, num_2):
           w.write(line)
       w.close()
     
-   if num_2 != 0:
+    if num_2 != 0:
       with open('./pfam_EAD_cdhit-' + str(int(str(num_1 + 1) + '00')) + '.fasta','w') as w:
         dic = dict_slice(dict, int(str(num_1) + '00'), int(str(num_1) + '00') + int(num_2))
         for key in dic:
@@ -610,300 +610,313 @@ if __name__ == "__main__":
                                           './ppn/' + i + '/' + j,
                                           './orf_ffn/' + j_prefix + '.ffn')
 
-
-        # step 5 ppn faa together
-        os.system('cat ./orf_ffn/* > all_protein_ut.faa')
         
-        fa_dict = fasta2dict('./all_protein_ut.faa')
-        filters = ["B","Z","J","O","U","X",'*']
-
-        with open('./all_protein.faa','w') as f:
-            for key in fa_dict:
-                if all(f not in fa_dict[key] for f in filters):
-                    line = key + '\n' + fa_dict[key] + '\n'
-                    f.write(line)
-        f.close()
-        
-        os.system('cat %s > %s' % ('./all_protein.faa', './all_protein_tmp.txt'))
-        with open('./all_protein.faa', 'w') as w:
-          f = open('./all_protein_tmp.txt')
-          for line in f:
-            if line.startswith('>'):
-              first_line = line[1::].strip()
-              name = first_line.split(' ')[0]
-              w.write('>' + name + '\n')
-            else:
+        if len(os.listdir('./orf_ffn/')) == 0:
+          os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
+          raise('No prophages found!')
+   
+        else:
+          # step 5 ppn faa together
+          os.system('cat ./orf_ffn/* > all_protein_ut.faa')
+          
+          fa_dict = fasta2dict('./all_protein_ut.faa')
+          filters = ["B","Z","J","O","U","X",'*']
+  
+          with open('./all_protein.faa','w') as f:
+              for key in fa_dict:
+                  if all(f not in fa_dict[key] for f in filters):
+                      line = key + '\n' + fa_dict[key] + '\n'
+                      f.write(line)
+          f.close()
+          
+          os.system('cat %s > %s' % ('./all_protein.faa', './all_protein_tmp.txt'))
+          with open('./all_protein.faa', 'w') as w:
+            f = open('./all_protein_tmp.txt')
+            for line in f:
+              if line.startswith('>'):
+                first_line = line[1::].strip()
+                name = first_line.split(' ')[0]
+                w.write('>' + name + '\n')
+              else:
+                w.write(line)
+          w.close()
+  
+          if not os.path.getsize('./all_protein.faa'):
+            with open('./putative_lysins.fa','w') as w:
+              line = 'No lysins found!'
               w.write(line)
-        w.close()
-
-
-        # step 6 cdhit cluster
-        cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa',Args.cdhit_cutoff)
-        tl.run(cmd_4)
-
-        # step 7 calculate molecular weight
-        molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
-
-
-        # step 8 hmmsearch reported lysin structure in pfam
-        if os.path.isdir('./hmmer_out/') == True:
-            pass
-        else:
-            os.mkdir('./hmmer_out/')
-
-        hmmer_db = Args.hmmer_db
-        if hmmer_db[0] == '.':
-            if hmmer_db[1] == '/':
-                hmmer_db_suffix = hmmer_db[1:]
-                curr_dir_hmmerdb = curr_dir
-            elif hmmer_db[1] == '.':
-                curr_dir_hmmerdb = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                hmmer_db_suffix = hmmer_db[2:]
-        else:
-            hmmer_db_suffix = hmmer_db
-            curr_dir_hmmerdb = ''
-
-        cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
-                                 curr_dir_hmmerdb + hmmer_db_suffix,
-                                 './all_protein_cdhit_filter.faa')
-        tl.run(cmd_5)
-        
-        cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
+            w.close()
+            
+            os.system('rm -r ./prokka_result/')
+            os.remove('./all_protein.faa')
+            os.remove('./all_protein_ut.faa')
+          
+          else:
+            # step 6 cdhit cluster
+            cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa',Args.cdhit_cutoff)
+            tl.run(cmd_4)
+    
+            # step 7 calculate molecular weight
+            molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
+    
+    
+            # step 8 hmmsearch reported lysin structure in pfam
+            if os.path.isdir('./hmmer_out/') == True:
+                pass
+            else:
+                os.mkdir('./hmmer_out/')
+    
+            hmmer_db = Args.hmmer_db
+            if hmmer_db[0] == '.':
+                if hmmer_db[1] == '/':
+                    hmmer_db_suffix = hmmer_db[1:]
+                    curr_dir_hmmerdb = curr_dir
+                elif hmmer_db[1] == '.':
+                    curr_dir_hmmerdb = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                    hmmer_db_suffix = hmmer_db[2:]
+            else:
+                hmmer_db_suffix = hmmer_db
+                curr_dir_hmmerdb = ''
+    
+            cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
                                      curr_dir_hmmerdb + hmmer_db_suffix,
                                      './all_protein_cdhit_filter.faa')
-        tl.run(cmd_5_p)
-
-        reported_lysin = Args.reported_lysin
-        if reported_lysin[0] == '.':
-            if reported_lysin[1] == '/':
-                reported_lysin_suffix = reported_lysin[1:]
-                curr_dir_rp = curr_dir
-            elif reported_lysin[1] == '.':
-                curr_dir_rp = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                reported_lysin_suffix = reported_lysin[2:]
-        else:
-            reported_lysin_suffix = reported_lysin
-            curr_dir_rp = ''
-
-        find_pfam('./all_protein_cdhit_filter.faa', curr_dir_rp + reported_lysin_suffix)
-        
-        
-        # step 9 Filter sequences without EAD
-        if os.path.isdir('./hmmer_out_EAD/') == True:
-            pass
-        else:
-            os.mkdir('./hmmer_out_EAD/')
-
-        hmmer_db_EAD = Args.hmmer_db_EAD
-        if hmmer_db_EAD[0] == '.':
-            if hmmer_db_EAD[1] == '/':
-                hmmer_db_EAD_suffix = hmmer_db_EAD[1:]
-                curr_dir_hmmerdb_EAD = curr_dir
-            elif hmmer_db_EAD[1] == '.':
-                curr_dir_hmmerdb_EAD = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                hmmer_db_EAD_suffix = hmmer_db_EAD[2:]
-        else:
-            hmmer_db_EAD_suffix = hmmer_db_EAD
-            curr_dir_hmmerdb_EAD = ''
-
-        cmd_6 = tl.run_hmmsearch('./hmmer_out_EAD/all_protein_filter_hmmer_out_EAD.txt', Args.hmmer_cutoff,
-                                 curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
-                                 './all_protein_pfam_protein.fasta')
-        tl.run(cmd_6)
-
-        reported_lysin_EAD = Args.reported_lysin_EAD
-        if reported_lysin_EAD[0] == '.':
-            if reported_lysin_EAD[1] == '/':
-                reported_lysin_EAD_suffix = reported_lysin_EAD[1:]
-                curr_dir_rpe = curr_dir
-            elif reported_lysin_EAD[1] == '.':
-                curr_dir_rpe = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                reported_lysin_EAD_suffix = reported_lysin_EAD[2:]
-        else:
-            reported_lysin_EAD_suffix = reported_lysin_EAD
-            curr_dir_rpe = ''
-
-        find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rpe + reported_lysin_EAD_suffix)
-        
-
-        # step 10 combine results of CAZY and pfam
-        os.system('cat all_protein_pfam_protein_EAD.fasta > pfam_EAD.fasta')
-        cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', int(1))
-        tl.run(cmd_7)
-
-        # step 11 remove TMhelix
-        tot = sub.getoutput("grep '>' %s | wc -l" % ('./pfam_EAD_cdhit.fasta'))
+            tl.run(cmd_5)
+            
+            cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
+                                       curr_dir_hmmerdb + hmmer_db_suffix,
+                                       './all_protein_cdhit_filter.faa')
+            tl.run(cmd_5_p)
     
-        if int(tot) > 100:
-            num_1 = int(tot)//100
-            num_2 = int(tot)%100
-            Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
-          
-            for i in range(1, int(num_1) + 2):
-               time_sleep = random.uniform(60, 180)
-               time.sleep(time_sleep)
-               cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
-               tl.run(cmd_8)
-               
-            os.system('cat ./biolib_results/predicted_topologies.3line* > predicted_topologies.line')
-            remove_TMhelix('./biolib_results/predicted_topologies.line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
-          
-        else:
-            cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit.fasta')
-            tl.run(cmd_8)
-            remove_TMhelix('./biolib_results/predicted_topologies.3line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
-          
-          
-        dic_fa = {}
-        with open('./putative_lysins.fa') as f:
-            lines = f.readlines()  # 读取所有行
-            first_line = lines[0]
-            if first_line.startswith('>'):
-                state = 'Y'
-                cmd_9 = tl.run_signal('./putative_lysins.fa','./signaltmp')
-                tl.run(cmd_9)
-                
-                dic_fa = fasta2dict_2('./putative_lysins.fa')
+            reported_lysin = Args.reported_lysin
+            if reported_lysin[0] == '.':
+                if reported_lysin[1] == '/':
+                    reported_lysin_suffix = reported_lysin[1:]
+                    curr_dir_rp = curr_dir
+                elif reported_lysin[1] == '.':
+                    curr_dir_rp = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                    reported_lysin_suffix = reported_lysin[2:]
             else:
-                state = 'N'
-        f.close()
-        
-        f1 = open('./molecular_weight.txt')
-        f2 = open('./hmmer_out/all_protein.txt')
-        
-        
-        if state == 'Y':
-        
-          with open('./MW_Length.txt', 'w') as w1:
-            for i in f1:
-              name = i.strip().split('\t')[0]
-              mw = i.strip().split('\t')[1]
-              if name in dic_fa.keys():
-                line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
-                w1.write(line)
-          w1.close()
-          
-          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))   
-          
-          with open('./Domain_Info.txt', 'w') as w2:
-            for line in f2:
-              if line[0] != "#" and len(line.split())!=0:
-                arr = line.strip().split(" ")
-                arr = list(filter(None, arr))
-                name = arr[0]
-                if name in dic_fa.keys():
-                  li = arr[0] + '\t' + arr[3] + '\t' + arr[4].split('.')[0] + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
-                  print(li)
-                  w2.write(li)
-          w2.close()
-                    
-          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
-          
-          
-          f1 = open('./MW_Length.txt')
-          f2 = open('./Domain_Info.txt')
-          f3 = open('./signaltmp/output.gff3')
-          
-          
-          dic_info = {}
-          for lines in f1:
-            line = lines.strip().split('\t')
-            id_1 = line[0]
-            mw = line[1]
-            length = line[2]
-            mw_length = []
-            mw_length.append(mw)
-            mw_length.append(length)
-            dic_info[id_1] = mw_length
+                reported_lysin_suffix = reported_lysin
+                curr_dir_rp = ''
+    
+            find_pfam('./all_protein_cdhit_filter.faa', curr_dir_rp + reported_lysin_suffix)
             
-          
-          for lines in f2:
-            line = lines.strip().split('\t')
-            id_2 = line[0]
-            pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
-            if id_2 in dic_info.keys():
-              dic_info[id_2].append(pf)
-        
-          a = []
-          b = []
-          for lines in f3:
-            if lines[0] != "#":
-              line = lines.strip().split('\t')
-              id_3 = line[0]
-              if float(line[5]) > 0.5:
-                li = line[0] + ':' + line[3] + '-' + line[4]
-                print(li)
-                if id_3 in dic_info.keys():
-                  dic_info[id_3].append(li)
-                  a.append(id_3)
-          
-          for key in dic_info:
-            b.append(key)    
-          c = list(set(b).difference(set(a)))
-          
-          for i in c:
-            dic_info[i].append('NULL')
-                  
-          print(dic_info)
-        
-          
-          
-          if Args.ref != '':
-            ref_lysins = str(Args.ref)
-            first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
-            second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
             
-            dic_ref = {}
-            # 两个fasta文件中的序列两两比较：
-            for t1 in first_dict:
-              t_len = len(first_dict[t1].seq)
-              for t2 in second_dict:
-                global_align = pw2.align.globalxx(first_dict[t1].seq, second_dict[t2].seq)
-                matched = global_align[0][2]
-                percent_match = (matched / t_len) * 100
-                
-                if t1 not in dic_ref.keys():
-                  score = []
-                  score.append(t2 + ':' + str(round(percent_match,2)))
-                  dic_ref[t1] = score
-                elif t1 in dic_ref.keys():
-                  dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
-
-
-            with open('./putative_lysins_info.txt','w') as w:
-              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
-              w.write(line)
-              for key in dic_info:
-                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
-                w.write(line)
-            w.close()
+            # step 9 Filter sequences without EAD
+            if os.path.isdir('./hmmer_out_EAD/') == True:
+                pass
+            else:
+                os.mkdir('./hmmer_out_EAD/')
+    
+            hmmer_db_EAD = Args.hmmer_db_EAD
+            if hmmer_db_EAD[0] == '.':
+                if hmmer_db_EAD[1] == '/':
+                    hmmer_db_EAD_suffix = hmmer_db_EAD[1:]
+                    curr_dir_hmmerdb_EAD = curr_dir
+                elif hmmer_db_EAD[1] == '.':
+                    curr_dir_hmmerdb_EAD = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                    hmmer_db_EAD_suffix = hmmer_db_EAD[2:]
+            else:
+                hmmer_db_EAD_suffix = hmmer_db_EAD
+                curr_dir_hmmerdb_EAD = ''
+    
+            cmd_6 = tl.run_hmmsearch('./hmmer_out_EAD/all_protein_filter_hmmer_out_EAD.txt', Args.hmmer_cutoff,
+                                     curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
+                                     './all_protein_pfam_protein.fasta')
+            tl.run(cmd_6)
+    
+            reported_lysin_EAD = Args.reported_lysin_EAD
+            if reported_lysin_EAD[0] == '.':
+                if reported_lysin_EAD[1] == '/':
+                    reported_lysin_EAD_suffix = reported_lysin_EAD[1:]
+                    curr_dir_rpe = curr_dir
+                elif reported_lysin_EAD[1] == '.':
+                    curr_dir_rpe = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                    reported_lysin_EAD_suffix = reported_lysin_EAD[2:]
+            else:
+                reported_lysin_EAD_suffix = reported_lysin_EAD
+                curr_dir_rpe = ''
+    
+            find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rpe + reported_lysin_EAD_suffix)
             
-                    
-          elif Args.ref == '':
-            with open('./putative_lysins_info.txt','w') as w:
-              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
-              w.write(line)
-              for key in dic_info:
-                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
-                w.write(line)
-            w.close()
+    
+            # step 10 combine results of CAZY and pfam
+            os.system('cat all_protein_pfam_protein_EAD.fasta > pfam_EAD.fasta')
+            cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', int(1))
+            tl.run(cmd_7)
+    
+            # step 11 remove TMhelix
+            tot = sub.getoutput("grep '>' %s | wc -l" % ('./pfam_EAD_cdhit.fasta'))
+        
+            if int(tot) > 100:
+                num_1 = int(tot)//100
+                num_2 = int(tot)%100
+                Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
               
-        else:
-          print(state)
-          
-        os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-        os.system('rm -r ./pfam_EAD_cdhit*')
-        os.remove('./all_protein_cdhit.faa')
-        os.remove('./all_protein_cdhit.faa.clstr')
-        os.remove('./all_protein_cdhit_filter.faa')
-        os.remove('./all_protein.faa')
-        os.remove('./all_protein_pfam_protein.fasta')
-        os.remove('./all_protein_pfam_protein_EAD.fasta')
-        os.remove('./pfam_EAD.fasta')
-        os.remove('./all_protein_ut.faa')
-        os.remove('./MW_Length.txt')
-        os.remove('./Domain_Info.txt')
-        os.remove('./molecular_weight.txt')
+                for i in range(1, int(num_1) + 1):
+                   time_sleep = random.uniform(60, 180)
+                   time.sleep(time_sleep)
+                   cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
+                   tl.run(cmd_8)
+                   
+                os.system('cat ./biolib_results/predicted_topologies.3line* > predicted_topologies.line')
+                remove_TMhelix('./biolib_results/predicted_topologies.line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
+              
+            else:
+                cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit.fasta')
+                tl.run(cmd_8)
+                remove_TMhelix('./biolib_results/predicted_topologies.3line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
+              
+              
+            dic_fa = {}
+            with open('./putative_lysins.fa') as f:
+                lines = f.readlines()  # 读取所有行
+                first_line = lines[0]
+                if first_line.startswith('>'):
+                    state = 'Y'
+                    cmd_9 = tl.run_signal('./putative_lysins.fa','./signaltmp')
+                    tl.run(cmd_9)
+                    
+                    dic_fa = fasta2dict_2('./putative_lysins.fa')
+                else:
+                    state = 'N'
+            f.close()
+            
+            f1 = open('./molecular_weight.txt')
+            f2 = open('./hmmer_out/all_protein.txt')
+            
+            
+            if state == 'Y':
+            
+              with open('./MW_Length.txt', 'w') as w1:
+                for i in f1:
+                  name = i.strip().split('\t')[0]
+                  mw = i.strip().split('\t')[1]
+                  if name in dic_fa.keys():
+                    line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
+                    w1.write(line)
+              w1.close()
+              
+              # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))   
+              
+              with open('./Domain_Info.txt', 'w') as w2:
+                for line in f2:
+                  if line[0] != "#" and len(line.split())!=0:
+                    arr = line.strip().split(" ")
+                    arr = list(filter(None, arr))
+                    name = arr[0]
+                    if name in dic_fa.keys():
+                      li = arr[0] + '\t' + arr[3] + '\t' + arr[4].split('.')[0] + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
+                      print(li)
+                      w2.write(li)
+              w2.close()
+                        
+              # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
+              
+              
+              f1 = open('./MW_Length.txt')
+              f2 = open('./Domain_Info.txt')
+              f3 = open('./signaltmp/output.gff3')
+              
+              
+              dic_info = {}
+              for lines in f1:
+                line = lines.strip().split('\t')
+                id_1 = line[0]
+                mw = line[1]
+                length = line[2]
+                mw_length = []
+                mw_length.append(mw)
+                mw_length.append(length)
+                dic_info[id_1] = mw_length
+                
+              
+              for lines in f2:
+                line = lines.strip().split('\t')
+                id_2 = line[0]
+                pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
+                if id_2 in dic_info.keys():
+                  dic_info[id_2].append(pf)
+            
+              a = []
+              b = []
+              for lines in f3:
+                if lines[0] != "#":
+                  line = lines.strip().split('\t')
+                  id_3 = line[0]
+                  if float(line[5]) > 0.5:
+                    li = line[0] + ':' + line[3] + '-' + line[4]
+                    print(li)
+                    if id_3 in dic_info.keys():
+                      dic_info[id_3].append(li)
+                      a.append(id_3)
+              
+              for key in dic_info:
+                b.append(key)    
+              c = list(set(b).difference(set(a)))
+              
+              for i in c:
+                dic_info[i].append('NULL')
+                      
+              print(dic_info)
+              
+              
+              if Args.ref != '':
+                ref_lysins = str(Args.ref)
+                first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+                second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+                
+                dic_ref = {}
+                # 两个fasta文件中的序列两两比较：
+                for t1 in first_dict:
+                  t_len = len(first_dict[t1].seq)
+                  for t2 in second_dict:
+                    global_align = pw2.align.globalxx(first_dict[t1].seq, second_dict[t2].seq)
+                    matched = global_align[0][2]
+                    percent_match = (matched / t_len) * 100
+                    
+                    if t1 not in dic_ref.keys():
+                      score = []
+                      score.append(t2 + ':' + str(round(percent_match,2)))
+                      dic_ref[t1] = score
+                    elif t1 in dic_ref.keys():
+                      dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
+    
+    
+                with open('./putative_lysins_info.txt','w') as w:
+                  line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
+                  w.write(line)
+                  for key in dic_info:
+                    line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                    w.write(line)
+                w.close()
+                
+                        
+              elif Args.ref == '':
+                print('aaaaa')
+                
+                with open('./putative_lysins_info.txt','w') as w:
+                  line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
+                  w.write(line)
+                  for key in dic_info:
+                    line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
+                    w.write(line)
+                w.close()
+                  
+            else:
+              print(state)
+              
+            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+            os.system('rm -r ./pfam_EAD_cdhit*')
+            os.remove('./all_protein_cdhit.faa')
+            os.remove('./all_protein_cdhit.faa.clstr')
+            os.remove('./all_protein_cdhit_filter.faa')
+            os.remove('./all_protein.faa')
+            os.remove('./all_protein_pfam_protein.fasta')
+            os.remove('./all_protein_pfam_protein_EAD.fasta')
+            os.remove('./pfam_EAD.fasta')
+            os.remove('./all_protein_ut.faa')
 
     elif Args.bacteriaORphage == 'P':
         if Args.workdir[-1] == '/':
@@ -986,287 +999,300 @@ if __name__ == "__main__":
                 if os.path.splitext(j)[-1] == ".faa":
                     os.system('cp %s %s' % ('./prokka_result/' + i + '/' + j, './phage_faa/'))
 
-
-        # step 3 phage faa together
-        os.system('cat ./phage_faa/* > all_protein_ut.faa')
         
-        fa_dict = fasta2dict('./all_protein_ut.faa')
-
-        filters = ["B","Z","J","O","U","X",'*']
-        with open('./all_protein.faa','w') as f:
-            for key in fa_dict:
-                if all(f not in fa_dict[key] for f in filters):
-                    line = key + '\n' + fa_dict[key] + '\n'
-                    f.write(line)
-        f.close()
-
-        # step 4 cdhit cluster
-        cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa',Args.cdhit_cutoff)
-        tl.run(cmd_4)
-
-        # step 5 calculate molecular weight
-        molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
-
-
-        # step 6 hmmsearch reported lysin structure in pfam
-        if os.path.isdir('./hmmer_out/') == True:
-            pass
+        if len(os.listdir('./phage_faa/')) == 0:
+          os.system('rm -r ./prokka_result/ ./phage_faa/')
+          raise('No phage faa found!')
+          
         else:
-            os.mkdir('./hmmer_out/')
-
-        hmmer_db = Args.hmmer_db
-        if hmmer_db[0] == '.':
-            if hmmer_db[1] == '/':
-                hmmer_db_suffix = hmmer_db[1:]
-                curr_dir_hmmerdb = curr_dir
-            elif hmmer_db[1] == '.':
-                curr_dir_hmmerdb = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                hmmer_db_suffix = hmmer_db[2:]
-        else:
-            hmmer_db_suffix = hmmer_db
-            curr_dir_hmmerdb = ''
-
-        cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
-                                 curr_dir_hmmerdb + hmmer_db_suffix,
-                                 './all_protein_cdhit_filter.faa')
-        tl.run(cmd_5)
-
-        cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
+          # step 3 phage faa together
+          os.system('cat ./phage_faa/* > all_protein_ut.faa')
+          
+          fa_dict = fasta2dict('./all_protein_ut.faa')
+  
+          filters = ["B","Z","J","O","U","X",'*']
+          with open('./all_protein.faa','w') as f:
+              for key in fa_dict:
+                  if all(f not in fa_dict[key] for f in filters):
+                      line = key + '\n' + fa_dict[key] + '\n'
+                      f.write(line)
+          f.close()
+          
+          if not os.path.getsize('./all_protein.faa'):
+            with open('./putative_lysins.fa','w') as w:
+              line = 'No lysins found!'
+              w.write(line)
+            w.close()
+            
+            os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
+            os.remove('./all_protein.faa')
+            os.remove('./all_protein_ut.faa')
+          
+          else:
+            # step 4 cdhit cluster
+            cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa',Args.cdhit_cutoff)
+            tl.run(cmd_4)
+    
+            # step 5 calculate molecular weight
+            molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
+    
+    
+            # step 6 hmmsearch reported lysin structure in pfam
+            if os.path.isdir('./hmmer_out/') == True:
+                pass
+            else:
+                os.mkdir('./hmmer_out/')
+    
+            hmmer_db = Args.hmmer_db
+            if hmmer_db[0] == '.':
+                if hmmer_db[1] == '/':
+                    hmmer_db_suffix = hmmer_db[1:]
+                    curr_dir_hmmerdb = curr_dir
+                elif hmmer_db[1] == '.':
+                    curr_dir_hmmerdb = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                    hmmer_db_suffix = hmmer_db[2:]
+            else:
+                hmmer_db_suffix = hmmer_db
+                curr_dir_hmmerdb = ''
+    
+            cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
                                      curr_dir_hmmerdb + hmmer_db_suffix,
                                      './all_protein_cdhit_filter.faa')
-        tl.run(cmd_5_p)
-
-        reported_lysin = Args.reported_lysin
-        if reported_lysin[0] == '.':
-            if reported_lysin[1] == '/':
-                reported_lysin_suffix = reported_lysin[1:]
-                curr_dir_rp = curr_dir
-            elif reported_lysin[1] == '.':
-                curr_dir_rp = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                reported_lysin_suffix = reported_lysin[2:]
-        else:
-            reported_lysin_suffix = reported_lysin
-            curr_dir_rp = ''
-
-        find_pfam('./all_protein_cdhit_filter.faa', curr_dir_rp + reported_lysin_suffix)
-        
-        
-        # step 7 Filter sequences without EAD
-        if os.path.isdir('./hmmer_out_EAD/') == True:
-            pass
-        else:
-            os.mkdir('./hmmer_out_EAD/')
-
-        hmmer_db_EAD = Args.hmmer_db_EAD
-        if hmmer_db_EAD[0] == '.':
-            if hmmer_db_EAD[1] == '/':
-                hmmer_db_EAD_suffix = hmmer_db_EAD[1:]
-                curr_dir_hmmerdb_EAD = curr_dir
-            elif hmmer_db_EAD[1] == '.':
-                curr_dir_hmmerdb_EAD = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                hmmer_db_EAD_suffix = hmmer_db_EAD[2:]
-        else:
-            hmmer_db_EAD_suffix = hmmer_db_EAD
-            curr_dir_hmmerdb_EAD = ''
-
-        cmd_6 = tl.run_hmmsearch('./hmmer_out_EAD/all_protein_filter_hmmer_out_EAD.txt', Args.hmmer_cutoff,
-                                 curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
-                                 './all_protein_pfam_protein.fasta')
-        tl.run(cmd_6)
-
-        reported_lysin_EAD = Args.reported_lysin_EAD
-        if reported_lysin_EAD[0] == '.':
-            if reported_lysin_EAD[1] == '/':
-                reported_lysin_EAD_suffix = reported_lysin_EAD[1:]
-                curr_dir_rpe = curr_dir
-            elif reported_lysin_EAD[1] == '.':
-                curr_dir_rpe = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                reported_lysin_EAD_suffix = reported_lysin_EAD[2:]
-        else:
-            reported_lysin_EAD_suffix = reported_lysin_EAD
-            curr_dir_rpe = ''
-
-        find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rpe + reported_lysin_EAD_suffix)
-        
-
-        # step 9 combine results of CAZY and pfam
-        os.system('cat all_protein_pfam_protein_EAD.fasta > pfam_EAD.fasta')
-        cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', int(1))
-        tl.run(cmd_7)
-
-        # step 12 remove TMhelix
-        tot = sub.getoutput("grep '>' %s | wc -l" % ('./pfam_EAD_cdhit.fasta'))
+            tl.run(cmd_5)
+            
+            cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
+                                       curr_dir_hmmerdb + hmmer_db_suffix,
+                                       './all_protein_cdhit_filter.faa')
+            tl.run(cmd_5_p)
     
-        if int(tot) > 100:
-            num_1 = int(tot)//100
-            num_2 = int(tot)%100
-            Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
-          
-            for i in range(1, int(num_1) + 2):
-               time_sleep = random.uniform(60, 180)
-               time.sleep(time_sleep)
-               cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
-               tl.run(cmd_8)
-               
-            os.system('cat ./biolib_results/predicted_topologies.3line* > ./biolib_results/predicted_topologies.line')
-            remove_TMhelix('./biolib_results/predicted_topologies.line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
-          
-        else:
-            cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit.fasta')
-            tl.run(cmd_8)
-            remove_TMhelix('./biolib_results/predicted_topologies.3line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
-
-
-        dic_fa = {}
-        with open('./putative_lysins.fa') as f:
-          lines = f.readlines()  # 读取所有行
-          first_line = lines[0]
-          if first_line.startswith('>'):
-              state = 'Y'
-              cmd_9 = tl.run_signal('./putative_lysins.fa','./signaltmp')
-              tl.run(cmd_9)
+            reported_lysin = Args.reported_lysin
+            if reported_lysin[0] == '.':
+                if reported_lysin[1] == '/':
+                    reported_lysin_suffix = reported_lysin[1:]
+                    curr_dir_rp = curr_dir
+                elif reported_lysin[1] == '.':
+                    curr_dir_rp = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                    reported_lysin_suffix = reported_lysin[2:]
+            else:
+                reported_lysin_suffix = reported_lysin
+                curr_dir_rp = ''
+    
+            find_pfam('./all_protein_cdhit_filter.faa', curr_dir_rp + reported_lysin_suffix)
+            
+            
+            # step 7 Filter sequences without EAD
+            if os.path.isdir('./hmmer_out_EAD/') == True:
+                pass
+            else:
+                os.mkdir('./hmmer_out_EAD/')
+    
+            hmmer_db_EAD = Args.hmmer_db_EAD
+            if hmmer_db_EAD[0] == '.':
+                if hmmer_db_EAD[1] == '/':
+                    hmmer_db_EAD_suffix = hmmer_db_EAD[1:]
+                    curr_dir_hmmerdb_EAD = curr_dir
+                elif hmmer_db_EAD[1] == '.':
+                    curr_dir_hmmerdb_EAD = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                    hmmer_db_EAD_suffix = hmmer_db_EAD[2:]
+            else:
+                hmmer_db_EAD_suffix = hmmer_db_EAD
+                curr_dir_hmmerdb_EAD = ''
+    
+            cmd_6 = tl.run_hmmsearch('./hmmer_out_EAD/all_protein_filter_hmmer_out_EAD.txt', Args.hmmer_cutoff,
+                                     curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
+                                     './all_protein_pfam_protein.fasta')
+            tl.run(cmd_6)
+    
+            reported_lysin_EAD = Args.reported_lysin_EAD
+            if reported_lysin_EAD[0] == '.':
+                if reported_lysin_EAD[1] == '/':
+                    reported_lysin_EAD_suffix = reported_lysin_EAD[1:]
+                    curr_dir_rpe = curr_dir
+                elif reported_lysin_EAD[1] == '.':
+                    curr_dir_rpe = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                    reported_lysin_EAD_suffix = reported_lysin_EAD[2:]
+            else:
+                reported_lysin_EAD_suffix = reported_lysin_EAD
+                curr_dir_rpe = ''
+    
+            find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rpe + reported_lysin_EAD_suffix)
+            
+    
+            # step 9 combine results of CAZY and pfam
+            os.system('cat all_protein_pfam_protein_EAD.fasta > pfam_EAD.fasta')
+            cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', int(1))
+            tl.run(cmd_7)
+    
+            # step 12 remove TMhelix
+            tot = sub.getoutput("grep '>' %s | wc -l" % ('./pfam_EAD_cdhit.fasta'))
+        
+            if int(tot) > 100:
+                num_1 = int(tot)//100
+                num_2 = int(tot)%100
+                Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
               
-              dic_fa = fasta2dict_2('./putative_lysins.fa')
-          else:
-              state = 'N'
-        f.close()
-        
-        f1 = open('./molecular_weight.txt')
-        f2 = open('./hmmer_out/all_protein.txt')
-        
-        
-        if state == 'Y':
-          with open('./MW_Length.txt', 'w') as w1:
-            for i in f1:
-              name = i.strip().split('\t')[0]
-              mw = i.strip().split('\t')[1]
-              if name in dic_fa.keys():
-                line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
-                w1.write(line)
-          w1.close()
-          
-          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))
-          
-          
-          with open('./Domain_Info.txt', 'w') as w2:
-            for line in f2:
-              if line[0] != "#" and len(line.split())!=0:
-                arr = line.strip().split(" ")
-                arr = list(filter(None, arr))
-                name = arr[0]
-                if name in dic_fa.keys():
-                  li = arr[0] + '\t' + arr[3] + '\t' + arr[4].split('.')[0] + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
-                  print(li)
-                  w2.write(li)
-          w2.close()
-          
-          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
-          
-          f1 = open('./MW_Length.txt')
-          f2 = open('./Domain_Info.txt')
-          f3 = open('./signaltmp/output.gff3')
-          
-          
-          dic_info = {}
-          for lines in f1:
-            line = lines.strip().split('\t')
-            id_1 = line[0]
-            mw = line[1]
-            length = line[2]
-            mw_length = []
-            mw_length.append(mw)
-            mw_length.append(length)
-            dic_info[id_1] = mw_length
-            
-          
-          for lines in f2:
-            line = lines.strip().split('\t')
-            id_2 = line[0]
-            pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
-            if id_2 in dic_info.keys():
-              dic_info[id_2].append(pf)
-        
-          a = []
-          b = []
-          for lines in f3:
-            if lines[0] != "#":
-              line = lines.strip().split('\t')
-              id_3 = line[0]
-              if float(line[5]) > 0.5:
-                li = line[0] + ':' + line[3] + '-' + line[4]
-                print(li)
-                if id_3 in dic_info.keys():
-                  dic_info[id_3].append(li)
-                  a.append(id_3)
-          
-          for key in dic_info:
-            b.append(key)
-          c = list(set(b).difference(set(a)))
-          
-          for i in c:
-            dic_info[i].append('NULL')
+                for i in range(1, int(num_1) + 1):
+                   time_sleep = random.uniform(60, 180)
+                   time.sleep(time_sleep)
+                   cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
+                   tl.run(cmd_8)
+                   
+                os.system('cat ./biolib_results/predicted_topologies.3line* > ./biolib_results/predicted_topologies.line')
+                remove_TMhelix('./biolib_results/predicted_topologies.line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
+              
+            else:
+                cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit.fasta')
+                tl.run(cmd_8)
+                remove_TMhelix('./biolib_results/predicted_topologies.3line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
+    
+    
+            dic_fa = {}
+            with open('./putative_lysins.fa') as f:
+              lines = f.readlines()  # 读取所有行
+              first_line = lines[0]
+              if first_line.startswith('>'):
+                  state = 'Y'
+                  cmd_9 = tl.run_signal('./putative_lysins.fa','./signaltmp')
+                  tl.run(cmd_9)
                   
-          print(dic_info)
-          
-          
-          if Args.ref != '':
-            ref_lysins = str(Args.ref)
-            first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
-            second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+                  dic_fa = fasta2dict_2('./putative_lysins.fa')
+              else:
+                  state = 'N'
+            f.close()
             
-            dic_ref = {}
-            # 两个fasta文件中的序列两两比较：
-            for t1 in first_dict:
-              t_len = len(first_dict[t1].seq)
-              for t2 in second_dict:
-                global_align = pw2.align.globalxx(first_dict[t1].seq, second_dict[t2].seq)
-                matched = global_align[0][2]
-                percent_match = (matched / t_len) * 100
+            f1 = open('./molecular_weight.txt')
+            f2 = open('./hmmer_out/all_protein.txt')
+            
+            
+            if state == 'Y':
+              with open('./MW_Length.txt', 'w') as w1:
+                for i in f1:
+                  name = i.strip().split('\t')[0]
+                  mw = i.strip().split('\t')[1]
+                  if name in dic_fa.keys():
+                    line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
+                    w1.write(line)
+              w1.close()
+              
+              # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))
+              
+              
+              with open('./Domain_Info.txt', 'w') as w2:
+                for line in f2:
+                  if line[0] != "#" and len(line.split())!=0:
+                    arr = line.strip().split(" ")
+                    arr = list(filter(None, arr))
+                    name = arr[0]
+                    if name in dic_fa.keys():
+                      li = arr[0] + '\t' + arr[3] + '\t' + arr[4].split('.')[0] + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
+                      print(li)
+                      w2.write(li)
+              w2.close()
+              
+              # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
+              
+              f1 = open('./MW_Length.txt')
+              f2 = open('./Domain_Info.txt')
+              f3 = open('./signaltmp/output.gff3')
+              
+              
+              dic_info = {}
+              for lines in f1:
+                line = lines.strip().split('\t')
+                id_1 = line[0]
+                mw = line[1]
+                length = line[2]
+                mw_length = []
+                mw_length.append(mw)
+                mw_length.append(length)
+                dic_info[id_1] = mw_length
                 
-                if t1 not in dic_ref.keys():
-                  score = []
-                  score.append(t2 + ':' + str(round(percent_match,2)))
-                  dic_ref[t1] = score
-                elif t1 in dic_ref.keys():
-                  dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
-
-
-            with open('./putative_lysins_info.txt','w') as w:
-              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
-              w.write(line)
-              for key in dic_info:
-                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
-                w.write(line)
-            w.close()
+              
+              for lines in f2:
+                line = lines.strip().split('\t')
+                id_2 = line[0]
+                pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
+                if id_2 in dic_info.keys():
+                  dic_info[id_2].append(pf)
             
+              a = []
+              b = []
+              for lines in f3:
+                if lines[0] != "#":
+                  line = lines.strip().split('\t')
+                  id_3 = line[0]
+                  if float(line[5]) > 0.5:
+                    li = line[0] + ':' + line[3] + '-' + line[4]
+                    print(li)
+                    if id_3 in dic_info.keys():
+                      dic_info[id_3].append(li)
+                      a.append(id_3)
+              
+              for key in dic_info:
+                b.append(key)
+              c = list(set(b).difference(set(a)))
+              
+              for i in c:
+                dic_info[i].append('NULL')
+                      
+              print(dic_info)
+              
+              
+              if Args.ref != '':
+                ref_lysins = str(Args.ref)
+                first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+                second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+                
+                dic_ref = {}
+                # 两个fasta文件中的序列两两比较：
+                for t1 in first_dict:
+                  t_len = len(first_dict[t1].seq)
+                  for t2 in second_dict:
+                    global_align = pw2.align.globalxx(first_dict[t1].seq, second_dict[t2].seq)
+                    matched = global_align[0][2]
+                    percent_match = (matched / t_len) * 100
                     
-          elif Args.ref == '':
-            with open('./putative_lysins_info.txt','w') as w:
-              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
-              w.write(line)
-              for key in dic_info:
-                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
-                w.write(line)
-            w.close()
-            
+                    if t1 not in dic_ref.keys():
+                      score = []
+                      score.append(t2 + ':' + str(round(percent_match,2)))
+                      dic_ref[t1] = score
+                    elif t1 in dic_ref.keys():
+                      dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
+    
+    
+                with open('./putative_lysins_info.txt','w') as w:
+                  line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
+                  w.write(line)
+                  for key in dic_info:
+                    line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                    w.write(line)
+                w.close()
                 
-        else:
-          print(state)
-          
-          
-        os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-        os.system('rm -r ./pfam_EAD_cdhit*')
-        os.remove('./all_protein_cdhit.faa')
-        os.remove('./all_protein_cdhit.faa.clstr')
-        os.remove('./all_protein_cdhit_filter.faa')
-        os.remove('./all_protein.faa')
-        os.remove('./all_protein_pfam_protein.fasta')
-        os.remove('./all_protein_pfam_protein_EAD.fasta')
-        os.remove('./pfam_EAD.fasta')
-        os.remove('./all_protein_ut.faa')
-        os.remove('./MW_Length.txt')
-        os.remove('./Domain_Info.txt')
-        os.remove('./molecular_weight.txt')
+                        
+              elif Args.ref == '':
+                with open('./putative_lysins_info.txt','w') as w:
+                  line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
+                  w.write(line)
+                  for key in dic_info:
+                    line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
+                    w.write(line)
+                w.close()
+                
+                    
+            else:
+              print(state)
+              
+              
+            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/')
+            os.system('rm -r ./pfam_EAD_cdhit*')
+            os.remove('./all_protein_cdhit.faa')
+            os.remove('./all_protein_cdhit.faa.clstr')
+            os.remove('./all_protein_cdhit_filter.faa')
+            os.remove('./all_protein.faa')
+            os.remove('./all_protein_pfam_protein.fasta')
+            os.remove('./all_protein_pfam_protein_EAD.fasta')
+            os.remove('./pfam_EAD.fasta')
+            os.remove('./all_protein_ut.faa')
 
     else:
         raise('Error, please check parameter "--bp"')
