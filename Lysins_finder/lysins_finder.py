@@ -588,8 +588,8 @@ if __name__ == "__main__":
         # step 4 phanotate annotates prophage ORFs
         for i in os.listdir('./phispy_out/'):
             for j in os.listdir('./ppn/' + i):
-                j_prefix = j.split('.')[0]
-                j_suffix = j.split('.')[1]
+                j_prefix = '.'.join(j.split('.')[:-1])
+                j_suffix = j.split('.')[-1]
                 if j_suffix == 'fasta':
                     cmd_3 = tl.run_phanotate('./ppn/' + i + '/' + j,
                                              './ppn/' + i + '/' + j_prefix + '.out')
@@ -603,8 +603,8 @@ if __name__ == "__main__":
             os.mkdir('./orf_ffn/')
         for i in os.listdir('./phispy_out/'):
             for j in os.listdir('./ppn/' + i):
-                j_prefix = j.split('.')[0]
-                j_suffix = j.split('.')[1]
+                j_prefix = '.'.join(j.split('.')[:-1])
+                j_suffix = j.split('.')[-1]
                 if j_suffix == 'fasta':
                     Gene_element_abstract('./ppn/' + i + '/' + j_prefix + '.out',
                                           './ppn/' + i + '/' + j,
@@ -612,8 +612,8 @@ if __name__ == "__main__":
 
         
         if len(os.listdir('./orf_ffn/')) == 0:
-          os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
-          raise('No prophages found!')
+          # os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
+          raise('No prophages ORFs found!')
    
         else:
           # step 5 ppn faa together
@@ -647,9 +647,9 @@ if __name__ == "__main__":
               w.write(line)
             w.close()
             
-            os.system('rm -r ./prokka_result/')
-            os.remove('./all_protein.faa')
-            os.remove('./all_protein_ut.faa')
+            # os.system('rm -r ./prokka_result/')
+            # os.remove('./all_protein.faa')
+            # os.remove('./all_protein_ut.faa')
           
           else:
             # step 6 cdhit cluster
@@ -907,16 +907,16 @@ if __name__ == "__main__":
             else:
               print(state)
               
-            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-            os.system('rm -r ./pfam_EAD_cdhit*')
-            os.remove('./all_protein_cdhit.faa')
-            os.remove('./all_protein_cdhit.faa.clstr')
-            os.remove('./all_protein_cdhit_filter.faa')
-            os.remove('./all_protein.faa')
-            os.remove('./all_protein_pfam_protein.fasta')
-            os.remove('./all_protein_pfam_protein_EAD.fasta')
-            os.remove('./pfam_EAD.fasta')
-            os.remove('./all_protein_ut.faa')
+            # os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+            # os.system('rm -r ./pfam_EAD_cdhit*')
+            # os.remove('./all_protein_cdhit.faa')
+            # os.remove('./all_protein_cdhit.faa.clstr')
+            # os.remove('./all_protein_cdhit_filter.faa')
+            # os.remove('./all_protein.faa')
+            # os.remove('./all_protein_pfam_protein.fasta')
+            # os.remove('./all_protein_pfam_protein_EAD.fasta')
+            # os.remove('./pfam_EAD.fasta')
+            # os.remove('./all_protein_ut.faa')
 
     elif Args.bacteriaORphage == 'P':
         if Args.workdir[-1] == '/':
@@ -1001,7 +1001,7 @@ if __name__ == "__main__":
 
         
         if len(os.listdir('./phage_faa/')) == 0:
-          os.system('rm -r ./prokka_result/ ./phage_faa/')
+          # os.system('rm -r ./prokka_result/ ./phage_faa/')
           raise('No phage faa found!')
           
         else:
@@ -1024,9 +1024,9 @@ if __name__ == "__main__":
               w.write(line)
             w.close()
             
-            os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
-            os.remove('./all_protein.faa')
-            os.remove('./all_protein_ut.faa')
+            # os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
+            # os.remove('./all_protein.faa')
+            # os.remove('./all_protein_ut.faa')
           
           else:
             # step 4 cdhit cluster
@@ -1283,16 +1283,16 @@ if __name__ == "__main__":
               print(state)
               
               
-            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/')
-            os.system('rm -r ./pfam_EAD_cdhit*')
-            os.remove('./all_protein_cdhit.faa')
-            os.remove('./all_protein_cdhit.faa.clstr')
-            os.remove('./all_protein_cdhit_filter.faa')
-            os.remove('./all_protein.faa')
-            os.remove('./all_protein_pfam_protein.fasta')
-            os.remove('./all_protein_pfam_protein_EAD.fasta')
-            os.remove('./pfam_EAD.fasta')
-            os.remove('./all_protein_ut.faa')
+            # os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/')
+            # os.system('rm -r ./pfam_EAD_cdhit*')
+            # os.remove('./all_protein_cdhit.faa')
+            # os.remove('./all_protein_cdhit.faa.clstr')
+            # os.remove('./all_protein_cdhit_filter.faa')
+            # os.remove('./all_protein.faa')
+            # os.remove('./all_protein_pfam_protein.fasta')
+            # os.remove('./all_protein_pfam_protein_EAD.fasta')
+            # os.remove('./pfam_EAD.fasta')
+            # os.remove('./all_protein_ut.faa')
 
     else:
         raise('Error, please check parameter "--bp"')
