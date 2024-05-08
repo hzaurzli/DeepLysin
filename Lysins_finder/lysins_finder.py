@@ -653,7 +653,7 @@ if __name__ == "__main__":
           
           else:
             # step 6 cdhit cluster
-            cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa',Args.cdhit_cutoff)
+            cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa', Args.cdhit_cutoff)
             tl.run(cmd_4)
     
             # step 7 calculate molecular weight
@@ -746,7 +746,7 @@ if __name__ == "__main__":
     
             # step 10 combine results of CAZY and pfam
             os.system('cat all_protein_pfam_protein_EAD.fasta > pfam_EAD.fasta')
-            cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', int(1))
+            cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
             tl.run(cmd_7)
     
             # step 11 remove TMhelix
@@ -1041,7 +1041,7 @@ if __name__ == "__main__":
           
           else:
             # step 4 cdhit cluster
-            cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa',Args.cdhit_cutoff)
+            cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa', Args.cdhit_cutoff)
             tl.run(cmd_4)
     
             # step 5 calculate molecular weight
@@ -1134,7 +1134,7 @@ if __name__ == "__main__":
     
             # step 9 combine results of CAZY and pfam
             os.system('cat all_protein_pfam_protein_EAD.fasta > pfam_EAD.fasta')
-            cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', int(1))
+            cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
             tl.run(cmd_7)
     
             # step 12 remove TMhelix
