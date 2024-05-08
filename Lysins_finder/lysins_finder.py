@@ -798,8 +798,9 @@ if __name__ == "__main__":
                     w1.write(line)
               w1.close()
               
-              os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))   
+              # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))   
               
+              Domain_Info_lis = []
               with open('./Domain_Info.txt', 'w') as w2:
                 for line in f2:
                   if line[0] != "#" and len(line.split())!=0:
@@ -807,12 +808,16 @@ if __name__ == "__main__":
                     arr = list(filter(None, arr))
                     name = arr[0]
                     if name in dic_fa.keys():
-                      li = arr[0] + '\t' + arr[3] + '\t' + arr[4].split('.')[0] + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
+                      li = arr[0] + '\t' + arr[3] + '(Length:' + arr[5] + ')' + '\t' + arr[4].split('.')[0] + '(Length:' + arr[5] + ')' + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
                       print(li)
-                      w2.write(li)
+                      Domain_Info_lis.append(li)
+               
+                Domain_Info_lis_new = list(set(Domain_Info_lis))
+                for line in Domain_Info_lis_new:
+                  w2.write(line)
               w2.close()
                         
-              os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
+              # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
               
               
               f1 = open('./MW_Length.txt')
@@ -907,7 +912,7 @@ if __name__ == "__main__":
             else:
               print(state)
               
-            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/ ./signaltmp/')
             os.system('rm -r ./pfam_EAD_cdhit*')
             os.remove('./all_protein_cdhit.faa')
             os.remove('./all_protein_cdhit.faa.clstr')
@@ -917,6 +922,9 @@ if __name__ == "__main__":
             os.remove('./all_protein_pfam_protein_EAD.fasta')
             os.remove('./pfam_EAD.fasta')
             os.remove('./all_protein_ut.faa')
+            os.remove('./molecular_weight.txt')
+            os.remove('./MW_Length.txt') 
+            os.remove('./Domain_Info.txt')
 
     elif Args.bacteriaORphage == 'P':
         if Args.workdir[-1] == '/':
@@ -1174,9 +1182,10 @@ if __name__ == "__main__":
                     w1.write(line)
               w1.close()
               
-              os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))
+              # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))
               
               
+              Domain_Info_lis = []
               with open('./Domain_Info.txt', 'w') as w2:
                 for line in f2:
                   if line[0] != "#" and len(line.split())!=0:
@@ -1184,12 +1193,16 @@ if __name__ == "__main__":
                     arr = list(filter(None, arr))
                     name = arr[0]
                     if name in dic_fa.keys():
-                      li = arr[0] + '\t' + arr[3] + '\t' + arr[4].split('.')[0] + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
+                      li = arr[0] + '\t' + arr[3] + '(Length:' + arr[5] + ')' + '\t' + arr[4].split('.')[0] + '(Length:' + arr[5] + ')' + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
                       print(li)
-                      w2.write(li)
+                      Domain_Info_lis.append(li)
+               
+                Domain_Info_lis_new = list(set(Domain_Info_lis))
+                for line in Domain_Info_lis_new:
+                  w2.write(line)
               w2.close()
               
-              os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
+              # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
               
               f1 = open('./MW_Length.txt')
               f2 = open('./Domain_Info.txt')
@@ -1283,7 +1296,7 @@ if __name__ == "__main__":
               print(state)
               
               
-            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/')
+            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./signaltmp/')
             os.system('rm -r ./pfam_EAD_cdhit*')
             os.remove('./all_protein_cdhit.faa')
             os.remove('./all_protein_cdhit.faa.clstr')
@@ -1293,6 +1306,9 @@ if __name__ == "__main__":
             os.remove('./all_protein_pfam_protein_EAD.fasta')
             os.remove('./pfam_EAD.fasta')
             os.remove('./all_protein_ut.faa')
+            os.remove('./molecular_weight.txt')
+            os.remove('./MW_Length.txt') 
+            os.remove('./Domain_Info.txt')
 
     else:
         raise('Error, please check parameter "--bp"')
