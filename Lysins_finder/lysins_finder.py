@@ -737,6 +737,9 @@ if __name__ == "__main__":
             else:
                 reported_lysin_EAD_suffix = reported_lysin_EAD
                 curr_dir_rpe = ''
+
+            if not os.path.getsize("./all_protein_pfam_protein.fasta"):
+                raise('No domain was found and No lysins found!!!')
     
             find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rpe + reported_lysin_EAD_suffix)
             
@@ -1122,6 +1125,9 @@ if __name__ == "__main__":
             else:
                 reported_lysin_EAD_suffix = reported_lysin_EAD
                 curr_dir_rpe = ''
+
+            if not os.path.getsize("./all_protein_pfam_protein.fasta"):
+                raise('No domain was found and No lysins found!!!')
     
             find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rpe + reported_lysin_EAD_suffix)
             
