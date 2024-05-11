@@ -63,7 +63,7 @@ source activate lysins_finder_env
 # run
 python lysins_finder.py
   -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
-  -t Bacteria (or 'Virus')                         # prokka kingdom type; Bacteria or Virus (for phages)
+  -t Bacteria (or 'Virus')                          # prokka kingdom type; Bacteria or Virus (for phages)
   -hd ./db/hmm/lysin_reported.hmm                   # hmmer database path
   -rl ./db/hmm/lysin_reported.txt                   # reported lysin structures(hmm files)
   -wkdir ./test/                                    # work directory
