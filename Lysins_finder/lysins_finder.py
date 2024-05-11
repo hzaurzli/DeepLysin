@@ -763,7 +763,7 @@ if __name__ == "__main__":
                    cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
                    tl.run(cmd_8)
                    
-                os.system('cat ./biolib_results/predicted_topologies.3line* > predicted_topologies.line')
+                os.system('cat ./biolib_results/predicted_topologies.3line* > ./biolib_results/predicted_topologies.line')
                 remove_TMhelix('./biolib_results/predicted_topologies.line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
               
             else:
