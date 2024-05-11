@@ -1,4 +1,4 @@
-# DeepLysin 
+# DeepLysin
 DeepLysin, easy and fast digging lysin from phages and prophages
 
 # Pipeline (Linux only, Internet)
