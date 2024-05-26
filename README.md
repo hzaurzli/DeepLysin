@@ -68,7 +68,7 @@ python lysins_finder.py
   -rl ./db/hmm/lysin_reported.txt                   # reported lysin structures(hmm files)
   -wkdir ./test/                                    # work directory
   -ml 10000                                         # lower proteins molecular weight
-  -mu 40000                                         # upper proteins molecular weight
+  -mu 50000                                         # upper proteins molecular weight
   -hde ./db/hmm/lysin_reported_EAD.hmm              # EAD hmmer database path
   -rle ./db/hmm/lysin_reported_EAD.txt              # reported lysin EAD structures(hmm files)
   -bp B                                             # 'B' for bacteria, 'P' for phage
