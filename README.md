@@ -287,8 +287,8 @@ python3 Predict_costom.py -f ./datasets/target_lysin.fa -o data.csv -m ./Models/
 
 # Reference database download
 Baidu：
-  Links：https://pan.baidu.com/s/1coUbBGpiSHmxgy418XWQDw
-  Password：smrz
+  Links：https://caiyun.139.com/m/i?1G5C3ebYpQu37
+  Password：DnyF
 
 # Cition
 If this software is useful, please cite [https://github.com/hzaurzli/DeepLysin](https://github.com/hzaurzli/DeepLysin)
