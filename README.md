@@ -286,7 +286,7 @@ python3 Predict_costom.py -f ./datasets/target_lysin.fa -o data.csv -m ./Models/
 
 
 # Reference database download
-Baidu：
+Web disk：
   Links：https://caiyun.139.com/m/i?1G5C3ebYpQu37
   Password：DnyF
 
