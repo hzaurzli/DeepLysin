@@ -502,7 +502,7 @@ if __name__ == "__main__":
     parser.add_argument("-hd", "--hmmer_db", required=True, type=str, help="reported lysin structures hmmer database path")
     parser.add_argument("-rl", "--reported_lysin", required=True, type=str, help="reported lysin structures(hmm files)")
     parser.add_argument("-wkdir", "--workdir", required=True, type=str, help="work directory")
-    parser.add_argument("-mu", "--MWU", required=False, default=40000, type=float, help="upper proteins molecular weight")
+    parser.add_argument("-mu", "--MWU", required=False, default=50000, type=float, help="upper proteins molecular weight")
     parser.add_argument("-ml", "--MWL", required=False, default=10000, type=float, help="lower proteins molecular weight")
     parser.add_argument("-hde", "--hmmer_db_EAD", required=True, type=str, help="EAD hmmer database path")
     parser.add_argument("-rle", "--reported_lysin_EAD", required=True, type=str, help="reported lysin EAD structures(hmm files)")
@@ -746,7 +746,16 @@ if __name__ == "__main__":
     
             # step 10 combine results of CAZY and pfam
             os.system('cat all_protein_pfam_protein_EAD.fasta > pfam_EAD.fasta')
-            cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
+            
+            dic_fa_ead = fasta2dict('./pfam_EAD.fasta')
+            with open('./pfam_EAD_tmp.fasta','w') as f:
+              for key in dic_fa_ead:
+                  if all(f not in dic_fa_ead[key] for f in filters):
+                      line = key + '\n' + dic_fa_ead[key] + '\n'
+                      f.write(line)
+            f.close()
+            
+            cmd_7 = tl.run_cdhit('./pfam_EAD_tmp.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
             tl.run(cmd_7)
     
             # step 11 remove TMhelix
@@ -914,8 +923,10 @@ if __name__ == "__main__":
                   
             else:
               print(state)
-              
-            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/ ./signaltmp/')
+            
+            
+            time.sleep(120) 
+            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
             os.system('rm -r ./pfam_EAD_cdhit*')
             os.remove('./all_protein_cdhit.faa')
             os.remove('./all_protein_cdhit.faa.clstr')
@@ -924,10 +935,13 @@ if __name__ == "__main__":
             os.remove('./all_protein_pfam_protein.fasta')
             os.remove('./all_protein_pfam_protein_EAD.fasta')
             os.remove('./pfam_EAD.fasta')
+            os.remove('./pfam_EAD_tmp.fasta')
+            os.remove('./all_protein_tmp.txt')
             os.remove('./all_protein_ut.faa')
             os.remove('./molecular_weight.txt')
             os.remove('./MW_Length.txt') 
             os.remove('./Domain_Info.txt')
+            os.system('rm -r ./signaltmp/')
 
     elif Args.bacteriaORphage == 'P':
         if Args.workdir[-1] == '/':
@@ -1134,7 +1148,16 @@ if __name__ == "__main__":
     
             # step 9 combine results of CAZY and pfam
             os.system('cat all_protein_pfam_protein_EAD.fasta > pfam_EAD.fasta')
-            cmd_7 = tl.run_cdhit('./pfam_EAD.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
+            
+            dic_fa_ead = fasta2dict('./pfam_EAD.fasta')
+            with open('./pfam_EAD_tmp.fasta','w') as f:
+              for key in dic_fa_ead:
+                  if all(f not in dic_fa_ead[key] for f in filters):
+                      line = key + '\n' + dic_fa_ead[key] + '\n'
+                      f.write(line)
+            f.close()
+            
+            cmd_7 = tl.run_cdhit('./pfam_EAD_tmp.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
             tl.run(cmd_7)
     
             # step 12 remove TMhelix
@@ -1302,7 +1325,8 @@ if __name__ == "__main__":
               print(state)
               
               
-            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./signaltmp/')
+            time.sleep(120) 
+            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
             os.system('rm -r ./pfam_EAD_cdhit*')
             os.remove('./all_protein_cdhit.faa')
             os.remove('./all_protein_cdhit.faa.clstr')
@@ -1311,10 +1335,12 @@ if __name__ == "__main__":
             os.remove('./all_protein_pfam_protein.fasta')
             os.remove('./all_protein_pfam_protein_EAD.fasta')
             os.remove('./pfam_EAD.fasta')
+            os.remove('./pfam_EAD_tmp.fasta')
             os.remove('./all_protein_ut.faa')
             os.remove('./molecular_weight.txt')
             os.remove('./MW_Length.txt') 
             os.remove('./Domain_Info.txt')
+            os.system('rm -r ./signaltmp/')
 
     else:
         raise('Error, please check parameter "--bp"')
