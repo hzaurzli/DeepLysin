@@ -291,4 +291,6 @@ Web disk：
   Password：DnyF
 
 # Cition
-If this software is useful, please cite [https://github.com/hzaurzli/DeepLysin](https://github.com/hzaurzli/DeepLysin)
+If this software is useful, please cite:
+
+Zhang Y, Li R, Zou G, et al. Discovery of Antimicrobial Lysins from the "Dark Matter" of Uncharacterized Phages Using Artificial Intelligence. Adv Sci (Weinh). Published online June 20, 2024. doi:10.1002/advs.202404049
