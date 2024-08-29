@@ -10,8 +10,8 @@ Prokka == 1.14.6
 PhiSpy.py == 4.2.21
 phanotate.py == 1.5.0
 CD-HIT == 4.8.1
-run_dbcan.py
 hmmsearch == 3.3.2
+run_dbcan.py
 DeepTMHMM
 signalp6
 ```
