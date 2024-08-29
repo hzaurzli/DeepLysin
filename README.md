@@ -5,6 +5,7 @@ DeepLysin, easy and fast digging lysin from phages and prophages, if you need to
 ![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/77f8e41a-ca4a-4a19-969f-9bd8aee74a73)
 
 # Requests
+Conda env:
 ```
 Prokka == 1.14.6
 PhiSpy.py == 4.2.21
@@ -12,9 +13,24 @@ phanotate.py == 1.5.0
 CD-HIT == 4.8.1
 hmmsearch == 3.3.2
 run_dbcan.py
+```
+
+Independent env:
+```
 DeepTMHMM
 signalp6
 ```
+
+Python pip install:
+```
+argparse
+pathlib
+pandas
+numpy
+joblib
+scikit-learn
+```
+
 
 ## Step 1: Lysins_finder: Find putative lysins
 ### Install the software
