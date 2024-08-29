@@ -4,7 +4,7 @@ DeepLysin, easy and fast digging lysin from phages and prophages, if you need to
 # Pipeline (Linux only, Internet)
 ![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/77f8e41a-ca4a-4a19-969f-9bd8aee74a73)
 
-# Request
+# Requests
 ```
 Prokka == 1.14.6
 PhiSpy.py == 4.2.21
