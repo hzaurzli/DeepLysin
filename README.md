@@ -4,6 +4,18 @@ DeepLysin, easy and fast digging lysin from phages and prophages, if you need to
 # Pipeline (Linux only, Internet)
 ![DeepLysin](https://github.com/hzaurzli/DeepLysin/assets/47686371/77f8e41a-ca4a-4a19-969f-9bd8aee74a73)
 
+# Request
+```
+Prokka == 1.14.6
+PhiSpy.py == 4.2.21
+phanotate.py == 1.5.0
+CD-HIT == 4.8.1
+run_dbcan.py
+hmmsearch == 3.3.2
+DeepTMHMM
+signalp6
+```
+
 ## Step 1: Lysins_finder: Find putative lysins
 ### Install the software
 ```
@@ -14,7 +26,7 @@ conda env create -f lysins_finder_env.yaml
 source activate lysins_finder_env
 ```
 
-If your perl version is not 5.22, please install perl=5.22
+***If your perl version is not 5.22***, please install perl=5.22
 ```
 # activate env
 source activate lysins_finder_env
@@ -23,7 +35,7 @@ source activate lysins_finder_env
 conda install -c anaconda perl=5.22
 ```
 
-If you don't have SignalP 6.0, please download from https://services.healthtech.dtu.dk/services/SignalP-6.0/
+***If you don't have SignalP 6.0***, please download from https://services.healthtech.dtu.dk/services/SignalP-6.0/
 ```
 # activate env
 source activate lysins_finder_env
@@ -45,7 +57,7 @@ cp /signalp6_fast/signalp-6-package/models/distilled_model_signalp6.pt /minicond
 signalp6 --help
 ```
 
-Install DeepTMHMM
+***Install DeepTMHMM***
 ```
 # activate env
 source activate lysins_finder_env
