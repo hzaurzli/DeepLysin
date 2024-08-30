@@ -17,8 +17,8 @@ run_dbcan.py
 
 Independent env:
 ```
-DeepTMHMM
 signalp6
+DeepTMHMM
 ```
 
 Python pip install:
