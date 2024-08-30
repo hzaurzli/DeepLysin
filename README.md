@@ -35,7 +35,7 @@ scikit-learn
 ## Step 1: Lysins_finder: Find putative lysins
 ### Install the software
 ```
-# install env
+# install env (recommend Python 3.7)
 conda env create -f lysins_finder_env.yaml
 
 # activate env
