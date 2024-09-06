@@ -549,12 +549,14 @@ if __name__ == "__main__":
         else:
             target_suffix = target
             curr_dir_target = ''
-
+        
+        name_fna = []
         type_annotation = Args.type
         for i in os.listdir(curr_dir_target + target_suffix):
             lis = i.split('.')[:-1]
             name = '.'.join(lis)
             suffix = i.split('.')[-1]
+            name_fna.append(i)
             cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
                               './prokka_result/' + name + '/',name,type_annotation)
             tl.run(cmd_1)
@@ -575,14 +577,18 @@ if __name__ == "__main__":
         else:
             os.mkdir('./ppn/')
 
-        fna_suffix = os.path.splitext(os.listdir(curr_dir_target + target_suffix)[0])[-1]
+
         for i in os.listdir('./phispy_out/'):
-            if os.path.isdir('./ppn/' + i) == True:
-                pass
-            else:
-                os.mkdir('./ppn/' + i)
-            prophage_select('./phispy_out/'+ i + '/' + i + '_prophage_coordinates.tsv',
-                            curr_dir_target + target_suffix + i + fna_suffix,'./ppn/' + i + '/' + i)
+          if os.path.isdir('./ppn/' + i) == True:
+            pass
+          else:
+            os.mkdir('./ppn/' + i)
+            
+          for fa_name in name_fna:
+            if i in fa_name:
+              fna_suffix = fa_name.split('.')[-1]
+              prophage_select('./phispy_out/'+ i + '/' + i + '_prophage_coordinates.tsv',
+                              curr_dir_target + target_suffix + i + '.' + fna_suffix,'./ppn/' + i + '/' + i)
 
 
         # step 4 phanotate annotates prophage ORFs
@@ -926,22 +932,22 @@ if __name__ == "__main__":
             
             
             time.sleep(120) 
-            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-            os.system('rm -r ./pfam_EAD_cdhit*')
-            os.remove('./all_protein_cdhit.faa')
-            os.remove('./all_protein_cdhit.faa.clstr')
-            os.remove('./all_protein_cdhit_filter.faa')
-            os.remove('./all_protein.faa')
-            os.remove('./all_protein_pfam_protein.fasta')
-            os.remove('./all_protein_pfam_protein_EAD.fasta')
-            os.remove('./pfam_EAD.fasta')
-            os.remove('./pfam_EAD_tmp.fasta')
-            os.remove('./all_protein_tmp.txt')
-            os.remove('./all_protein_ut.faa')
-            os.remove('./molecular_weight.txt')
-            os.remove('./MW_Length.txt') 
-            os.remove('./Domain_Info.txt')
-            os.system('rm -r ./signaltmp/')
+            #os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+            #os.system('rm -r ./pfam_EAD_cdhit*')
+            #os.remove('./all_protein_cdhit.faa')
+            #os.remove('./all_protein_cdhit.faa.clstr')
+            #os.remove('./all_protein_cdhit_filter.faa')
+            #os.remove('./all_protein.faa')
+            #os.remove('./all_protein_pfam_protein.fasta')
+            #os.remove('./all_protein_pfam_protein_EAD.fasta')
+            #os.remove('./pfam_EAD.fasta')
+            #os.remove('./pfam_EAD_tmp.fasta')
+            #os.remove('./all_protein_tmp.txt')
+            #os.remove('./all_protein_ut.faa')
+            #os.remove('./molecular_weight.txt')
+            #os.remove('./MW_Length.txt') 
+            #os.remove('./Domain_Info.txt')
+            #os.system('rm -r ./signaltmp/')
 
     elif Args.bacteriaORphage == 'P':
         if Args.workdir[-1] == '/':
@@ -1326,21 +1332,21 @@ if __name__ == "__main__":
               
               
             time.sleep(120) 
-            os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
-            os.system('rm -r ./pfam_EAD_cdhit*')
-            os.remove('./all_protein_cdhit.faa')
-            os.remove('./all_protein_cdhit.faa.clstr')
-            os.remove('./all_protein_cdhit_filter.faa')
-            os.remove('./all_protein.faa')
-            os.remove('./all_protein_pfam_protein.fasta')
-            os.remove('./all_protein_pfam_protein_EAD.fasta')
-            os.remove('./pfam_EAD.fasta')
-            os.remove('./pfam_EAD_tmp.fasta')
-            os.remove('./all_protein_ut.faa')
-            os.remove('./molecular_weight.txt')
-            os.remove('./MW_Length.txt') 
-            os.remove('./Domain_Info.txt')
-            os.system('rm -r ./signaltmp/')
+            #os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
+            #os.system('rm -r ./pfam_EAD_cdhit*')
+            #os.remove('./all_protein_cdhit.faa')
+            #os.remove('./all_protein_cdhit.faa.clstr')
+            #os.remove('./all_protein_cdhit_filter.faa')
+            #os.remove('./all_protein.faa')
+            #os.remove('./all_protein_pfam_protein.fasta')
+            #os.remove('./all_protein_pfam_protein_EAD.fasta')
+            #os.remove('./pfam_EAD.fasta')
+            #os.remove('./pfam_EAD_tmp.fasta')
+            #os.remove('./all_protein_ut.faa')
+            #os.remove('./molecular_weight.txt')
+            #os.remove('./MW_Length.txt') 
+            #os.remove('./Domain_Info.txt')
+            #os.system('rm -r ./signaltmp/')
 
     else:
         raise('Error, please check parameter "--bp"')
