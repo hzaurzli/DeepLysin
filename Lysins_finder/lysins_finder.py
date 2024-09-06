@@ -550,13 +550,13 @@ if __name__ == "__main__":
             target_suffix = target
             curr_dir_target = ''
         
-        name_fna = []
+        name_fna = {}
         type_annotation = Args.type
         for i in os.listdir(curr_dir_target + target_suffix):
             lis = i.split('.')[:-1]
             name = '.'.join(lis)
             suffix = i.split('.')[-1]
-            name_fna.append(i)
+            name_fna[name] = suffix
             cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
                               './prokka_result/' + name + '/',name,type_annotation)
             tl.run(cmd_1)
@@ -583,12 +583,10 @@ if __name__ == "__main__":
             pass
           else:
             os.mkdir('./ppn/' + i)
-            
-          for fa_name in name_fna:
-            if i in fa_name:
-              fna_suffix = fa_name.split('.')[-1]
-              prophage_select('./phispy_out/'+ i + '/' + i + '_prophage_coordinates.tsv',
-                              curr_dir_target + target_suffix + i + '.' + fna_suffix,'./ppn/' + i + '/' + i)
+
+          fna_suffix = name_fna[i]
+          prophage_select('./phispy_out/'+ i + '/' + i + '_prophage_coordinates.tsv',
+                          curr_dir_target + target_suffix + i + '.' + fna_suffix,'./ppn/' + i + '/' + i)
 
 
         # step 4 phanotate annotates prophage ORFs
