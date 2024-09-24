@@ -7,12 +7,12 @@ DeepLysin, easy and fast digging lysin from phages and prophages, if you need to
 # Requests
 Conda env:
 ```
-Prokka == 1.14.6
-PhiSpy.py == 4.2.21
-phanotate.py == 1.5.0
-CD-HIT == 4.8.1
-hmmsearch == 3.3.2
-run_dbcan.py
+prokka==1.14.6
+phispy==4.2.21
+phanotate==1.5.0
+cd-hit==4.8.1
+hmmer==3.3.2
+run-dbcan
 ```
 
 Independent env:
