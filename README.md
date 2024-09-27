@@ -318,6 +318,32 @@ Web disk：
   Links：https://caiyun.139.com/m/i?1G5C3ebYpQu37
   Password：DnyF
 
+# Update
+***1.lysins_finder.py(2022.10)
+See above 
+<br>
+***2.lysins_finder_super.py(2024.9)
+
+install for dbscan-swa.py: please refer to [DBSCAN-SWA](https://github.com/HIT-ImmunologyLab/DBSCAN-SWA)
+
+```
+# usage
+python lysins_finder_super.py
+  -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
+  -t Bacteria (or 'Virus')                          # prokka kingdom type; Bacteria or Virus (for phages)
+  -hd ./db/hmm/lysin_reported.hmm                   # hmmer database path
+  -rl ./db/hmm/lysin_reported.txt                   # reported lysin structures(hmm files)
+  -wkdir ./test/                                    # work directory
+  -ml 10000                                         # lower proteins molecular weight
+  -mu 50000                                         # upper proteins molecular weight
+  -hde ./db/hmm/lysin_reported_EAD.hmm              # EAD hmmer database path
+  -rle ./db/hmm/lysin_reported_EAD.txt              # reported lysin EAD structures(hmm files)
+  -bp B                                             # 'B' for bacteria, 'P' for phage
+  -r ./ref.fasta                                    # reported lysin reference fasta (optional parammeter, comparative similarity with known reported sequences)
+  -pp DBSCAN_SWA                                    # prophage predict method ('phispy' or 'DBSCAN-SWA')
+  -ds /path/bin/dbscan-swa.py                       # path of dbscan-swa.py, if prophage predict method is 'DBSCAN-SWA'
+```
+
 # Cition
 If this software is useful, please cite:
 
