@@ -326,7 +326,7 @@ See above
 
 ***2.lysins_finder_super.py(2024.9)***
 
-install for dbscan-swa.py: please refer to [DBSCAN-SWA](https://github.com/HIT-ImmunologyLab/DBSCAN-SWA)
+Install for dbscan-swa.py: please refer to [DBSCAN-SWA](https://github.com/HIT-ImmunologyLab/DBSCAN-SWA)
 
 ```
 # usage
