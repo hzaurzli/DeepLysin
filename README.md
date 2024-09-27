@@ -319,10 +319,12 @@ Web disk：
   Password：DnyF
 
 # Update
-***1.lysins_finder.py(2022.10)
+***1.lysins_finder.py(2022.10)***
+
 See above 
 <br>
-***2.lysins_finder_super.py(2024.9)
+
+***2.lysins_finder_super.py(2024.9)***
 
 install for dbscan-swa.py: please refer to [DBSCAN-SWA](https://github.com/HIT-ImmunologyLab/DBSCAN-SWA)
 
