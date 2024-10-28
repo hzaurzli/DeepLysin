@@ -565,7 +565,7 @@ if __name__ == "__main__":
             suffix = i.split('.')[-1]
             name_fna[name] = suffix
             cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
-                              './prokka_result/' + name + '/',name,type_annotation)
+                              './prokka_result/' + name + '/', name, type_annotation)
             tl.run(cmd_1)
         
         
@@ -583,9 +583,9 @@ if __name__ == "__main__":
                 os.mkdir('./DBSCAN_SWA_out/')
                 
             for i in os.listdir('./prokka_result/'):
-                i_prefix = '.'.join(i.split('.')[:-1])
+                #i_prefix = '.'.join(i.split('.')[:-1])
                 cmd_2 = tl.run_DBSCAN_SWA(Args.dbscan_swa, './prokka_result/' + i + '/' + i + '.fna',
-                                  './DBSCAN_SWA_out/' + i, i_prefix)
+                                  './DBSCAN_SWA_out/' + i, i)
                 tl.run(cmd_2)
                 
             if os.path.isdir('./orf_ffn/') == True:
