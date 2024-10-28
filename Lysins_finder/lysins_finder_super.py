@@ -583,7 +583,7 @@ if __name__ == "__main__":
                 os.mkdir('./DBSCAN_SWA_out/')
                 
             for i in os.listdir('./prokka_result/'):
-                #i_prefix = '.'.join(i.split('.')[:-1])
+                # i_prefix = '.'.join(i.split('.')[:-1])
                 cmd_2 = tl.run_DBSCAN_SWA(Args.dbscan_swa, './prokka_result/' + i + '/' + i + '.fna',
                                   './DBSCAN_SWA_out/' + i, i)
                 tl.run(cmd_2)
@@ -604,8 +604,6 @@ if __name__ == "__main__":
           else:
             raise('please add dbscan-swa.py path!')     
           
-  
-        
         elif Args.prophage_method == 'phispy':
           # step 2 phispy predict prophage
           if os.path.isdir('./phispy_out/') == True:
