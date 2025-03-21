@@ -341,9 +341,9 @@ python lysins_finder_super.py
   -hde ./db/hmm/lysin_reported_EAD.hmm              # EAD hmmer database path
   -rle ./db/hmm/lysin_reported_EAD.txt              # reported lysin EAD structures(hmm files)
   -bp B                                             # 'B' for bacteria, 'P' for phage
-  -r ./ref.fasta                                    # reported lysin reference fasta (optional parammeter, comparative similarity with known reported sequences)
   -pp DBSCAN_SWA                                    # prophage predict method ('phispy' or 'DBSCAN-SWA')
   -ds /path/bin/dbscan-swa.py                       # path of dbscan-swa.py, if prophage predict method is 'DBSCAN-SWA'
+  -r ./ref.fasta                                    # reported lysin reference fasta (optional parammeter, comparative similarity with known reported sequences)
 ```
 
 # Cition
