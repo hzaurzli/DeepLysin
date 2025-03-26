@@ -836,7 +836,7 @@ if __name__ == "__main__":
               
             dic_fa = {}
             with open('./putative_lysins.fa') as f:
-                lines = f.readlines()  # è¯»å–æ‰€æœ‰è¡Œ
+                lines = f.readlines()  # ¶ÁÈ¡ËùÓĞĞĞ
                 first_line = lines[0]
                 if first_line.startswith('>'):
                     state = 'Y'
@@ -933,12 +933,14 @@ if __name__ == "__main__":
               
               
               if Args.ref != '':
-                ref_lysins = str(Args.ref)
                 first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+                os.chdir(curr_dir)
+                ref_lysins = os.path.abspath(str(Args.ref))
                 second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+                os.chdir(Args.workdir)
                 
                 dic_ref = {}
-                # ä¸¤ä¸ªfastaæ–‡ä»¶ä¸­çš„åºåˆ—ä¸¤ä¸¤æ¯”è¾ƒï¼š
+                # Á½¸öfastaÎÄ¼şÖĞµÄĞòÁĞÁ½Á½±È½Ï£º
                 for t1 in first_dict:
                   t_len = len(first_dict[t1].seq)
                   for t2 in second_dict:
@@ -1241,7 +1243,7 @@ if __name__ == "__main__":
     
             dic_fa = {}
             with open('./putative_lysins.fa') as f:
-              lines = f.readlines()  # è¯»å–æ‰€æœ‰è¡Œ
+              lines = f.readlines()  # ¶ÁÈ¡ËùÓĞĞĞ
               first_line = lines[0]
               if first_line.startswith('>'):
                   state = 'Y'
@@ -1337,12 +1339,14 @@ if __name__ == "__main__":
               
               
               if Args.ref != '':
-                ref_lysins = str(Args.ref)
                 first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+                os.chdir(curr_dir)
+                ref_lysins = os.path.abspath(str(Args.ref))
                 second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+                os.chdir(Args.workdir)
                 
                 dic_ref = {}
-                # ä¸¤ä¸ªfastaæ–‡ä»¶ä¸­çš„åºåˆ—ä¸¤ä¸¤æ¯”è¾ƒï¼š
+                # Á½¸öfastaÎÄ¼şÖĞµÄĞòÁĞÁ½Á½±È½Ï£º
                 for t1 in first_dict:
                   t_len = len(first_dict[t1].seq)
                   for t2 in second_dict:

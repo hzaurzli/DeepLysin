@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
@@ -787,7 +788,7 @@ if __name__ == "__main__":
               
             dic_fa = {}
             with open('./putative_lysins.fa') as f:
-                lines = f.readlines()  # 读取所有行
+                lines = f.readlines()
                 first_line = lines[0]
                 if first_line.startswith('>'):
                     state = 'Y'
@@ -884,12 +885,13 @@ if __name__ == "__main__":
               
               
               if Args.ref != '':
-                ref_lysins = str(Args.ref)
                 first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+                os.chdir(curr_dir)
+                ref_lysins = os.path.abspath(str(Args.ref))
                 second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+                os.chdir(Args.workdir)
                 
                 dic_ref = {}
-                # 两个fasta文件中的序列两两比较：
                 for t1 in first_dict:
                   t_len = len(first_dict[t1].seq)
                   for t2 in second_dict:
@@ -1189,7 +1191,7 @@ if __name__ == "__main__":
     
             dic_fa = {}
             with open('./putative_lysins.fa') as f:
-              lines = f.readlines()  # 读取所有行
+              lines = f.readlines()
               first_line = lines[0]
               if first_line.startswith('>'):
                   state = 'Y'
@@ -1285,12 +1287,13 @@ if __name__ == "__main__":
               
               
               if Args.ref != '':
-                ref_lysins = str(Args.ref)
                 first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+                os.chdir(curr_dir)
+                ref_lysins = os.path.abspath(str(Args.ref))
                 second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+                os.chdir(Args.workdir)
                 
                 dic_ref = {}
-                # 两个fasta文件中的序列两两比较：
                 for t1 in first_dict:
                   t_len = len(first_dict[t1].seq)
                   for t2 in second_dict:
