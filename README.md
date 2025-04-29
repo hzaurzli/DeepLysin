@@ -54,7 +54,7 @@ conda install -c anaconda perl=5.22
 ***If you don't have SignalP 6.0***, please download from https://services.healthtech.dtu.dk/services/SignalP-6.0/
 ```
 # activate env
-source activate deeplysin.yaml
+source activate deeplysin
 
 # install torch==1.7.1
 pip install torch==1.7.1
