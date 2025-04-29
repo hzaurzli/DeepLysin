@@ -350,3 +350,19 @@ python lysins_finder_super.py
 If this software is useful, please cite:
 
 Zhang Y, Li R, Zou G, et al. Discovery of Antimicrobial Lysins from the "Dark Matter" of Uncharacterized Phages Using Artificial Intelligence. Adv Sci (Weinh). Published online June 20, 2024. doi:10.1002/advs.202404049
+
+# Tips
+If an error occurs:
+```
+from subprocess import _args_from_interpreter_flags
+ImportError: cannot import name '_args_from_interpreter_flags' from 'subprocess' (/home/user/mambaforge/envs/deeplysin/lib/python3.7/subprocess.py)
+```
+
+Please enter the corresponding virtual environment to remove the following statements:
+```
+cd "/home/.../miniconda3/envs/deeplysin/lib/python3.7/multiprocessing/
+vi util.py
+```
+
+Remove ```from subprocess import _args_from_interpreter_flags```
+
