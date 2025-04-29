@@ -36,16 +36,16 @@ scikit-learn
 ### Install the software
 ```
 # install env (recommend Python 3.7)
-conda env create -f lysins_finder_env.yaml
+conda env create -f deeplysin.yaml
 
 # activate env
-source activate lysins_finder_env
+source activate deeplysin
 ```
 
 ***If your perl version is not 5.22***, please install perl=5.22
 ```
 # activate env
-source activate lysins_finder_env
+source activate deeplysin
 
 # install perl 5.22
 conda install -c anaconda perl=5.22
@@ -54,7 +54,7 @@ conda install -c anaconda perl=5.22
 ***If you don't have SignalP 6.0***, please download from https://services.healthtech.dtu.dk/services/SignalP-6.0/
 ```
 # activate env
-source activate lysins_finder_env
+source activate deeplysin.yaml
 
 # install torch==1.7.1
 pip install torch==1.7.1
@@ -76,7 +76,7 @@ signalp6 --help
 ***Install DeepTMHMM***
 ```
 # activate env
-source activate inder_env
+source activate deeplysin
 
 # install
 pip3 install -U pybiolib
@@ -86,7 +86,7 @@ pip3 install -U pybiolib
 And then, run ```lysins_finder.py```:
 ```
 # activate env
-source activate lysins_finder_env
+source activate deeplysin
 
 # run
 python lysins_finder.py
