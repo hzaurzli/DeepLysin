@@ -1055,7 +1055,7 @@ if __name__ == "__main__":
               w.write(line)
             w.close()
             
-            os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
+            os.system('rm -r ./prokka_result/')
             os.remove('./all_protein.faa')
             os.remove('./all_protein_ut.faa')
           
