@@ -836,7 +836,7 @@ if __name__ == "__main__":
               
             dic_fa = {}
             with open('./putative_lysins.fa') as f:
-                lines = f.readlines()  # ¶ÁÈ¡ËùÓĞĞĞ
+                lines = f.readlines()  # è¯»å–æ‰€æœ‰è¡Œ
                 first_line = lines[0]
                 if first_line.startswith('>'):
                     state = 'Y'
@@ -940,7 +940,7 @@ if __name__ == "__main__":
                 os.chdir(Args.workdir)
                 
                 dic_ref = {}
-                # Á½¸öfastaÎÄ¼şÖĞµÄĞòÁĞÁ½Á½±È½Ï£º
+                # ä¸¤ä¸ªfastaæ–‡ä»¶ä¸­çš„åºåˆ—ä¸¤ä¸¤æ¯”è¾ƒï¼š
                 for t1 in first_dict:
                   t_len = len(first_dict[t1].seq)
                   for t2 in second_dict:
@@ -1107,7 +1107,7 @@ if __name__ == "__main__":
               w.write(line)
             w.close()
             
-            os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
+            os.system('rm -r ./prokka_result/')
             os.remove('./all_protein.faa')
             os.remove('./all_protein_ut.faa')
           
@@ -1243,7 +1243,7 @@ if __name__ == "__main__":
     
             dic_fa = {}
             with open('./putative_lysins.fa') as f:
-              lines = f.readlines()  # ¶ÁÈ¡ËùÓĞĞĞ
+              lines = f.readlines()  # è¯»å–æ‰€æœ‰è¡Œ
               first_line = lines[0]
               if first_line.startswith('>'):
                   state = 'Y'
@@ -1346,7 +1346,7 @@ if __name__ == "__main__":
                 os.chdir(Args.workdir)
                 
                 dic_ref = {}
-                # Á½¸öfastaÎÄ¼şÖĞµÄĞòÁĞÁ½Á½±È½Ï£º
+                # ä¸¤ä¸ªfastaæ–‡ä»¶ä¸­çš„åºåˆ—ä¸¤ä¸¤æ¯”è¾ƒï¼š
                 for t1 in first_dict:
                   t_len = len(first_dict[t1].seq)
                   for t2 in second_dict:
