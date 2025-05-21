@@ -1802,40 +1802,40 @@ if __name__ == "__main__":
                 molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
                 rewrite_dict = fasta2dict_2('./all_protein_cdhit_filter.faa')
                 
-                if os.path.isdir('./rpb_input/') == True:
+                if os.path.isdir('./rps_input/') == True:
                     pass
                 else:
-                    os.mkdir('./rpb_input/')
+                    os.mkdir('./rps_input/')
                     
-                if os.path.isdir('./rpb_output/') == True:
+                if os.path.isdir('./rps_output/') == True:
                     pass
                 else:
-                    os.mkdir('./rpb_output/')
+                    os.mkdir('./rps_output/')
                     
-                if os.path.isdir('./add_rpb_output/') == True:
+                if os.path.isdir('./add_rps_output/') == True:
                     pass
                 else:
-                    os.mkdir('./add_rpb_output/')
+                    os.mkdir('./add_rps_output/')
                       
                 for key in rewrite_dict:
-                  with open('./rpb_input/' + key + '.fasta', 'w') as w:
+                  with open('./rps_input/' + key + '.fasta', 'w') as w:
                       line = '>' + key + '\n' + rewrite_dict[key] + '\n'
                       w.write(line)
                   w.close()
                     
         
                 # step 8 rpsblast scan in db
-                for i in os.listdir('./rpb_input/'):
+                for i in os.listdir('./rps_input/'):
                   lis = i.split('.')[:-1]
                   name = '.'.join(lis)
-                  cmd_5 = tl.run_rpsblast('./rpb_input/' + i, float(Args.rpsblast_cutoff), './rpb_output/' + name +'.out', Args.rpsblast_db)
+                  cmd_5 = tl.run_rpsblast('./rps_input/' + i, float(Args.rpsblast_cutoff), './rps_output/' + name +'.out', Args.rpsblast_db)
                   tl.run(cmd_5)
               
                 ead_path = os.path.abspath(Args.EAD_info)
                 cbd_path = os.path.abspath(Args.CBD_info)
                 
-                blast_res = './rpb_output/'
-                blast_len_res = './add_rpb_output/'
+                blast_res = './rps_output/'
+                blast_len_res = './add_rps_output/'
                 if not os.path.exists(blast_len_res):
                   os.mkdir(blast_len_res)
                 
@@ -2053,12 +2053,13 @@ if __name__ == "__main__":
                 
                 time.sleep(120) 
                 if os.path.isdir('./phispy_out/') == True:
-                    os.system('rm -r ./rpb_input/ ./rpb_output/ ./add_rpb_output/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
                 else:
-                    os.system('rm -r ./rpb_input/ ./rpb_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
+                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
                 os.remove('./all_protein_cdhit.faa')
                 os.remove('./all_protein_cdhit.faa.clstr')
                 os.remove('./all_protein_cdhit_filter.faa')
+                os.remove('./all_protein_tmp.txt')
                 os.remove('./all_protein.faa')
                 os.remove('./all_protein_ut.faa')
                 os.remove('./rpsblast_cdhit.fasta')
@@ -2189,40 +2190,40 @@ if __name__ == "__main__":
                 molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
                 rewrite_dict = fasta2dict_2('./all_protein_cdhit_filter.faa')
                 
-                if os.path.isdir('./rpb_input/') == True:
+                if os.path.isdir('./rps_input/') == True:
                     pass
                 else:
-                    os.mkdir('./rpb_input/')
+                    os.mkdir('./rps_input/')
                     
-                if os.path.isdir('./rpb_output/') == True:
+                if os.path.isdir('./rps_output/') == True:
                     pass
                 else:
-                    os.mkdir('./rpb_output/')
+                    os.mkdir('./rps_output/')
                     
-                if os.path.isdir('./add_rpb_output/') == True:
+                if os.path.isdir('./add_rps_output/') == True:
                     pass
                 else:
-                    os.mkdir('./add_rpb_output/')
+                    os.mkdir('./add_rps_output/')
                       
                 for key in rewrite_dict:
-                  with open('./rpb_input/' + key + '.fasta', 'w') as w:
+                  with open('./rps_input/' + key + '.fasta', 'w') as w:
                       line = '>' + key + '\n' + rewrite_dict[key] + '\n'
                       w.write(line)
                   w.close()
                     
         
                 # step 8 rpsblast scan in db
-                for i in os.listdir('./rpb_input/'):
+                for i in os.listdir('./rps_input/'):
                   lis = i.split('.')[:-1]
                   name = '.'.join(lis)
-                  cmd_5 = tl.run_rpsblast('./rpb_input/' + i, float(Args.rpsblast_cutoff), './rpb_output/' + name +'.out', Args.rpsblast_db)
+                  cmd_5 = tl.run_rpsblast('./rps_input/' + i, float(Args.rpsblast_cutoff), './rps_output/' + name +'.out', Args.rpsblast_db)
                   tl.run(cmd_5)
               
                 ead_path = os.path.abspath(Args.EAD_info)
                 cbd_path = os.path.abspath(Args.CBD_info)
                 
-                blast_res = './rpb_output/'
-                blast_len_res = './add_rpb_output/'
+                blast_res = './rps_output/'
+                blast_len_res = './add_rps_output/'
                 if not os.path.exists(blast_len_res):
                   os.mkdir(blast_len_res)
                 
@@ -2440,7 +2441,7 @@ if __name__ == "__main__":
                   
                   
                 time.sleep(120) 
-                os.system('rm -r ./rpb_input/ ./rpb_output/ ./add_rpb_output/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
+                os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
                 os.remove('./all_protein_cdhit.faa')
                 os.remove('./all_protein_cdhit.faa.clstr')
                 os.remove('./all_protein_cdhit_filter.faa')
