@@ -681,7 +681,7 @@ if __name__ == "__main__":
     parser.add_argument("-CI", "--CBD_info", required=False, type=str, help="CBD information(rpsblast)")
     parser.add_argument("-rc", "--rpsblast_cutoff", default=1e-5,required=False, type=float, help="rpsblast evalue cutoff(rpsblast)")
     parser.add_argument("-rcov", "--rpsblast_coverage", required=False, default=80, type=float, help="rpbblast region coverage(rpsblast)")
-    parser.add_argument("-rident", "--rpsblast_identity", required=False, default=40, type=float, help="rpbblast identity(rpsblast)")
+    parser.add_argument("-rident", "--rpsblast_identity", required=False, default=20, type=float, help="rpbblast identity(rpsblast)")
     parser.add_argument("-rol", "--rpsblast_over_lap", default=80,required=False, type=float, help="rpsblast cutoff of overlap in the same region(rpsblast)")
     parser.add_argument("-rpsdb", "--rpsblast_db", required=False, type=str, help="reported lysin rpsblast database path(need db index, rpsblast)")
     Args = parser.parse_args()
@@ -776,11 +776,11 @@ if __name__ == "__main__":
                                 for m in f:
                                     if m != None:
                                         if m.startswith('>'):
-                                            line = '>' + i + '_' + i.strip().split('|')[2].split('_')[1] + '\n'
-                                            w.wrire(line)
+                                            line = '>' + i + '_' + m.strip().split('|')[2].split('_')[1] + '\n'
+                                            w.write(line)
                                         else:
                                             line = m
-                                            w.wrire(line)
+                                            w.write(line)
                             w.close()
                             os.remove('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
                                 
@@ -1680,11 +1680,11 @@ if __name__ == "__main__":
                                 for m in f:
                                     if m != None:
                                         if m.startswith('>'):
-                                            line = '>' + i + '_' + i.strip().split('|')[2].split('_')[1] + '\n'
-                                            w.wrire(line)
+                                            line = '>' + i + '_' + m.strip().split('|')[2].split('_')[1] + '\n'
+                                            w.write(line)
                                         else:
                                             line = m
-                                            w.wrire(line)
+                                            w.write(line)
                             w.close()
                             os.remove('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
                                 
