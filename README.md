@@ -338,12 +338,14 @@ Web disk：
 See above 
 <br>
 
-***2.lysins_finder_super.py(2024.9)***
+***2.lysins_finder_super.py(for 'hmmer', 2024.9)***
 
+**Two method to predict ppn ('phispy' or 'DBSCAN-SWA')**
 Install for dbscan-swa.py: please refer to [DBSCAN-SWA](https://github.com/HIT-ImmunologyLab/DBSCAN-SWA)
 
 ```
 # usage
+## two method to predict ppn ('phispy' or 'DBSCAN-SWA')
 python lysins_finder_super.py
   -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
   -t Bacteria (or 'Virus')                          # prokka kingdom type; Bacteria or Virus (for phages)
@@ -359,6 +361,35 @@ python lysins_finder_super.py
   -ds /path/bin/dbscan-swa.py                       # path of dbscan-swa.py, if prophage predict method is 'DBSCAN-SWA'
   -r ./ref.fasta                                    # reported lysin reference fasta (optional parammeter, comparative similarity with known reported sequences)
 ```
+
+
+***3.lysins_finder_super.py(for 'rpsblast', 2025.5)***
+
+**Two method to scan lysin domain ('hmmer' or 'rpsblast')**
+
+```
+# usage
+## two method to scan lysin domain ('hmmer' or 'rpsblast')
+python lysins_finder_super.py
+  -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
+  -t Bacteria (or 'Virus')                          # prokka kingdom type; Bacteria or Virus (for phages)
+  -wkdir ./test/                                    # work directory
+  -ml 10000                                         # lower proteins molecular weight
+  -mu 50000                                         # upper proteins molecular weight
+  -bp B                                             # 'B' for bacteria, 'P' for phage
+  -pp DBSCAN_SWA                                    # prophage predict method ('phispy' or 'DBSCAN-SWA')
+  -ds /path/bin/dbscan-swa.py                       # path of dbscan-swa.py, if prophage predict method is 'DBSCAN-SWA'
+  -m hmmer (or rpsblast)                            # searching method 'hmmer' or 'rpsblast'
+  -EI /path/EAD_info.csv                            # EAD information(.csv, rpsblast)
+  -CI /path/CBD_info.csv                            # CBD information(.csv, rpsblast)
+  -rc 1e-5                                          # rpsblast evalue cutoff(rpsblast)
+  -rcov 80                                          # rpsblast region coverage(%, rpsblast)
+  -rident 40                                        # rpsblast identity(%, rpsblast)
+  -rol 80                                           # rpsblast cutoff of overlap in the same region(%, rpsblast)
+  -rpsdb /path/pldb/pldb (index path)               # reported lysin rpsblast database path(need db index, rpsblast)
+  -r ./ref.fasta                                    # reported lysin reference fasta (optional parammeter, comparative similarity with known reported sequences)
+```
+
 
 # Cition
 If this software is useful, please cite:
