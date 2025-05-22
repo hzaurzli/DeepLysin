@@ -614,7 +614,7 @@ def dict_slice(adict, start, end):
 
 def Split_fa(fasta_name,tot, num_1, num_2):    
     dict = fasta2dict(fasta_name)
-    for i in range(1,num_1):
+    for i in range(1,num_1 + 1):
       dic = dict_slice(dict, int(str(i) + '00') - 100, int(str(i) + '00'))
       with open('./pfam_EAD_cdhit-' + str(i) + '00.fasta','w') as w:
         for key in dic:
@@ -624,6 +624,25 @@ def Split_fa(fasta_name,tot, num_1, num_2):
     
     if num_2 != 0:
       with open('./pfam_EAD_cdhit-' + str(int(str(num_1 + 1) + '00')) + '.fasta','w') as w:
+        dic = dict_slice(dict, int(str(num_1) + '00'), int(str(num_1) + '00') + int(num_2))
+        for key in dic:
+          line = key + '\n' + dic[key] + '\n'
+          w.write(line)
+      w.close()
+
+
+def Split_fa_rps(fasta_name,tot, num_1, num_2):    
+    dict = fasta2dict(fasta_name)
+    for i in range(1,num_1 + 1):
+      dic = dict_slice(dict, int(str(i) + '00') - 100, int(str(i) + '00'))
+      with open('./rpsblast_cdhit-' + str(i) + '00.fasta','w') as w:
+        for key in dic:
+          line = key + '\n' + dic[key] + '\n'
+          w.write(line)
+      w.close()
+    
+    if num_2 != 0:
+      with open('./rpsblast_cdhit-' + str(int(str(num_1 + 1) + '00')) + '.fasta','w') as w:
         dic = dict_slice(dict, int(str(num_1) + '00'), int(str(num_1) + '00') + int(num_2))
         for key in dic:
           line = key + '\n' + dic[key] + '\n'
@@ -1890,7 +1909,7 @@ if __name__ == "__main__":
                 if int(tot) > 100:
                     num_1 = int(tot)//100
                     num_2 = int(tot)%100
-                    Split_fa('./rpsblast_cdhit.fasta', tot, num_1, num_2)
+                    Split_fa_rps('./rpsblast_cdhit.fasta', tot, num_1, num_2)
                   
                     for i in range(1, int(num_1) + 1):
                        time_sleep = random.uniform(60, 180)
@@ -2062,9 +2081,7 @@ if __name__ == "__main__":
                 os.remove('./all_protein_tmp.txt')
                 os.remove('./all_protein.faa')
                 os.remove('./all_protein_ut.faa')
-                os.remove('./rpsblast_cdhit.fasta')
-                os.remove('./rpsblast_cdhit.fasta.clstr')
-                os.remove('./rpsblast_tmp.fasta')
+                os.system('rm -r rpsblast_cdhit*')
                 os.remove('./putative_lysin_domain_info.csv')
                 os.remove('./molecular_weight.txt')
                 os.remove('./MW_Length.txt') 
@@ -2278,7 +2295,7 @@ if __name__ == "__main__":
                 if int(tot) > 100:
                     num_1 = int(tot)//100
                     num_2 = int(tot)%100
-                    Split_fa('./rpsblast_cdhit.fasta', tot, num_1, num_2)
+                    Split_fa_rps('./rpsblast_cdhit.fasta', tot, num_1, num_2)
                   
                     for i in range(1, int(num_1) + 1):
                        time_sleep = random.uniform(60, 180)
@@ -2442,14 +2459,12 @@ if __name__ == "__main__":
                   
                 time.sleep(120) 
                 os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
+                os.system('rm -r rpsblast_cdhit*')
                 os.remove('./all_protein_cdhit.faa')
                 os.remove('./all_protein_cdhit.faa.clstr')
                 os.remove('./all_protein_cdhit_filter.faa')
                 os.remove('./all_protein.faa')
                 os.remove('./all_protein_ut.faa')
-                os.remove('./rpsblast_cdhit.fasta')
-                os.remove('./rpsblast_cdhit.fasta.clstr')
-                os.remove('./rpsblast_tmp.fasta')
                 os.remove('./putative_lysin_domain_info.csv')
                 os.remove('./molecular_weight.txt')
                 os.remove('./MW_Length.txt') 
