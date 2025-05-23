@@ -864,21 +864,21 @@ if __name__ == "__main__":
                                                 
                                                 
               for name in os.listdir('./orf_ffn/'):
-                f = open('./orf_ffn/' + name)
-                prefix = '.'.join(name.split('.')[:-1])
-                os.system('mv %s %s' % ('./orf_ffn/' + prefix + '.ffn', './orf_ffn/' + prefix + '_tmp.ffn'))
+                  f = open('./orf_ffn/' + name)
+                  prefix = '.'.join(name.split('.')[:-1])
+                  os.system('mv %s %s' % ('./orf_ffn/' + prefix + '.ffn', './orf_ffn/' + prefix + '_tmp.ffn'))
                 
-                with open('./orf_ffn/' + prefix + '.ffn', 'w') as w:
-                  for jj in f:
-                    if jj != None:
-                      if jj.startswith('>'):
-                        line = '>' + prefix + ':' + jj.strip().split(':')[2].split(' ')[0] + ':' + jj.strip().split(':')[1] + '\n'
-                        w.write(line)
-                      else:
-                        line = jj
-                        w.write(line)
-                w.close()
-                os.remove('./orf_ffn/' + prefix + '_tmp.ffn')
+                  with open('./orf_ffn/' + prefix + '.ffn', 'w') as w:
+                    for jj in f:
+                      if jj != None:
+                        if jj.startswith('>'):
+                          line = '>' + prefix + ':' + jj.strip().split(':')[2].split(' ')[0] + ':' + jj.strip().split(':')[1] + '\n'
+                          w.write(line)
+                        else:
+                          line = jj
+                          w.write(line)
+                  w.close()
+                  os.remove('./orf_ffn/' + prefix + '_tmp.ffn')
     
             
             if len(os.listdir('./orf_ffn/')) == 0:
@@ -1786,21 +1786,21 @@ if __name__ == "__main__":
               
               
               for name in os.listdir('./orf_ffn/'):
-                f = open('./orf_ffn/' + name)
-                prefix = '.'.join(name.split('.')[:-1])
-                os.system('mv %s %s' % ('./orf_ffn/' + prefix + '.ffn', './orf_ffn/' + prefix + '_tmp.ffn'))
+                  f = open('./orf_ffn/' + name)
+                  prefix = '.'.join(name.split('.')[:-1])
+                  os.system('mv %s %s' % ('./orf_ffn/' + prefix + '.ffn', './orf_ffn/' + prefix + '_tmp.ffn'))
                 
-                with open('./orf_ffn/' + prefix + '.ffn', 'w') as w:
-                  for jj in f:
-                    if jj != None:
-                      if jj.startswith('>'):
-                        line = '>' + prefix + ':' + jj.strip().split(':')[2].split(' ')[0] + ':' + jj.strip().split(':')[1] + '\n'
-                        w.write(line)
-                      else:
-                        line = jj
-                        w.write(line)
-                w.close()
-                os.remove('./orf_ffn/' + prefix + '_tmp.ffn')
+                  with open('./orf_ffn/' + prefix + '.ffn', 'w') as w:
+                    for jj in f:
+                      if jj != None:
+                        if jj.startswith('>'):
+                          line = '>' + prefix + ':' + jj.strip().split(':')[2].split(' ')[0] + ':' + jj.strip().split(':')[1] + '\n'
+                          w.write(line)
+                        else:
+                          line = jj
+                          w.write(line)
+                  w.close()
+                  os.remove('./orf_ffn/' + prefix + '_tmp.ffn')
                 
             
             if len(os.listdir('./orf_ffn/')) == 0:
