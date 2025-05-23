@@ -795,7 +795,7 @@ if __name__ == "__main__":
                                 for m in f:
                                     if m != None:
                                         if m.startswith('>'):
-                                            line = '>' + i + '_' + m.strip().split('|')[2].split('_')[1] + '\n'
+                                            line = '>' + i + ':' + m.strip().split('|')[3].split('_')[0] + '-' + m.strip().split('|')[3].split('_')[1] + ':' + m.strip().split('|')[3].split('_')[2] + ':' + m.strip().split('|')[2] + '\n'
                                             w.write(line)
                                         else:
                                             line = m
@@ -861,6 +861,24 @@ if __name__ == "__main__":
                           Gene_element_abstract('./ppn/' + i + '/' + j_prefix + '.out',
                                                 './ppn/' + i + '/' + j,
                                                 './orf_ffn/' + j_prefix + '.ffn')
+                                                
+                                                
+              for name in os.listdir('./orf_ffn/'):
+                f = open('./orf_ffn/' + name)
+                prefix = '.'.join(name.split('.')[:-1])
+                os.system('mv %s %s' % ('./orf_ffn/' + prefix + '.ffn', './orf_ffn/' + prefix + '_tmp.ffn'))
+                
+                with open('./orf_ffn/' + prefix + '.ffn', 'w') as w:
+                  for jj in f:
+                    if jj != None:
+                      if jj.startswith('>'):
+                        line = '>' + prefix + ':' + jj.strip().split(':')[2].split(' ')[0] + ':' + jj.strip().split(':')[1] + '\n'
+                        w.write(line)
+                      else:
+                        line = jj
+                        w.write(line)
+                w.close()
+                os.remove('./orf_ffn/' + prefix + '_tmp.ffn')
     
             
             if len(os.listdir('./orf_ffn/')) == 0:
@@ -873,7 +891,7 @@ if __name__ == "__main__":
               
        
             else:
-              # step 5 ppn faa together
+              # step 5 ppn faa together    
               os.system('cat ./orf_ffn/* > all_protein_ut.faa')
               
               fa_dict = fasta2dict('./all_protein_ut.faa')
@@ -1699,7 +1717,7 @@ if __name__ == "__main__":
                                 for m in f:
                                     if m != None:
                                         if m.startswith('>'):
-                                            line = '>' + i + '_' + m.strip().split('|')[2].split('_')[1] + '\n'
+                                            line = '>' + i + ':' + m.strip().split('|')[3].split('_')[0] + '-' + m.strip().split('|')[3].split('_')[1] + ':' + m.strip().split('|')[3].split('_')[2] + ':' + m.strip().split('|')[2] + '\n'
                                             w.write(line)
                                         else:
                                             line = m
@@ -1765,7 +1783,25 @@ if __name__ == "__main__":
                           Gene_element_abstract('./ppn/' + i + '/' + j_prefix + '.out',
                                                 './ppn/' + i + '/' + j,
                                                 './orf_ffn/' + j_prefix + '.ffn')
-    
+              
+              
+              for name in os.listdir('./orf_ffn/'):
+                f = open('./orf_ffn/' + name)
+                prefix = '.'.join(name.split('.')[:-1])
+                os.system('mv %s %s' % ('./orf_ffn/' + prefix + '.ffn', './orf_ffn/' + prefix + '_tmp.ffn'))
+                
+                with open('./orf_ffn/' + prefix + '.ffn', 'w') as w:
+                  for jj in f:
+                    if jj != None:
+                      if jj.startswith('>'):
+                        line = '>' + prefix + ':' + jj.strip().split(':')[2].split(' ')[0] + ':' + jj.strip().split(':')[1] + '\n'
+                        w.write(line)
+                      else:
+                        line = jj
+                        w.write(line)
+                w.close()
+                os.remove('./orf_ffn/' + prefix + '_tmp.ffn')
+                
             
             if len(os.listdir('./orf_ffn/')) == 0:
               if os.path.isdir('./phispy_out/') == True:
@@ -1777,7 +1813,7 @@ if __name__ == "__main__":
               
        
             else:
-              # step 5 ppn faa together
+              # step 5 ppn faa together  
               os.system('cat ./orf_ffn/* > all_protein_ut.faa')
               
               fa_dict = fasta2dict('./all_protein_ut.faa')
