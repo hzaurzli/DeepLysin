@@ -127,9 +127,9 @@ def add_length(ead_path, cbd_path, blast_res, blast_len_res):
     for n in f_cbd:
       lis = []
       id = 'CDD:' + n.strip().split(',')[2]
-      domain_id = m.strip().split(',')[0]
-      domain_name = m.strip().split(',')[1]
-      length = m.strip().split(',')[3]
+      domain_id = n.strip().split(',')[0]
+      domain_name = n.strip().split(',')[1]
+      length = n.strip().split(',')[3]
       lis.append(domain_id)
       lis.append(domain_name)
       lis.append(length)
