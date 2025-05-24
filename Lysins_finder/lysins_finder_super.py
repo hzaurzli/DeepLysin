@@ -2005,7 +2005,8 @@ if __name__ == "__main__":
                           info_lis.append(info)
                           Domain_Info_dict[orf_id] = info_lis
                     for key in Domain_Info_dict:
-                        line = key + '\t' + ';'.join(Domain_Info_dict[key]) + '\n'
+                        list_tmp = list(set(Domain_Info_dict[key]))
+                        line = key + '\t' + ';'.join(list_tmp) + '\n'
                         w2.write(line)
                   w2.close()
                             
@@ -2392,7 +2393,8 @@ if __name__ == "__main__":
                           info_lis.append(info)
                           Domain_Info_dict[orf_id] = info_lis
                     for key in Domain_Info_dict:
-                        line = key + '\t' + ';'.join(Domain_Info_dict[key]) + '\n'
+                        list_tmp = list(set(Domain_Info_dict[key]))
+                        line = key + '\t' + ';'.join(list_tmp) + '\n'
                         w2.write(line)
                   w2.close()
                             
