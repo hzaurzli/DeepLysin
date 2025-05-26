@@ -927,12 +927,8 @@ if __name__ == "__main__":
                 os.remove('./all_protein_ut.faa')
               
               else:
-                # step 6 cdhit cluster
-                cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa', Args.cdhit_cutoff)
-                tl.run(cmd_4)
-        
                 # step 7 calculate molecular weight
-                molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
+                molecular_weight('./all_protein.faa','./all_protein_filter.faa', float(Args.MWU),float(Args.MWL))
         
         
                 # step 8 hmmsearch reported lysin structure in pfam
@@ -955,12 +951,12 @@ if __name__ == "__main__":
         
                 cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
                                          curr_dir_hmmerdb + hmmer_db_suffix,
-                                         './all_protein_cdhit_filter.faa')
+                                         './all_protein_filter.faa')
                 tl.run(cmd_5)
                 
                 cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
                                            curr_dir_hmmerdb + hmmer_db_suffix,
-                                           './all_protein_cdhit_filter.faa')
+                                           './all_protein_filter.faa')
                 tl.run(cmd_5_p)
         
                 reported_lysin = Args.reported_lysin
@@ -975,7 +971,7 @@ if __name__ == "__main__":
                     reported_lysin_suffix = reported_lysin
                     curr_dir_rp = ''
         
-                find_pfam('./all_protein_cdhit_filter.faa', curr_dir_rp + reported_lysin_suffix)
+                find_pfam('./all_protein_filter.faa', curr_dir_rp + reported_lysin_suffix)
                 
                 
                 # step 9 Filter sequences without EAD
@@ -1030,8 +1026,16 @@ if __name__ == "__main__":
                           f.write(line)
                 f.close()
                 
-                cmd_7 = tl.run_cdhit('./pfam_EAD_tmp.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
-                tl.run(cmd_7)
+                
+                x = float(Args.cdhit_cutoff)
+                cdhit_cutoff = str("%.2f" %x)
+                if cdhit_cutoff == '1.00':
+                    os.system('cat ./pfam_EAD_tmp.fasta > ./pfam_EAD_cdhit.fasta')
+                    print('cdhit_cutoff 1.00')
+                else:
+                    cmd_7 = tl.run_cdhit('./pfam_EAD_tmp.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
+                    tl.run(cmd_7)
+                    
         
                 # step 11 remove TMhelix
                 tot = sub.getoutput("grep '>' %s | wc -l" % ('./pfam_EAD_cdhit.fasta'))
@@ -1208,9 +1212,7 @@ if __name__ == "__main__":
                 else:
                     os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
                 os.system('rm -r ./pfam_EAD_cdhit*')
-                os.remove('./all_protein_cdhit.faa')
-                os.remove('./all_protein_cdhit.faa.clstr')
-                os.remove('./all_protein_cdhit_filter.faa')
+                os.remove('./all_protein_filter.faa')
                 os.remove('./all_protein.faa')
                 os.remove('./all_protein_pfam_protein.fasta')
                 os.remove('./all_protein_pfam_protein_EAD.fasta')
@@ -1290,9 +1292,8 @@ if __name__ == "__main__":
                       else:
                         w.write(line)
                   w.close()
-    
-            
-    
+
+
             # step 2 move faa into phage_faa fold
             if os.path.isdir('./phage_faa/') == True:
                 pass
@@ -1334,13 +1335,8 @@ if __name__ == "__main__":
                 os.remove('./all_protein_ut.faa')
               
               else:
-                # step 4 cdhit cluster
-                cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa', Args.cdhit_cutoff)
-                tl.run(cmd_4)
-        
                 # step 5 calculate molecular weight
-                molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
-        
+                molecular_weight('./all_protein.faa','./all_protein_filter.faa', float(Args.MWU),float(Args.MWL))
         
                 # step 6 hmmsearch reported lysin structure in pfam
                 if os.path.isdir('./hmmer_out/') == True:
@@ -1362,12 +1358,12 @@ if __name__ == "__main__":
         
                 cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
                                          curr_dir_hmmerdb + hmmer_db_suffix,
-                                         './all_protein_cdhit_filter.faa')
+                                         './all_protein_filter.faa')
                 tl.run(cmd_5)
                 
                 cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
                                            curr_dir_hmmerdb + hmmer_db_suffix,
-                                           './all_protein_cdhit_filter.faa')
+                                           './all_protein_filter.faa')
                 tl.run(cmd_5_p)
         
                 reported_lysin = Args.reported_lysin
@@ -1382,7 +1378,7 @@ if __name__ == "__main__":
                     reported_lysin_suffix = reported_lysin
                     curr_dir_rp = ''
         
-                find_pfam('./all_protein_cdhit_filter.faa', curr_dir_rp + reported_lysin_suffix)
+                find_pfam('./all_protein_filter.faa', curr_dir_rp + reported_lysin_suffix)
                 
                 
                 # step 7 Filter sequences without EAD
@@ -1437,9 +1433,16 @@ if __name__ == "__main__":
                           f.write(line)
                 f.close()
                 
-                cmd_7 = tl.run_cdhit('./pfam_EAD_tmp.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
-                tl.run(cmd_7)
-        
+                x = float(Args.cdhit_cutoff)
+                cdhit_cutoff = str("%.2f" %x)
+                if cdhit_cutoff == '1.00':
+                    os.system('cat ./pfam_EAD_tmp.fasta > ./pfam_EAD_cdhit.fasta')
+                    print('cdhit_cutoff 1.00')
+                else:
+                    cmd_7 = tl.run_cdhit('./pfam_EAD_tmp.fasta', './pfam_EAD_cdhit.fasta', Args.cdhit_cutoff)
+                    tl.run(cmd_7)
+                
+                
                 # step 12 remove TMhelix
                 tot = sub.getoutput("grep '>' %s | wc -l" % ('./pfam_EAD_cdhit.fasta'))
             
@@ -1610,9 +1613,7 @@ if __name__ == "__main__":
                 time.sleep(120) 
                 os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
                 os.system('rm -r ./pfam_EAD_cdhit*')
-                os.remove('./all_protein_cdhit.faa')
-                os.remove('./all_protein_cdhit.faa.clstr')
-                os.remove('./all_protein_cdhit_filter.faa')
+                os.remove('./all_protein_filter.faa')
                 os.remove('./all_protein.faa')
                 os.remove('./all_protein_pfam_protein.fasta')
                 os.remove('./all_protein_pfam_protein_EAD.fasta')
@@ -1849,13 +1850,9 @@ if __name__ == "__main__":
                 os.remove('./all_protein_ut.faa')
               
               else:
-                # step 6 cdhit cluster
-                cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa', Args.cdhit_cutoff)
-                tl.run(cmd_4)
-        
                 # step 7 calculate molecular weight
-                molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
-                rewrite_dict = fasta2dict_2('./all_protein_cdhit_filter.faa')
+                molecular_weight('./all_protein.faa','./all_protein_filter.faa', float(Args.MWU),float(Args.MWL))
+                rewrite_dict = fasta2dict_2('./all_protein_filter.faa')
                 
                 if os.path.isdir('./rps_input/') == True:
                     pass
@@ -1935,9 +1932,14 @@ if __name__ == "__main__":
                             w.write(line)
                 w.close()
                 
-                
-                cmd_7 = tl.run_cdhit('./rpsblast_tmp.fasta', './rpsblast_cdhit.fasta', Args.cdhit_cutoff)
-                tl.run(cmd_7)
+                x = float(Args.cdhit_cutoff)
+                cdhit_cutoff = str("%.2f" %x)
+                if cdhit_cutoff == '1.00':
+                    os.system('cat ./rpsblast_tmp.fasta > ./rpsblast_cdhit.fasta')
+                    print('cdhit_cutoff 1.00')
+                else:
+                    cmd_7 = tl.run_cdhit('./rpsblast_tmp.fasta', './rpsblast_cdhit.fasta', Args.cdhit_cutoff)
+                    tl.run(cmd_7)
         
                 # step 11 remove TMhelix
                 tot = sub.getoutput("grep '>' %s | wc -l" % ('./rpsblast_cdhit.fasta'))
@@ -2112,9 +2114,7 @@ if __name__ == "__main__":
                     os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
                 else:
                     os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
-                os.remove('./all_protein_cdhit.faa')
-                os.remove('./all_protein_cdhit.faa.clstr')
-                os.remove('./all_protein_cdhit_filter.faa')
+                os.remove('./all_protein_filter.faa')
                 os.remove('./all_protein_tmp.txt')
                 os.remove('./all_protein.faa')
                 os.remove('./all_protein_ut.faa')
@@ -2236,14 +2236,10 @@ if __name__ == "__main__":
                 os.remove('./all_protein.faa')
                 os.remove('./all_protein_ut.faa')
               
-              else:
-                # step 4 cdhit cluster
-                cmd_4 = tl.run_cdhit('./all_protein.faa','./all_protein_cdhit.faa', Args.cdhit_cutoff)
-                tl.run(cmd_4)
-        
+              else:     
                 # step 5 calculate molecular weight
-                molecular_weight('./all_protein_cdhit.faa','./all_protein_cdhit_filter.faa', float(Args.MWU),float(Args.MWL))
-                rewrite_dict = fasta2dict_2('./all_protein_cdhit_filter.faa')
+                molecular_weight('./all_protein.faa','./all_protein_filter.faa', float(Args.MWU),float(Args.MWL))
+                rewrite_dict = fasta2dict_2('./all_protein_filter.faa')
                 
                 if os.path.isdir('./rps_input/') == True:
                     pass
@@ -2324,8 +2320,14 @@ if __name__ == "__main__":
                 w.close()
                 
                 
-                cmd_7 = tl.run_cdhit('./rpsblast_tmp.fasta', './rpsblast_cdhit.fasta', Args.cdhit_cutoff)
-                tl.run(cmd_7)
+                x = float(Args.cdhit_cutoff)
+                cdhit_cutoff = str("%.2f" %x)
+                if cdhit_cutoff == '1.00':
+                    os.system('cat ./rpsblast_tmp.fasta > ./rpsblast_cdhit.fasta')
+                    print('cdhit_cutoff 1.00')
+                else:
+                    cmd_7 = tl.run_cdhit('./rpsblast_tmp.fasta', './rpsblast_cdhit.fasta', Args.cdhit_cutoff)
+                    tl.run(cmd_7)
         
                 # step 11 remove TMhelix
                 tot = sub.getoutput("grep '>' %s | wc -l" % ('./rpsblast_cdhit.fasta'))
@@ -2500,10 +2502,8 @@ if __name__ == "__main__":
                 os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
                 os.system('rm -r rpsblast_cdhit*')
                 os.system('rm -r rpsblast_tmp.fasta')
-                os.remove('./all_protein_cdhit.faa')
-                os.remove('./all_protein_cdhit.faa.clstr')
-                os.remove('./all_protein_cdhit_filter.faa')
                 os.remove('./all_protein.faa')
+                os.remove('./all_protein_filter.faa')
                 os.remove('./all_protein_ut.faa')
                 os.remove('./putative_lysin_domain_info.csv')
                 os.remove('./molecular_weight.txt')
