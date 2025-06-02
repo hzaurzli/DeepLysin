@@ -102,7 +102,6 @@ def main(path, ref):
         lines = f.readlines()
         first_line = lines[0]
         if first_line.startswith('>'):
-            state = 'Y'
             cmd_9 = tl.run_signal(path,'./signaltmp')
             tl.run(cmd_9)
             
@@ -110,6 +109,12 @@ def main(path, ref):
         else:
             state = 'N'
     f.close()
+    
+    with open('./putative_lysins.fa','w') as w:
+      for key in dic_fa:
+         line = '>' + key + '\n' + dic_fa[key] + '\n'
+         w.write(line)
+    w.close()
     
     f1 = open('./molecular_weight.txt')
     f2 = open('./putative_lysin_domain_info.csv')
@@ -199,7 +204,7 @@ def main(path, ref):
     if ref != '':
       first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
       os.chdir(curr_dir)
-      ref_lysins = os.path.abspath(str(Args.ref))
+      ref_lysins = os.path.abspath(str(ref))
       second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
       os.chdir(Args.workdir)
       
