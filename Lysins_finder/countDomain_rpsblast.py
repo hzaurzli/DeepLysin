@@ -1,6 +1,6 @@
 import os
 
-a = './putative_lysins_info_20.txt'
+a = './putative_lysins_info.txt'
 b = './ead.txt'
 c = './cbd.txt'
 coverage = 0.8
@@ -82,7 +82,7 @@ for i in f:
       dict_s = {}
       dict_id = {}
       for kk in dict_cbd[key]:
-        length = int(kk.split('&')[0].split('(')[1].strip(')').split(':')[1])
+        length = int(kk.split('&')[0].split('Length:')[1].strip(')'))
         start = kk.split('&')[2].split('-')[0]
         end = kk.split('&')[2].split('-')[1]
         inv = int(end) - int(start) + 1
