@@ -49,7 +49,7 @@ for i in f:
         length = int(kk.split('&')[0].split('Length:')[1].strip(')'))
         start = kk.split('&')[2].split('-')[0]
         end = kk.split('&')[2].split('-')[1]
-        inv = int(end) - int(start) + 1
+        inv = int(end) - int(start)
         s = float(kk.split('&')[1])
         id = kk.split('&')[0]
         if inv /length > float(coverage):
@@ -85,7 +85,7 @@ for i in f:
         length = int(kk.split('&')[0].split('Length:')[1].strip(')'))
         start = kk.split('&')[2].split('-')[0]
         end = kk.split('&')[2].split('-')[1]
-        inv = int(end) - int(start) + 1
+        inv = int(end) - int(start)
         s = float(kk.split('&')[1])
         id = kk.split('&')[0]
         if inv /length > float(coverage):
