@@ -67,7 +67,11 @@ with open(b, 'w') as w:
     if len(dict_domain_new[key]) == 0:
       line = key + '\t' + 'Coverage not meeting the threshold' + '\n'
       w.write(line)
+    elif len(dict_domain_new[key]) == 1:
+      line = key + '\t' + dict_domain_new[key][0] + '\n'
+      w.write(line) 
     else:
-      line = key + '\t' + '&'.join(dict_domain_new[key]) + '\n'
-      w.write(line)
+      for i in dict_domain_new[key]:
+        line = key + '\t' + i + '\n'
+        w.write(line)
 w.close()
