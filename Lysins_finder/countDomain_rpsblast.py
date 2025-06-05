@@ -118,9 +118,13 @@ with open(b, 'w') as w:
     if len(dict_ead_new[key]) == 0:
       line = key + '\t' + 'Coverage not meeting the threshold' + '\n'
       w.write(line)
-    else:
-      line = key + '\t' + '&'.join(dict_ead_new[key]) + '\n'
+    elif len(dict_ead_new[key]) == 1:
+      line = key + '\t' + dict_ead_new[key][0] + '\n'
       w.write(line) 
+    else:
+      for i in dict_ead_new[key]:
+        line = key + '\t' + i + '\n'
+        w.write(line)
 w.close()
 
 with open(c, 'w') as w:
@@ -128,7 +132,11 @@ with open(c, 'w') as w:
     if len(dict_cbd_new[key]) == 0:
       line = key + '\t' + 'Coverage not meeting the threshold' + '\n'
       w.write(line)
-    else:
-      line = key + '\t' + '&'.join(dict_cbd_new[key]) + '\n'
+    elif len(dict_cbd_new[key]) == 1:
+      line = key + '\t' + dict_cbd_new[key][0] + '\n'
       w.write(line) 
+    else:
+      for i in dict_cbd_new[key]:
+        line = key + '\t' + i + '\n'
+        w.write(line)
 w.close()
