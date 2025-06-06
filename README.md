@@ -92,6 +92,7 @@ source activate deeplysin
 python lysins_finder.py
   -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
   -t Viruses (for phages or prophages)              # prokka kingdom type; Viruses (for phages or prophages)
+  -c 0.95                                           # cdhit cluster cutoff
   -hd ./db/hmm/lysin_reported.hmm                   # hmmer database path
   -rl ./db/hmm/lysin_reported.txt                   # reported lysin structures(hmm files)
   -wkdir ./test/                                    # work directory
@@ -349,6 +350,7 @@ Install for dbscan-swa.py: please refer to [DBSCAN-SWA](https://github.com/HIT-I
 python lysins_finder_super.py
   -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
   -t Bacteria (or 'Virus')                          # prokka kingdom type; Bacteria or Virus (for phages)
+  -c 0.95                                           # cdhit cluster cutoff
   -hd ./db/hmm/lysin_reported.hmm                   # hmmer database path
   -rl ./db/hmm/lysin_reported.txt                   # reported lysin structures(hmm files)
   -wkdir ./test/                                    # work directory
@@ -373,6 +375,7 @@ python lysins_finder_super.py
 python lysins_finder_super.py
   -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
   -t Bacteria (or 'Virus')                          # prokka kingdom type; Bacteria or Virus (for phages)
+  -c 0.95                                           # cdhit cluster cutoff
   -wkdir ./test/                                    # work directory
   -ml 10000                                         # lower proteins molecular weight
   -mu 50000                                         # upper proteins molecular weight
