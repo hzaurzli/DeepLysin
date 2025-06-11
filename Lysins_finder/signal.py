@@ -217,6 +217,7 @@ if __name__ == "__main__":
     
     file = 'pfam_EAD_cdhit.fasta'
     method = 'hmmer'
+    ref = ''
     
     lis = file.split('.')[:-1]
     prefix_file = '.'.join(lis)
@@ -344,7 +345,7 @@ if __name__ == "__main__":
           print(dic_info)
           
           
-          if Args.ref != '':
+          if ref != '':
             first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
             os.chdir(curr_dir)
             ref_lysins = os.path.abspath(str(Args.ref))
@@ -377,7 +378,7 @@ if __name__ == "__main__":
             w.close()
             
                     
-          elif Args.ref == '':
+          elif ref == '':
             with open('./putative_lysins_info.txt','w') as w:
               line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
               w.write(line)
@@ -510,7 +511,7 @@ if __name__ == "__main__":
           print(dic_info)
           
           
-          if Args.ref != '':
+          if ref != '':
             first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
             os.chdir(curr_dir)
             ref_lysins = os.path.abspath(str(Args.ref))
@@ -543,7 +544,7 @@ if __name__ == "__main__":
             w.close()
             
                     
-          elif Args.ref == '':
+          elif ref == '':
             print('aaaaa')
             
             with open('./putative_lysins_info.txt','w') as w:
