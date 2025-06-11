@@ -679,7 +679,7 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Lysin finder")
     parser.add_argument("-p", "--path", required=True, type=str, help="genome sequnce path")
-    parser.add_argument("-t", "--type", required=True, type=str, help="prokka kingdom type")
+    parser.add_argument("-t", "--type", required=False, default='', type=str, help="prokka kingdom type")
     parser.add_argument("-pp", "--prophage_method", required=False, default='phispy', type=str, help="prophage predict method")
     parser.add_argument("-ds", "--dbscan_swa", required=False, type=str, default='', help="path of dbscan-swa.py")
     parser.add_argument("-c", "--cdhit_cutoff", default=0.95,required=False, type=float, help="cdhit cluster cutoff")
@@ -721,14 +721,9 @@ if __name__ == "__main__":
             
             
             tl = tools()
-            # step 1 prokka annotates ORFs
             curr_dir = sub.getoutput('pwd')
             os.chdir(Args.workdir)
-            if os.path.isdir('./prokka_result/') == True:
-                pass
-            else:
-                os.mkdir('./prokka_result/')
-    
+            
             target = Args.path
             curr_dir_target = curr_dir
             if target[-1] == '/':
@@ -746,69 +741,86 @@ if __name__ == "__main__":
                 target_suffix = target
                 curr_dir_target = ''
             
-            name_fna = {}
-            type_annotation = Args.type
-            for i in os.listdir(curr_dir_target + target_suffix):
-                lis = i.split('.')[:-1]
-                name = '.'.join(lis)
-                suffix = i.split('.')[-1]
-                name_fna[name] = suffix
-                cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
-                                  './prokka_result/' + name + '/', name, type_annotation)
-                tl.run(cmd_1)
-            
             
             if Args.prophage_method == 'DBSCAN_SWA':
-              if Args.dbscan_swa != '':
-                # step 2 DBSCAN-SWA predict prophage
-                if os.path.isdir('./DBSCAN_SWA_out/') == True:
-                    pass
-                else:
-                    os.mkdir('./DBSCAN_SWA_out/')
+              if Args.type == '':
+                  if Args.dbscan_swa != '':
+                    # step 2 DBSCAN-SWA predict prophage
+                    if os.path.isdir('./DBSCAN_SWA_out/') == True:
+                        pass
+                    else:
+                        os.mkdir('./DBSCAN_SWA_out/')
+                        
+                    if os.path.isdir('./DBSCAN_SWA_out/') == True:
+                        pass
+                    else:
+                        os.mkdir('./DBSCAN_SWA_out/')
                     
-                if os.path.isdir('./DBSCAN_SWA_out/') == True:
-                    pass
-                else:
-                    os.mkdir('./DBSCAN_SWA_out/')
                     
-                for i in os.listdir('./prokka_result/'):
-                    # i_prefix = '.'.join(i.split('.')[:-1])
-                    cmd_2 = tl.run_DBSCAN_SWA(Args.dbscan_swa, './prokka_result/' + i + '/' + i + '.fna',
-                                      './DBSCAN_SWA_out/' + i, i)
-                    tl.run(cmd_2)
-                    
-                if os.path.isdir('./orf_ffn/') == True:
-                    pass
-                else:
-                    os.mkdir('./orf_ffn/')
-                    
-                # step 4 phanotate annotates prophage ORFs
-                for i in os.listdir('./DBSCAN_SWA_out/'):
-                    for j in os.listdir('./DBSCAN_SWA_out/' + i):
-                        j_prefix = '.'.join(j.split('.')[:-1])
-                        j_suffix = j.split('.')[-1]
-                        if j_suffix == 'faa':
-                            os.system('mv %s %s' % ('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '.' + j_suffix,
-                                                    './DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix))
-                            f = open('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
-                            with open('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '.' + j_suffix, 'w') as w:
-                                for m in f:
-                                    if m != None:
-                                        if m.startswith('>'):
-                                            line = '>' + i + ':' + m.strip().split('|')[3].split('_')[0] + '-' + m.strip().split('|')[3].split('_')[1] + ':' + m.strip().split('|')[3].split('_')[2] + ':' + m.strip().split('|')[2] + '\n'
-                                            w.write(line)
-                                        else:
-                                            line = m
-                                            w.write(line)
-                            w.close()
-                            os.remove('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
-                                
-                            shutil.copyfile('./DBSCAN_SWA_out/' + i + '/' + j, './orf_ffn/' + j)
-              
+                    for i in os.listdir(curr_dir_target + target_suffix):
+                        lis = i.split('.')[:-1]
+                        prefix = '.'.join(lis)
+                        cmd_2 = tl.run_DBSCAN_SWA(Args.dbscan_swa, curr_dir_target + target_suffix + i,
+                                                  './DBSCAN_SWA_out/' + prefix, prefix)
+                        tl.run(cmd_2)
+                     
+                        
+                    if os.path.isdir('./orf_ffn/') == True:
+                        pass
+                    else:
+                        os.mkdir('./orf_ffn/')
+                        
+                    # step 4 phanotate annotates prophage ORFs
+                    for i in os.listdir('./DBSCAN_SWA_out/'):
+                        for j in os.listdir('./DBSCAN_SWA_out/' + i):
+                            j_prefix = '.'.join(j.split('.')[:-1])
+                            j_suffix = j.split('.')[-1]
+                            if j_suffix == 'faa':
+                                os.system('mv %s %s' % ('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '.' + j_suffix,
+                                                        './DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix))
+                                f = open('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
+                                with open('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '.' + j_suffix, 'w') as w:
+                                    for m in f:
+                                        if m != None:
+                                            if m.startswith('>'):
+                                                line = '>' + i + ':' + m.strip().split('|')[3].split('_')[0] + '-' + m.strip().split('|')[3].split('_')[1] + ':' + m.strip().split('|')[3].split('_')[2] + ':' + m.strip().split('|')[2] + '\n'
+                                                w.write(line)
+                                            else:
+                                                line = m
+                                                w.write(line)
+                                w.close()
+                                os.remove('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
+                                    
+                                shutil.copyfile('./DBSCAN_SWA_out/' + i + '/' + j, './orf_ffn/' + j)
+                
+                  else:
+                      raise ValueError('please add dbscan-swa.py path!')     
+                
               else:
-                raise('please add dbscan-swa.py path!')     
+                  raise ValueError('redundant parameters "-t" !')     
               
             elif Args.prophage_method == 'phispy':
+              if Args.type == 'Bacteria':
+                # step 1 prokka annotates ORFs
+                if os.path.isdir('./prokka_result/') == True:
+                    pass
+                else:
+                    os.mkdir('./prokka_result/')
+                
+                name_fna = {}
+                type_annotation = Args.type
+                for i in os.listdir(curr_dir_target + target_suffix):
+                    lis = i.split('.')[:-1]
+                    name = '.'.join(lis)
+                    suffix = i.split('.')[-1]
+                    name_fna[name] = suffix
+                    cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
+                                      './prokka_result/' + name + '/', name, type_annotation)
+                    tl.run(cmd_1)
+                    
+              else:
+                  raise ValueError('please correct annotation type!')
+                  
               # step 2 phispy predict prophage
               if os.path.isdir('./phispy_out/') == True:
                   pass
@@ -884,10 +896,10 @@ if __name__ == "__main__":
             if len(os.listdir('./orf_ffn/')) == 0:
               if os.path.isdir('./phispy_out/') == True:
                   os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
-                  raise('No prophages ORFs found!')
+                  raise ValueError('No prophages ORFs found!')
               else:
                   os.system('rm -r ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/')
-                  raise('No prophages ORFs found!')
+                  raise ValueError('No prophages ORFs found!')
               
        
             else:
@@ -1010,7 +1022,7 @@ if __name__ == "__main__":
                     curr_dir_rpe = ''
     
                 if not os.path.getsize("./all_protein_pfam_protein.fasta"):
-                    raise('No domain was found and No lysins found!!!')
+                    raise ValueError('No domain was found and No lysins found!!!')
         
                 find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rpe + reported_lysin_EAD_suffix)
                 
@@ -1207,23 +1219,23 @@ if __name__ == "__main__":
                 
                 
                 time.sleep(120) 
-                if os.path.isdir('./phispy_out/') == True:
-                    os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-                else:
-                    os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
-                os.system('rm -r ./pfam_EAD_cdhit*')
-                os.remove('./all_protein_filter.faa')
-                os.remove('./all_protein.faa')
-                os.remove('./all_protein_pfam_protein.fasta')
-                os.remove('./all_protein_pfam_protein_EAD.fasta')
-                os.remove('./pfam_EAD.fasta')
-                os.remove('./pfam_EAD_tmp.fasta')
-                os.remove('./all_protein_tmp.txt')
-                os.remove('./all_protein_ut.faa')
-                os.remove('./molecular_weight.txt')
-                os.remove('./MW_Length.txt') 
-                os.remove('./Domain_Info.txt')
-                os.system('rm -r ./signaltmp/')
+                #if os.path.isdir('./phispy_out/') == True:
+                    #os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+                #else:
+                    #os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
+                #os.system('rm -r ./pfam_EAD_cdhit*')
+                #os.remove('./all_protein_filter.faa')
+                #os.remove('./all_protein.faa')
+                #os.remove('./all_protein_pfam_protein.fasta')
+                #os.remove('./all_protein_pfam_protein_EAD.fasta')
+                #os.remove('./pfam_EAD.fasta')
+                #os.remove('./pfam_EAD_tmp.fasta')
+                #os.remove('./all_protein_tmp.txt')
+                #os.remove('./all_protein_ut.faa')
+                #os.remove('./molecular_weight.txt')
+                #os.remove('./MW_Length.txt') 
+                #os.remove('./Domain_Info.txt')
+                #os.system('rm -r ./signaltmp/')
     
         elif Args.bacteriaORphage == 'P':
             if Args.workdir[-1] == '/':
@@ -1264,35 +1276,38 @@ if __name__ == "__main__":
             else:
                 target_suffix = target
                 curr_dir_target = ''
-    
-            type_annotation = Args.type
-            for i in os.listdir(curr_dir_target + target_suffix):
-                lis = i.split('.')[:-1]
-                name = '.'.join(lis)
-                suffix = i.split('.')[-1]
-                cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
-                                  './prokka_result/' + name + '/',name,type_annotation)
-                tl.run(cmd_1)
-                
-            for i in os.listdir('./prokka_result/'):
-              for j in os.listdir('./prokka_result/' + i):
-                if j.endswith('.faa'):
-                  os.system('cat %s > %s' % ('./prokka_result/' + i + '/' + j, './prokka_result/' + i + '/tmp.txt'))
-                  with open('./prokka_result/' + i + '/' + j, 'w') as w:
-                    f = open('./prokka_result/' + i + '/tmp.txt')
-                    for line in f:
-                      if line.startswith('>'):
-                        print(line)
-                        first_line = line[1::].strip()
-                        key = first_line.split(' ')[0].split('_')[0]
-                        num = first_line.split(' ')[0].split('_')[1]
-                        lis = j.split('.')[:-1]
-                        name = '.'.join(lis)
-                        w.write('>' + name + '_' + num + '\n')
-                      else:
-                        w.write(line)
-                  w.close()
-
+            
+            if Args.type == 'Viruses':
+                type_annotation = Args.type
+                for i in os.listdir(curr_dir_target + target_suffix):
+                    lis = i.split('.')[:-1]
+                    name = '.'.join(lis)
+                    suffix = i.split('.')[-1]
+                    cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
+                                      './prokka_result/' + name + '/',name,type_annotation)
+                    tl.run(cmd_1)
+                    
+                for i in os.listdir('./prokka_result/'):
+                  for j in os.listdir('./prokka_result/' + i):
+                    if j.endswith('.faa'):
+                      os.system('cat %s > %s' % ('./prokka_result/' + i + '/' + j, './prokka_result/' + i + '/tmp.txt'))
+                      with open('./prokka_result/' + i + '/' + j, 'w') as w:
+                        f = open('./prokka_result/' + i + '/tmp.txt')
+                        for line in f:
+                          if line.startswith('>'):
+                            print(line)
+                            first_line = line[1::].strip()
+                            key = first_line.split(' ')[0].split('_')[0]
+                            num = first_line.split(' ')[0].split('_')[1]
+                            lis = j.split('.')[:-1]
+                            name = '.'.join(lis)
+                            w.write('>' + name + '_' + num + '\n')
+                          else:
+                            w.write(line)
+                      w.close()
+                      
+            else:
+                raise ValueError('please correct annotation type!')
 
             # step 2 move faa into phage_faa fold
             if os.path.isdir('./phage_faa/') == True:
@@ -1308,7 +1323,7 @@ if __name__ == "__main__":
             
             if len(os.listdir('./phage_faa/')) == 0:
               os.system('rm -r ./prokka_result/ ./phage_faa/')
-              raise('No phage faa found!')
+              raise ValueError('No phage faa found!')
               
             else:
               # step 3 phage faa together
@@ -1417,7 +1432,7 @@ if __name__ == "__main__":
                     curr_dir_rpe = ''
     
                 if not os.path.getsize("./all_protein_pfam_protein.fasta"):
-                    raise('No domain was found and No lysins found!!!')
+                    raise ValueError('No domain was found and No lysins found!!!')
         
                 find_pfam_EAD('./all_protein_pfam_protein.fasta', curr_dir_rpe + reported_lysin_EAD_suffix)
                 
@@ -1611,22 +1626,22 @@ if __name__ == "__main__":
                   
                   
                 time.sleep(120) 
-                os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
-                os.system('rm -r ./pfam_EAD_cdhit*')
-                os.remove('./all_protein_filter.faa')
-                os.remove('./all_protein.faa')
-                os.remove('./all_protein_pfam_protein.fasta')
-                os.remove('./all_protein_pfam_protein_EAD.fasta')
-                os.remove('./pfam_EAD.fasta')
-                os.remove('./pfam_EAD_tmp.fasta')
-                os.remove('./all_protein_ut.faa')
-                os.remove('./molecular_weight.txt')
-                os.remove('./MW_Length.txt') 
-                os.remove('./Domain_Info.txt')
-                os.system('rm -r ./signaltmp/')
+                #os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
+                #os.system('rm -r ./pfam_EAD_cdhit*')
+                #os.remove('./all_protein_filter.faa')
+                #os.remove('./all_protein.faa')
+                #os.remove('./all_protein_pfam_protein.fasta')
+                #os.remove('./all_protein_pfam_protein_EAD.fasta')
+                #os.remove('./pfam_EAD.fasta')
+                #os.remove('./pfam_EAD_tmp.fasta')
+                #os.remove('./all_protein_ut.faa')
+                #os.remove('./molecular_weight.txt')
+                #os.remove('./MW_Length.txt') 
+                #os.remove('./Domain_Info.txt')
+                #os.system('rm -r ./signaltmp/')
     
         else:
-            raise('Error, please check parameter "--bp"')
+            raise ValueError('Error, please check parameter "--bp"')
             
     elif Args.method == 'rpsblast':
         if Args.bacteriaORphage == 'B':
@@ -1644,14 +1659,9 @@ if __name__ == "__main__":
             
             
             tl = tools()
-            # step 1 prokka annotates ORFs
             curr_dir = sub.getoutput('pwd')
             os.chdir(Args.workdir)
-            if os.path.isdir('./prokka_result/') == True:
-                pass
-            else:
-                os.mkdir('./prokka_result/')
-    
+            
             target = Args.path
             curr_dir_target = curr_dir
             if target[-1] == '/':
@@ -1669,69 +1679,87 @@ if __name__ == "__main__":
                 target_suffix = target
                 curr_dir_target = ''
             
-            name_fna = {}
-            type_annotation = Args.type
-            for i in os.listdir(curr_dir_target + target_suffix):
-                lis = i.split('.')[:-1]
-                name = '.'.join(lis)
-                suffix = i.split('.')[-1]
-                name_fna[name] = suffix
-                cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
-                                  './prokka_result/' + name + '/', name, type_annotation)
-                tl.run(cmd_1)
-            
             
             if Args.prophage_method == 'DBSCAN_SWA':
-              if Args.dbscan_swa != '':
-                # step 2 DBSCAN-SWA predict prophage
-                if os.path.isdir('./DBSCAN_SWA_out/') == True:
-                    pass
-                else:
-                    os.mkdir('./DBSCAN_SWA_out/')
+              if Args.type == '':
+                  if Args.dbscan_swa != '':
+                    # step 2 DBSCAN-SWA predict prophage
+                    if os.path.isdir('./DBSCAN_SWA_out/') == True:
+                        pass
+                    else:
+                        os.mkdir('./DBSCAN_SWA_out/')
+                        
+                    if os.path.isdir('./DBSCAN_SWA_out/') == True:
+                        pass
+                    else:
+                        os.mkdir('./DBSCAN_SWA_out/')
                     
-                if os.path.isdir('./DBSCAN_SWA_out/') == True:
-                    pass
-                else:
-                    os.mkdir('./DBSCAN_SWA_out/')
                     
-                for i in os.listdir('./prokka_result/'):
-                    # i_prefix = '.'.join(i.split('.')[:-1])
-                    cmd_2 = tl.run_DBSCAN_SWA(Args.dbscan_swa, './prokka_result/' + i + '/' + i + '.fna',
-                                      './DBSCAN_SWA_out/' + i, i)
-                    tl.run(cmd_2)
-                    
-                if os.path.isdir('./orf_ffn/') == True:
-                    pass
-                else:
-                    os.mkdir('./orf_ffn/')
-                    
-                # step 4 phanotate annotates prophage ORFs
-                for i in os.listdir('./DBSCAN_SWA_out/'):
-                    for j in os.listdir('./DBSCAN_SWA_out/' + i):
-                        j_prefix = '.'.join(j.split('.')[:-1])
-                        j_suffix = j.split('.')[-1]
-                        if j_suffix == 'faa':
-                            os.system('mv %s %s' % ('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '.' + j_suffix,
-                                                    './DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix))
-                            f = open('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
-                            with open('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '.' + j_suffix, 'w') as w:
-                                for m in f:
-                                    if m != None:
-                                        if m.startswith('>'):
-                                            line = '>' + i + ':' + m.strip().split('|')[3].split('_')[0] + '-' + m.strip().split('|')[3].split('_')[1] + ':' + m.strip().split('|')[3].split('_')[2] + ':' + m.strip().split('|')[2] + '\n'
-                                            w.write(line)
-                                        else:
-                                            line = m
-                                            w.write(line)
-                            w.close()
-                            os.remove('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
-                                
-                            shutil.copyfile('./DBSCAN_SWA_out/' + i + '/' + j, './orf_ffn/' + j)
-              
+                    for i in os.listdir(curr_dir_target + target_suffix):
+                        lis = i.split('.')[:-1]
+                        prefix = '.'.join(lis)
+                        cmd_2 = tl.run_DBSCAN_SWA(Args.dbscan_swa, curr_dir_target + target_suffix + i,
+                                                  './DBSCAN_SWA_out/' + prefix, prefix)
+                        tl.run(cmd_2)
+                     
+                        
+                    if os.path.isdir('./orf_ffn/') == True:
+                        pass
+                    else:
+                        os.mkdir('./orf_ffn/')
+                        
+                    # step 4 phanotate annotates prophage ORFs
+                    for i in os.listdir('./DBSCAN_SWA_out/'):
+                        for j in os.listdir('./DBSCAN_SWA_out/' + i):
+                            j_prefix = '.'.join(j.split('.')[:-1])
+                            j_suffix = j.split('.')[-1]
+                            if j_suffix == 'faa':
+                                os.system('mv %s %s' % ('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '.' + j_suffix,
+                                                        './DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix))
+                                f = open('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
+                                with open('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '.' + j_suffix, 'w') as w:
+                                    for m in f:
+                                        if m != None:
+                                            if m.startswith('>'):
+                                                line = '>' + i + ':' + m.strip().split('|')[3].split('_')[0] + '-' + m.strip().split('|')[3].split('_')[1] + ':' + m.strip().split('|')[3].split('_')[2] + ':' + m.strip().split('|')[2] + '\n'
+                                                w.write(line)
+                                            else:
+                                                line = m
+                                                w.write(line)
+                                w.close()
+                                os.remove('./DBSCAN_SWA_out/' + i + '/' + j_prefix + '_tmp.' + j_suffix)
+                                    
+                                shutil.copyfile('./DBSCAN_SWA_out/' + i + '/' + j, './orf_ffn/' + j)
+                
+                  else:
+                      raise ValueError('please add dbscan-swa.py path!')     
+                
               else:
-                raise('please add dbscan-swa.py path!')     
+                  raise ValueError('redundant parameters "-t" !')  
+              
               
             elif Args.prophage_method == 'phispy':
+              if Args.type == 'Bacteria':
+                # step 1 prokka annotates ORFs
+                if os.path.isdir('./prokka_result/') == True:
+                    pass
+                else:
+                    os.mkdir('./prokka_result/')
+                
+                name_fna = {}
+                type_annotation = Args.type
+                for i in os.listdir(curr_dir_target + target_suffix):
+                    lis = i.split('.')[:-1]
+                    name = '.'.join(lis)
+                    suffix = i.split('.')[-1]
+                    name_fna[name] = suffix
+                    cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
+                                      './prokka_result/' + name + '/', name, type_annotation)
+                    tl.run(cmd_1)
+                    
+              else:
+                  raise ValueError('please correct annotation type!')
+                  
               # step 2 phispy predict prophage
               if os.path.isdir('./phispy_out/') == True:
                   pass
@@ -1807,10 +1835,10 @@ if __name__ == "__main__":
             if len(os.listdir('./orf_ffn/')) == 0:
               if os.path.isdir('./phispy_out/') == True:
                   os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
-                  raise('No prophages ORFs found!')
+                  raise ValueError('No prophages ORFs found!')
               else:
                   os.system('rm -r ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/')
-                  raise('No prophages ORFs found!')
+                  raise ValueError('No prophages ORFs found!')
               
        
             else:
@@ -2110,21 +2138,21 @@ if __name__ == "__main__":
                   print(state)
                 
                 time.sleep(120) 
-                if os.path.isdir('./phispy_out/') == True:
-                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-                else:
-                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
-                os.remove('./all_protein_filter.faa')
-                os.remove('./all_protein_tmp.txt')
-                os.remove('./all_protein.faa')
-                os.remove('./all_protein_ut.faa')
-                os.system('rm -r rpsblast_cdhit*')
-                os.system('rm -r rpsblast_tmp.fasta')
-                os.remove('./putative_lysin_domain_info.csv')
-                os.remove('./molecular_weight.txt')
-                os.remove('./MW_Length.txt') 
-                os.remove('./Domain_Info.txt')
-                os.system('rm -r ./signaltmp/')
+                #if os.path.isdir('./phispy_out/') == True:
+                    #os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+                #else:
+                    #os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
+                #os.remove('./all_protein_filter.faa')
+                #os.remove('./all_protein_tmp.txt')
+                #os.remove('./all_protein.faa')
+                #os.remove('./all_protein_ut.faa')
+                #os.system('rm -r rpsblast_cdhit*')
+                #os.system('rm -r rpsblast_tmp.fasta')
+                #os.remove('./putative_lysin_domain_info.csv')
+                #os.remove('./molecular_weight.txt')
+                #os.remove('./MW_Length.txt') 
+                #os.remove('./Domain_Info.txt')
+                #os.system('rm -r ./signaltmp/')
     
         elif Args.bacteriaORphage == 'P':
             if Args.workdir[-1] == '/':
@@ -2166,35 +2194,38 @@ if __name__ == "__main__":
                 target_suffix = target
                 curr_dir_target = ''
     
-            type_annotation = Args.type
-            for i in os.listdir(curr_dir_target + target_suffix):
-                lis = i.split('.')[:-1]
-                name = '.'.join(lis)
-                suffix = i.split('.')[-1]
-                cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
-                                  './prokka_result/' + name + '/',name,type_annotation)
-                tl.run(cmd_1)
-                
-            for i in os.listdir('./prokka_result/'):
-              for j in os.listdir('./prokka_result/' + i):
-                if j.endswith('.faa'):
-                  os.system('cat %s > %s' % ('./prokka_result/' + i + '/' + j, './prokka_result/' + i + '/tmp.txt'))
-                  with open('./prokka_result/' + i + '/' + j, 'w') as w:
-                    f = open('./prokka_result/' + i + '/tmp.txt')
-                    for line in f:
-                      if line.startswith('>'):
-                        print(line)
-                        first_line = line[1::].strip()
-                        key = first_line.split(' ')[0].split('_')[0]
-                        num = first_line.split(' ')[0].split('_')[1]
-                        lis = j.split('.')[:-1]
-                        name = '.'.join(lis)
-                        w.write('>' + name + '_' + num + '\n')
-                      else:
-                        w.write(line)
-                  w.close()
+            if Args.type == 'Viruses':
+                type_annotation = Args.type
+                for i in os.listdir(curr_dir_target + target_suffix):
+                    lis = i.split('.')[:-1]
+                    name = '.'.join(lis)
+                    suffix = i.split('.')[-1]
+                    cmd_1 = tl.run_prokka(curr_dir_target + target_suffix + i,
+                                      './prokka_result/' + name + '/',name,type_annotation)
+                    tl.run(cmd_1)
+                    
+                for i in os.listdir('./prokka_result/'):
+                  for j in os.listdir('./prokka_result/' + i):
+                    if j.endswith('.faa'):
+                      os.system('cat %s > %s' % ('./prokka_result/' + i + '/' + j, './prokka_result/' + i + '/tmp.txt'))
+                      with open('./prokka_result/' + i + '/' + j, 'w') as w:
+                        f = open('./prokka_result/' + i + '/tmp.txt')
+                        for line in f:
+                          if line.startswith('>'):
+                            print(line)
+                            first_line = line[1::].strip()
+                            key = first_line.split(' ')[0].split('_')[0]
+                            num = first_line.split(' ')[0].split('_')[1]
+                            lis = j.split('.')[:-1]
+                            name = '.'.join(lis)
+                            w.write('>' + name + '_' + num + '\n')
+                          else:
+                            w.write(line)
+                      w.close()
+                      
+            else:
+                raise ValueError('please correct annotation type!')
     
-            
     
             # step 2 move faa into phage_faa fold
             if os.path.isdir('./phage_faa/') == True:
@@ -2210,7 +2241,7 @@ if __name__ == "__main__":
             
             if len(os.listdir('./phage_faa/')) == 0:
               os.system('rm -r ./prokka_result/ ./phage_faa/')
-              raise('No phage faa found!')
+              raise ValueError('No phage faa found!')
               
             else:
               # step 3 phage faa together
@@ -2499,17 +2530,17 @@ if __name__ == "__main__":
                   
                   
                 time.sleep(120) 
-                os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
-                os.system('rm -r rpsblast_cdhit*')
-                os.system('rm -r rpsblast_tmp.fasta')
-                os.remove('./all_protein.faa')
-                os.remove('./all_protein_filter.faa')
-                os.remove('./all_protein_ut.faa')
-                os.remove('./putative_lysin_domain_info.csv')
-                os.remove('./molecular_weight.txt')
-                os.remove('./MW_Length.txt') 
-                os.remove('./Domain_Info.txt')
-                os.system('rm -r ./signaltmp/')
+                #os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
+                #os.system('rm -r rpsblast_cdhit*')
+                #os.system('rm -r rpsblast_tmp.fasta')
+                #os.remove('./all_protein.faa')
+                #os.remove('./all_protein_filter.faa')
+                #os.remove('./all_protein_ut.faa')
+                #os.remove('./putative_lysin_domain_info.csv')
+                #os.remove('./molecular_weight.txt')
+                #os.remove('./MW_Length.txt') 
+                #os.remove('./Domain_Info.txt')
+                #os.system('rm -r ./signaltmp/')
     
         else:
-            raise('Error, please check parameter "--bp"')
+            raise ValueError('Error, please check parameter "--bp"')
