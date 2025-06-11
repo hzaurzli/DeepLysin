@@ -15,6 +15,7 @@ from Bio import pairwise2 as pw2
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
+import operator
 
 
 class tools:
@@ -25,8 +26,10 @@ class tools:
         self.cdHit = 'cd-hit'
         self.rundbcan = 'run_dbcan.py'
         self.hmmsearch = 'hmmsearch'
+        self.rpsblast = 'rpsblast'
         self.deeptmhmm = 'biolib run DTU/DeepTMHMM'
         self.signal = 'signalp6'
+        self.DBSCAN_SWA = 'python'
 
 
     def run(self, cmd, wkdir=None):
@@ -67,6 +70,14 @@ class tools:
         cmd = '%s --fasta %s' % (self.deeptmhmm,fa)
         return cmd
         
+    def run_rpsblast(self,query,evalue,out,db):
+        cmd = '%s -query %s -outfmt 6 -evalue %s -out %s -db %s' % (self.rpsblast, query,evalue,out,db)
+        return cmd
+        
+    def run_DBSCAN_SWA(self,path_arg,inp,out,prefix):
+        cmd = '%s %s --input %s --output %s --prefix %s' % (self.DBSCAN_SWA,path_arg,inp,out,prefix)
+        return cmd
+    
     def run_signal(self,fa,out):
         cmd = '%s --fastafile %s --output_dir %s' % (self.signal,fa,out)
         return cmd
@@ -203,136 +214,345 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
 
 
 if __name__ == "__main__":
+    
+    file = 'pfam_EAD_cdhit.fasta'
+    method = 'hmmer'
+    
+    lis = file.split('.')[:-1]
+    prefix_file = '.'.join(lis)
 
-  tl = tools()
-  # step 12 remove TMhelix
-  tot = sub.getoutput("grep '>' %s | wc -l" % ('./pfam_EAD_cdhit.fasta'))
-  
-  if int(tot) > 100:
-      num_1 = int(tot)//100
-      num_2 = int(tot)%100
-      Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
+    tl = tools()
     
-      for i in range(1, int(num_1) + 2):
-         time_sleep = random.uniform(60, 180)
-         time.sleep(time_sleep)
-         cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
-         print('pfam_EAD_cdhit-' + str(i) + '00.fasta')
-         tl.run(cmd_8)
-         
-      os.system('cat ./biolib_results/predicted_topologies.3line* > ./biolib_results/predicted_topologies.line')
-      remove_TMhelix('./biolib_results/predicted_topologies.line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
-    
-  else:
-      cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit.fasta')
-      tl.run(cmd_8)
-      remove_TMhelix('./biolib_results/predicted_topologies.3line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
-  
-  
-  dic_fa = {}
-  with open('./putative_lysins.fa') as f:
-    lines = f.readlines()  # 读取所有行
-    first_line = lines[0]
-    if first_line.startswith('>'):
-        state = 'Y'
-        cmd_9 = tl.run_signal('./putative_lysins.fa','./signaltmp')
-        tl.run(cmd_9)
-        
-        dic_fa = fasta2dict_2('./putative_lysins.fa')
-    else:
-        state = 'N'
-  f.close()
-  
-  f1 = open('./molecular_weight.txt')
-  f2 = open('./hmmer_out/all_protein.txt')
-  
-  
-  if state == 'Y':
-    with open('./MW_Length.txt', 'w') as w1:
-      for i in f1:
-        name = i.strip().split('\t')[0]
-        mw = i.strip().split('\t')[1]
-        if name in dic_fa.keys():
-          line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
-          w1.write(line)
-    w1.close()
-    
-    # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))
-    
-    Domain_Info_lis = []
-    with open('./Domain_Info.txt', 'w') as w2:
-      for line in f2:
-        if line[0] != "#" and len(line.split())!=0:
-          arr = line.strip().split(" ")
-          arr = list(filter(None, arr))
-          name = arr[0]
-          if name in dic_fa.keys():
-            li = arr[0] + '\t' + arr[3] + '(Length:' + arr[5] + ')' + '\t' + arr[4].split('.')[0] + '(Length:' + arr[5] + ')' + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
-            print(li)
-            Domain_Info_lis.append(li)
-            
-      Domain_Info_lis_new = list(set(Domain_Info_lis))
-      for line in Domain_Info_lis_new:
-        w2.write(line)
-    w2.close()
-    
-    # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
-    
-    f1 = open('./MW_Length.txt')
-    f2 = open('./Domain_Info.txt')
-    f3 = open('./signaltmp/output.gff3')
-    
-    
-    dic_info = {}
-    for lines in f1:
-      line = lines.strip().split('\t')
-      id_1 = line[0]
-      mw = line[1]
-      length = line[2]
-      mw_length = []
-      mw_length.append(mw)
-      mw_length.append(length)
-      dic_info[id_1] = mw_length
-      
-    
-    for lines in f2:
-      line = lines.strip().split('\t')
-      id_2 = line[0]
-      pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
-      if id_2 in dic_info.keys():
-        dic_info[id_2].append(pf)
-  
-    a = []
-    b = []
-    for lines in f3:
-      if lines[0] != "#":
-        line = lines.strip().split('\t')
-        id_3 = line[0]
-        if float(line[5]) > 0.5:
-          li = line[0] + ':' + line[3] + '-' + line[4]
-          print(li)
-          if id_3 in dic_info.keys():
-            dic_info[id_3].append(li)
-            a.append(id_3)
-    
-    for key in dic_info:
-      b.append(key)
-    c = list(set(b).difference(set(a)))
-    
-    for i in c:
-      dic_info[i].append('NULL')
-            
-    print(dic_info)
-    
-    
-    with open('./putative_lysins_info.txt','w') as w:
-      line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
-      w.write(line)
-      for key in dic_info:
-        line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
-        w.write(line)
-    w.close()
-      
+    if method == 'hmmer':
+        # step 12 remove TMhelix
+        tot = sub.getoutput("grep '>' %s | wc -l" % ('./' + file))
+                    
+        if int(tot) > 100:
+            num_1 = int(tot)//100
+            num_2 = int(tot)%100
+            Split_fa('./' + file, tot, num_1, num_2)
           
-  else:
-    print(state)
+            for i in range(1, int(num_1) + 1):
+               time_sleep = random.uniform(60, 180)
+               time.sleep(time_sleep)
+               cmd_8 = tl.run_deeptmhmm('./' + prefix_file + '-' + str(i) + '00.fasta')
+               tl.run(cmd_8)
+               
+            os.system('cat ./biolib_results/predicted_topologies.3line* > ./biolib_results/predicted_topologies.line')
+            remove_TMhelix('./biolib_results/predicted_topologies.line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
+          
+        else:
+            cmd_8 = tl.run_deeptmhmm('./' + file)
+            tl.run(cmd_8)
+            remove_TMhelix('./biolib_results/predicted_topologies.3line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
+
+
+        dic_fa = {}
+        with open('./putative_lysins.fa') as f:
+          lines = f.readlines()  # 读取所有行
+          first_line = lines[0]
+          if first_line.startswith('>'):
+              state = 'Y'
+              cmd_9 = tl.run_signal('./putative_lysins.fa','./signaltmp')
+              tl.run(cmd_9)
+              
+              dic_fa = fasta2dict_2('./putative_lysins.fa')
+          else:
+              state = 'N'
+        f.close()
+
+        f1 = open('./molecular_weight.txt')
+        f2 = open('./hmmer_out/all_protein.txt')
+
+
+        if state == 'Y':
+          with open('./MW_Length.txt', 'w') as w1:
+            for i in f1:
+              name = i.strip().split('\t')[0]
+              mw = i.strip().split('\t')[1]
+              if name in dic_fa.keys():
+                line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
+                w1.write(line)
+          w1.close()
+          
+          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))
+          
+          
+          Domain_Info_lis = []
+          with open('./Domain_Info.txt', 'w') as w2:
+            for line in f2:
+              if line[0] != "#" and len(line.split())!=0:
+                arr = line.strip().split(" ")
+                arr = list(filter(None, arr))
+                name = arr[0]
+                if name in dic_fa.keys():
+                  li = arr[0] + '\t' + arr[3] + '(Length:' + arr[5] + ')' + '\t' + arr[4].split('.')[0] + '(Length:' + arr[5] + ')' + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
+                  print(li)
+                  Domain_Info_lis.append(li)
+           
+            Domain_Info_lis_new = list(set(Domain_Info_lis))
+            for line in Domain_Info_lis_new:
+              w2.write(line)
+          w2.close()
+          
+          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
+          
+          f1 = open('./MW_Length.txt')
+          f2 = open('./Domain_Info.txt')
+          f3 = open('./signaltmp/output.gff3')
+          
+          
+          dic_info = {}
+          for lines in f1:
+            line = lines.strip().split('\t')
+            id_1 = line[0]
+            mw = line[1]
+            length = line[2]
+            mw_length = []
+            mw_length.append(mw)
+            mw_length.append(length)
+            dic_info[id_1] = mw_length
+            
+          
+          for lines in f2:
+            line = lines.strip().split('\t')
+            id_2 = line[0]
+            pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
+            if id_2 in dic_info.keys():
+              dic_info[id_2].append(pf)
+
+          a = []
+          b = []
+          for lines in f3:
+            if lines[0] != "#":
+              line = lines.strip().split('\t')
+              id_3 = line[0]
+              if float(line[5]) > 0.5:
+                li = line[0] + ':' + line[3] + '-' + line[4]
+                print(li)
+                if id_3 in dic_info.keys():
+                  dic_info[id_3].append(li)
+                  a.append(id_3)
+          
+          for key in dic_info:
+            b.append(key)
+          c = list(set(b).difference(set(a)))
+          
+          for i in c:
+            dic_info[i].append('NULL')
+                  
+          print(dic_info)
+          
+          
+          if Args.ref != '':
+            first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+            os.chdir(curr_dir)
+            ref_lysins = os.path.abspath(str(Args.ref))
+            second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+            os.chdir(Args.workdir)
+            
+            dic_ref = {}
+            # 两个fasta文件中的序列两两比较：
+            for t1 in first_dict:
+              t_len = len(first_dict[t1].seq)
+              for t2 in second_dict:
+                global_align = pw2.align.globalxx(first_dict[t1].seq, second_dict[t2].seq)
+                matched = global_align[0][2]
+                percent_match = (matched / t_len) * 100
+                
+                if t1 not in dic_ref.keys():
+                  score = []
+                  score.append(t2 + ':' + str(round(percent_match,2)))
+                  dic_ref[t1] = score
+                elif t1 in dic_ref.keys():
+                  dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
+
+
+            with open('./putative_lysins_info.txt','w') as w:
+              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
+              w.write(line)
+              for key in dic_info:
+                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                w.write(line)
+            w.close()
+            
+                    
+          elif Args.ref == '':
+            with open('./putative_lysins_info.txt','w') as w:
+              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
+              w.write(line)
+              for key in dic_info:
+                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
+                w.write(line)
+            w.close()
+            
+                
+        else:
+          print(state)
+
+    elif method == 'rpsblast':
+        tot = sub.getoutput("grep '>' %s | wc -l" % ('./' + file))
+        if int(tot) > 100:
+            num_1 = int(tot)//100
+            num_2 = int(tot)%100
+            Split_fa_rps('./' + file, tot, num_1, num_2)
+          
+            for i in range(1, int(num_1) + 1):
+               time_sleep = random.uniform(60, 180)
+               time.sleep(time_sleep)
+               cmd_8 = tl.run_deeptmhmm('./' + prefix_file + '-' + str(i) + '00.fasta')
+               tl.run(cmd_8)
+               
+            os.system('cat ./biolib_results/predicted_topologies.3line* > ./biolib_results/predicted_topologies.line')
+            remove_TMhelix('./biolib_results/predicted_topologies.line','./rpsblast_cdhit.fasta','./putative_lysins.fa')
+          
+        else:
+            cmd_8 = tl.run_deeptmhmm('./' + file)
+            tl.run(cmd_8)
+            remove_TMhelix('./biolib_results/predicted_topologies.3line','./rpsblast_cdhit.fasta','./putative_lysins.fa')
+          
+          
+        dic_fa = {}
+        with open('./putative_lysins.fa') as f:
+            lines = f.readlines()  # 读取所有行
+            first_line = lines[0]
+            if first_line.startswith('>'):
+                state = 'Y'
+                cmd_9 = tl.run_signal('./putative_lysins.fa','./signaltmp')
+                tl.run(cmd_9)
+                
+                dic_fa = fasta2dict_2('./putative_lysins.fa')
+            else:
+                state = 'N'
+        f.close()
+        
+        f1 = open('./molecular_weight.txt')
+        f2 = open('./putative_lysin_domain_info.csv')
+        
+        if state == 'Y':
+        
+          with open('./MW_Length.txt', 'w') as w1:
+            for i in f1:
+              name = i.strip().split('\t')[0]
+              mw = i.strip().split('\t')[1]
+              if name in dic_fa.keys():
+                line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
+                w1.write(line)
+          w1.close()
+          
+          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))   
+          
+          Domain_Info_dict = {}
+          with open('./Domain_Info.txt', 'w') as w2:
+            for line in f2:
+                orf_id = line.strip().split(',')[0]
+                info_lis = []
+                info = '&'.join(line.strip().split(',')[1:])
+                info_lis.append(info)
+                if orf_id in Domain_Info_dict:
+                  Domain_Info_dict[orf_id].append(info)
+                else:
+                  info_lis.append(info)
+                  Domain_Info_dict[orf_id] = info_lis
+            for key in Domain_Info_dict:
+                list_tmp = list(set(Domain_Info_dict[key]))
+                line = key + '\t' + ';'.join(list_tmp) + '\n'
+                w2.write(line)
+          w2.close()
+                    
+          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
+          
+          
+          f1 = open('./MW_Length.txt')
+          f2 = open('./Domain_Info.txt')
+          f3 = open('./signaltmp/output.gff3')
+          
+          
+          dic_info = {}
+          for lines in f1:
+            line = lines.strip().split('\t')
+            id_1 = line[0]
+            mw = line[1]
+            length = line[2]
+            mw_length = []
+            mw_length.append(mw)
+            mw_length.append(length)
+            dic_info[id_1] = mw_length
+            
+          
+          for lines in f2:
+            line = lines.strip().split('\t')
+            id_2 = line[0]
+            pf = line[1]
+            if id_2 in dic_info.keys():
+              dic_info[id_2].append(pf)
+        
+          a = []
+          b = []
+          for lines in f3:
+            if lines[0] != "#":
+              line = lines.strip().split('\t')
+              id_3 = line[0]
+              if float(line[5]) > 0.5:
+                li = line[0] + ':' + line[3] + '-' + line[4]
+                print(li)
+                if id_3 in dic_info.keys():
+                  dic_info[id_3].append(li)
+                  a.append(id_3)
+          
+          for key in dic_info:
+            b.append(key)    
+          c = list(set(b).difference(set(a)))
+          
+          for i in c:
+            dic_info[i].append('NULL')
+                  
+          print(dic_info)
+          
+          
+          if Args.ref != '':
+            first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+            os.chdir(curr_dir)
+            ref_lysins = os.path.abspath(str(Args.ref))
+            second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+            os.chdir(Args.workdir)
+            
+            dic_ref = {}
+            # 两个fasta文件中的序列两两比较：
+            for t1 in first_dict:
+              t_len = len(first_dict[t1].seq)
+              for t2 in second_dict:
+                global_align = pw2.align.globalxx(first_dict[t1].seq, second_dict[t2].seq)
+                matched = global_align[0][2]
+                percent_match = (matched / t_len) * 100
+                
+                if t1 not in dic_ref.keys():
+                  score = []
+                  score.append(t2 + ':' + str(round(percent_match,2)))
+                  dic_ref[t1] = score
+                elif t1 in dic_ref.keys():
+                  dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
+
+
+            with open('./putative_lysins_info.txt','w') as w:
+              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
+              w.write(line)
+              for key in dic_info:
+                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                w.write(line)
+            w.close()
+            
+                    
+          elif Args.ref == '':
+            print('aaaaa')
+            
+            with open('./putative_lysins_info.txt','w') as w:
+              line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
+              w.write(line)
+              for key in dic_info:
+                line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\n'
+                w.write(line)
+            w.close()
+              
+        else:
+          print(state)
