@@ -1074,7 +1074,7 @@ if __name__ == "__main__":
                   
                 dic_fa = {}
                 with open('./putative_lysins.fa') as f:
-                    lines = f.readlines()  # ∂¡»°À˘”–––
+                    lines = f.readlines()  # ËØªÂèñÊâÄÊúâË°å
                     first_line = lines[0]
                     if first_line.startswith('>'):
                         state = 'Y'
@@ -1178,7 +1178,7 @@ if __name__ == "__main__":
                     os.chdir(Args.workdir)
                     
                     dic_ref = {}
-                    # ¡Ω∏ˆfastaŒƒº˛÷–µƒ–Ú¡–¡Ω¡Ω±»Ωœ£∫
+                    # ‰∏§‰∏™fastaÊñá‰ª∂‰∏≠ÁöÑÂ∫èÂàó‰∏§‰∏§ÊØîËæÉÔºö
                     for t1 in first_dict:
                       t_len = len(first_dict[t1].seq)
                       for t2 in second_dict:
@@ -1219,23 +1219,23 @@ if __name__ == "__main__":
                 
                 
                 time.sleep(120) 
-                #if os.path.isdir('./phispy_out/') == True:
-                    #os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-                #else:
-                    #os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
-                #os.system('rm -r ./pfam_EAD_cdhit*')
-                #os.remove('./all_protein_filter.faa')
-                #os.remove('./all_protein.faa')
-                #os.remove('./all_protein_pfam_protein.fasta')
-                #os.remove('./all_protein_pfam_protein_EAD.fasta')
-                #os.remove('./pfam_EAD.fasta')
-                #os.remove('./pfam_EAD_tmp.fasta')
-                #os.remove('./all_protein_tmp.txt')
-                #os.remove('./all_protein_ut.faa')
-                #os.remove('./molecular_weight.txt')
-                #os.remove('./MW_Length.txt') 
-                #os.remove('./Domain_Info.txt')
-                #os.system('rm -r ./signaltmp/')
+                if os.path.isdir('./phispy_out/') == True:
+                    os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+                else:
+                    os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./biolib_results/') 
+                os.system('rm -r ./pfam_EAD_cdhit*')
+                os.remove('./all_protein_filter.faa')
+                os.remove('./all_protein.faa')
+                os.remove('./all_protein_pfam_protein.fasta')
+                os.remove('./all_protein_pfam_protein_EAD.fasta')
+                os.remove('./pfam_EAD.fasta')
+                os.remove('./pfam_EAD_tmp.fasta')
+                os.remove('./all_protein_tmp.txt')
+                os.remove('./all_protein_ut.faa')
+                os.remove('./molecular_weight.txt')
+                os.remove('./MW_Length.txt') 
+                os.remove('./Domain_Info.txt')
+                os.system('rm -r ./signaltmp/')
     
         elif Args.bacteriaORphage == 'P':
             if Args.workdir[-1] == '/':
@@ -1483,7 +1483,7 @@ if __name__ == "__main__":
         
                 dic_fa = {}
                 with open('./putative_lysins.fa') as f:
-                  lines = f.readlines()  # ∂¡»°À˘”–––
+                  lines = f.readlines()  # ËØªÂèñÊâÄÊúâË°å
                   first_line = lines[0]
                   if first_line.startswith('>'):
                       state = 'Y'
@@ -1586,7 +1586,7 @@ if __name__ == "__main__":
                     os.chdir(Args.workdir)
                     
                     dic_ref = {}
-                    # ¡Ω∏ˆfastaŒƒº˛÷–µƒ–Ú¡–¡Ω¡Ω±»Ωœ£∫
+                    # ‰∏§‰∏™fastaÊñá‰ª∂‰∏≠ÁöÑÂ∫èÂàó‰∏§‰∏§ÊØîËæÉÔºö
                     for t1 in first_dict:
                       t_len = len(first_dict[t1].seq)
                       for t2 in second_dict:
@@ -1626,19 +1626,19 @@ if __name__ == "__main__":
                   
                   
                 time.sleep(120) 
-                #os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
-                #os.system('rm -r ./pfam_EAD_cdhit*')
-                #os.remove('./all_protein_filter.faa')
-                #os.remove('./all_protein.faa')
-                #os.remove('./all_protein_pfam_protein.fasta')
-                #os.remove('./all_protein_pfam_protein_EAD.fasta')
-                #os.remove('./pfam_EAD.fasta')
-                #os.remove('./pfam_EAD_tmp.fasta')
-                #os.remove('./all_protein_ut.faa')
-                #os.remove('./molecular_weight.txt')
-                #os.remove('./MW_Length.txt') 
-                #os.remove('./Domain_Info.txt')
-                #os.system('rm -r ./signaltmp/')
+                os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
+                os.system('rm -r ./pfam_EAD_cdhit*')
+                os.remove('./all_protein_filter.faa')
+                os.remove('./all_protein.faa')
+                os.remove('./all_protein_pfam_protein.fasta')
+                os.remove('./all_protein_pfam_protein_EAD.fasta')
+                os.remove('./pfam_EAD.fasta')
+                os.remove('./pfam_EAD_tmp.fasta')
+                os.remove('./all_protein_ut.faa')
+                os.remove('./molecular_weight.txt')
+                os.remove('./MW_Length.txt') 
+                os.remove('./Domain_Info.txt')
+                os.system('rm -r ./signaltmp/')
     
         else:
             raise ValueError('Error, please check parameter "--bp"')
@@ -1994,7 +1994,7 @@ if __name__ == "__main__":
                   
                 dic_fa = {}
                 with open('./putative_lysins.fa') as f:
-                    lines = f.readlines()  # ∂¡»°À˘”–––
+                    lines = f.readlines()  # ËØªÂèñÊâÄÊúâË°å
                     first_line = lines[0]
                     if first_line.startswith('>'):
                         state = 'Y'
@@ -2098,7 +2098,7 @@ if __name__ == "__main__":
                     os.chdir(Args.workdir)
                     
                     dic_ref = {}
-                    # ¡Ω∏ˆfastaŒƒº˛÷–µƒ–Ú¡–¡Ω¡Ω±»Ωœ£∫
+                    # ‰∏§‰∏™fastaÊñá‰ª∂‰∏≠ÁöÑÂ∫èÂàó‰∏§‰∏§ÊØîËæÉÔºö
                     for t1 in first_dict:
                       t_len = len(first_dict[t1].seq)
                       for t2 in second_dict:
@@ -2138,21 +2138,21 @@ if __name__ == "__main__":
                   print(state)
                 
                 time.sleep(120) 
-                #if os.path.isdir('./phispy_out/') == True:
-                    #os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
-                #else:
-                    #os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
-                #os.remove('./all_protein_filter.faa')
-                #os.remove('./all_protein_tmp.txt')
-                #os.remove('./all_protein.faa')
-                #os.remove('./all_protein_ut.faa')
-                #os.system('rm -r rpsblast_cdhit*')
-                #os.system('rm -r rpsblast_tmp.fasta')
-                #os.remove('./putative_lysin_domain_info.csv')
-                #os.remove('./molecular_weight.txt')
-                #os.remove('./MW_Length.txt') 
-                #os.remove('./Domain_Info.txt')
-                #os.system('rm -r ./signaltmp/')
+                if os.path.isdir('./phispy_out/') == True:
+                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+                else:
+                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./biolib_results/') 
+                os.remove('./all_protein_filter.faa')
+                os.remove('./all_protein_tmp.txt')
+                os.remove('./all_protein.faa')
+                os.remove('./all_protein_ut.faa')
+                os.system('rm -r rpsblast_cdhit*')
+                os.system('rm -r rpsblast_tmp.fasta')
+                os.remove('./putative_lysin_domain_info.csv')
+                os.remove('./molecular_weight.txt')
+                os.remove('./MW_Length.txt') 
+                os.remove('./Domain_Info.txt')
+                os.system('rm -r ./signaltmp/')
     
         elif Args.bacteriaORphage == 'P':
             if Args.workdir[-1] == '/':
@@ -2385,7 +2385,7 @@ if __name__ == "__main__":
                   
                 dic_fa = {}
                 with open('./putative_lysins.fa') as f:
-                    lines = f.readlines()  # ∂¡»°À˘”–––
+                    lines = f.readlines()  # ËØªÂèñÊâÄÊúâË°å
                     first_line = lines[0]
                     if first_line.startswith('>'):
                         state = 'Y'
@@ -2489,7 +2489,7 @@ if __name__ == "__main__":
                     os.chdir(Args.workdir)
                     
                     dic_ref = {}
-                    # ¡Ω∏ˆfastaŒƒº˛÷–µƒ–Ú¡–¡Ω¡Ω±»Ωœ£∫
+                    # ‰∏§‰∏™fastaÊñá‰ª∂‰∏≠ÁöÑÂ∫èÂàó‰∏§‰∏§ÊØîËæÉÔºö
                     for t1 in first_dict:
                       t_len = len(first_dict[t1].seq)
                       for t2 in second_dict:
@@ -2530,17 +2530,17 @@ if __name__ == "__main__":
                   
                   
                 time.sleep(120) 
-                #os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
-                #os.system('rm -r rpsblast_cdhit*')
-                #os.system('rm -r rpsblast_tmp.fasta')
-                #os.remove('./all_protein.faa')
-                #os.remove('./all_protein_filter.faa')
-                #os.remove('./all_protein_ut.faa')
-                #os.remove('./putative_lysin_domain_info.csv')
-                #os.remove('./molecular_weight.txt')
-                #os.remove('./MW_Length.txt') 
-                #os.remove('./Domain_Info.txt')
-                #os.system('rm -r ./signaltmp/')
+                os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
+                os.system('rm -r rpsblast_cdhit*')
+                os.system('rm -r rpsblast_tmp.fasta')
+                os.remove('./all_protein.faa')
+                os.remove('./all_protein_filter.faa')
+                os.remove('./all_protein_ut.faa')
+                os.remove('./putative_lysin_domain_info.csv')
+                os.remove('./molecular_weight.txt')
+                os.remove('./MW_Length.txt') 
+                os.remove('./Domain_Info.txt')
+                os.system('rm -r ./signaltmp/')
     
         else:
             raise ValueError('Error, please check parameter "--bp"')
