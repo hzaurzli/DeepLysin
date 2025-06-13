@@ -1,5 +1,5 @@
 # DeepLysin
-DeepLysin, easy and fast digging lysin from phages and prophages, if you need to download DeepLysin, please contact Email: small.runze@gmail.com
+DeepLysin, easy and fast digging lysin from phages and prophages, if you need to download DeepLysin, please contact Email: small.runze@gmail.co
 
 # Pipeline (Linux only, Internet)
 ![DeepLysin](https://github.com/user-attachments/assets/41341e0c-5d89-447c-8ea5-55c1480a6a71)
