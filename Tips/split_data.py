@@ -46,7 +46,7 @@ if int(tot) > nn:
   for n in range(1,int(num_1) + 1):
     lis2 = lis[(n-1)*nn:(n-1)*nn + nn]
     if os.path.isdir(path_2 + '/data_' + str(n) + '/') == True:
-          pass
+        pass
     else:
         os.mkdir(path_2 + '/data_' + str(n) + '/')
     
@@ -55,7 +55,10 @@ if int(tot) > nn:
     else:   
        os.mkdir(path_3 + '/res_' + str(n) + '/')
     for m in lis2:
-      os.system('cp %s %s' % (path + '/' + m, path_2 + '/data_' + str(n) + '/'))
+       if os.path.exists(path_2 + '/data_' + str(n) + '/' + m):
+           pass
+       else:
+           os.system('cp %s %s' % (path + '/' + m, path_2 + '/data_' + str(n) + '/'))
       
   if num_2 != 0:
      lis2 = lis[num_1*nn:num_1*nn+num_2]
@@ -71,10 +74,18 @@ if int(tot) > nn:
          os.mkdir(path_3 + '/res_' + str(num_1 + 1) + '/')
      
      for k in lis2:
-         os.system('cp %s %s' % (path + '/' + k, path_2 + '/data_' + str(num_1 + 1) + '/'))
+         if os.path.exists(path_2 + '/data_' + str(num_1 + 1) + '/' + k):
+             pass
+         else:
+             os.system('cp %s %s' % (path + '/' + k, path_2 + '/data_' + str(num_1 + 1) + '/'))
+         
   else:
       pass
       
 else:
-    os.system('cp %s %s' % (path + '/' + '*', path_2 + '/data_0/'))
+    if os.path.isdir(path_2 + '/data_0/') == True:
+        pass
+    else:
+        os.mkdir(path_2 + '/data_0/')
+        os.system('cp %s %s' % (path + '/' + '*', path_2 + '/data_0/'))
   
