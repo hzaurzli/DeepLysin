@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 
 import argparse
@@ -211,12 +212,50 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
               line = key + '\n' + fi[key] + '\n'
               w.write(line)
       w.close()
+      
+
+def Split_fa(fasta_name,tot, num_1, num_2):    
+    dict = fasta2dict(fasta_name)
+    for i in range(1,num_1 + 1):
+      dic = dict_slice(dict, int(str(i) + '00') - 100, int(str(i) + '00'))
+      with open('./pfam_EAD_cdhit-' + str(i) + '00.fasta','w') as w:
+        for key in dic:
+          line = key + '\n' + dic[key] + '\n'
+          w.write(line)
+      w.close()
+    
+    if num_2 != 0:
+      with open('./pfam_EAD_cdhit-' + str(int(str(num_1 + 1) + '00')) + '.fasta','w') as w:
+        dic = dict_slice(dict, int(str(num_1) + '00'), int(str(num_1) + '00') + int(num_2))
+        for key in dic:
+          line = key + '\n' + dic[key] + '\n'
+          w.write(line)
+      w.close()
+
+
+def Split_fa_rps(fasta_name,tot, num_1, num_2):    
+    dict = fasta2dict(fasta_name)
+    for i in range(1,num_1 + 1):
+      dic = dict_slice(dict, int(str(i) + '00') - 100, int(str(i) + '00'))
+      with open('./rpsblast_cdhit-' + str(i) + '00.fasta','w') as w:
+        for key in dic:
+          line = key + '\n' + dic[key] + '\n'
+          w.write(line)
+      w.close()
+    
+    if num_2 != 0:
+      with open('./rpsblast_cdhit-' + str(int(str(num_1 + 1) + '00')) + '.fasta','w') as w:
+        dic = dict_slice(dict, int(str(num_1) + '00'), int(str(num_1) + '00') + int(num_2))
+        for key in dic:
+          line = key + '\n' + dic[key] + '\n'
+          w.write(line)
+      w.close()
 
 
 if __name__ == "__main__":
     
-    file = 'pfam_EAD_cdhit.fasta'
-    method = 'hmmer'
+    file = 'rpsblast_cdhit.fasta'
+    method = 'rpsblast'
     ref = ''
     
     lis = file.split('.')[:-1]
@@ -250,7 +289,7 @@ if __name__ == "__main__":
 
         dic_fa = {}
         with open('./putative_lysins.fa') as f:
-          lines = f.readlines()  # 读取所有行
+          lines = f.readlines()
           first_line = lines[0]
           if first_line.startswith('>'):
               state = 'Y'
@@ -353,7 +392,6 @@ if __name__ == "__main__":
             os.chdir(Args.workdir)
             
             dic_ref = {}
-            # 两个fasta文件中的序列两两比较：
             for t1 in first_dict:
               t_len = len(first_dict[t1].seq)
               for t2 in second_dict:
@@ -415,7 +453,7 @@ if __name__ == "__main__":
           
         dic_fa = {}
         with open('./putative_lysins.fa') as f:
-            lines = f.readlines()  # 读取所有行
+            lines = f.readlines()
             first_line = lines[0]
             if first_line.startswith('>'):
                 state = 'Y'
@@ -519,7 +557,6 @@ if __name__ == "__main__":
             os.chdir(Args.workdir)
             
             dic_ref = {}
-            # 两个fasta文件中的序列两两比较：
             for t1 in first_dict:
               t_len = len(first_dict[t1].seq)
               for t2 in second_dict:
