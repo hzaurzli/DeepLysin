@@ -16,20 +16,20 @@ path_3 = os.path.abspath(Args.output)
 tot = sub.getoutput("ls -r %s | wc -l" % (path + '/*'))
 print(tot)
 
-if os.path.isdir('./data/') == True:
+if os.path.isdir(path) == True:
     pass
 else:
-    os.mkdir('./data/')
+    os.mkdir(path)
     
-if os.path.isdir('./datatmp/') == True:
+if os.path.isdir(path_2) == True:
     pass
 else:
-    os.mkdir('./datatmp/')
+    os.mkdir(path_2)
 
-if os.path.isdir('./result/') == True:
+if os.path.isdir(path_3) == True:
     pass
 else:
-    os.mkdir('./result/')
+    os.mkdir(path_3)
 
 lis = []
 for i in os.listdir(path):
