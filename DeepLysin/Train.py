@@ -92,9 +92,12 @@ if __name__ == '__main__':
     XGB_clf = XGBoost(n_jobs=njob,random_state=Randon_seed)
 
     clf_feature_order = {
-        "AAC" : ["ERT_clf","ANN_clf","XGB_clf"],
-        "BPNC" : ["KNN_clf","ANN_clf","XGB_clf"],
-        "CTD" : ["ANN_clf","XGB_clf"]
+        "BPNC" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
+        "GAAC" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
+        "AAE" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
+        "AAI" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
+        "AAC" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
+        "CTD" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
     }
 
     meta_features,y = process_train(Args.file, Args.pos_num, Args.neg_num, os.path.abspath(Args.model_path))
