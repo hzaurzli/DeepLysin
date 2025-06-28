@@ -79,7 +79,7 @@ signalp6 --help
 source activate deeplysin
 
 # install
-pip3 install -U pybiolib
+pip3 install -U pybiolib==0.1.275
 ```
 
 ### Find putative lysins
