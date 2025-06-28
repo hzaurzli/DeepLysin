@@ -18,7 +18,7 @@ run-dbcan
 Independent env:
 ```
 signalp6
-DeepTMHMM
+DeepTMHMM (pybiolib==0.1.275)
 ```
 
 Python pip install:
