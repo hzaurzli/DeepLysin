@@ -334,12 +334,12 @@ Web disk：
   Password：5ivi
   
 # Update
-***1.lysins_finder.py(2022.10)***
+***1.lysins_finder.py (2022.10)***
 
 See above 
 <br>
 
-***2.lysins_finder_super.py(for 'method to predict ppn', 2024.9)***
+***2.lysins_finder_super.py (for 'method to predict ppn', 2024.9)***
 
 **Two method to predict ppn ('phispy' or 'DBSCAN-SWA')**
 Install for dbscan-swa.py: please refer to [DBSCAN-SWA](https://github.com/HIT-ImmunologyLab/DBSCAN-SWA)
@@ -365,7 +365,7 @@ python lysins_finder_super.py
 ```
 
 
-***3.lysins_finder_super.py(for 'method to scan lysin domain', 2025.5)***
+***3.lysins_finder_super.py (for 'method to scan lysin domain', 2025.5)***
 
 **Two method to scan lysin domain ('hmmer' or 'rpsblast')**
 
