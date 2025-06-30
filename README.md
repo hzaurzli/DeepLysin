@@ -394,7 +394,7 @@ python lysins_finder_super.py
   -rpsdb /path/pldb/pldb (index path)               # reported lysin rpsblast database path(need db index, rpsblast)
   -r ./ref.fasta                                    # reported lysin reference fasta (optional parammeter, comparative similarity with known reported sequences)
 ```
-**For CBD_info.csv and EAD_info.csv, the first colum is '.smp' file prefix, the second colum is domain name, the third colum is CDD id number and the fourth colum is domain length**
+For **'CBD_info.csv'** and **'EAD_info.csv'**, the first colum is **'.smp'** file prefix, the second colum is domain name, the third colum is CDD id number and the fourth colum is domain length**
 
 # Cition
 If this software is useful, please cite:
