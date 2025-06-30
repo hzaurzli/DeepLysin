@@ -67,7 +67,7 @@ cd signalp6_fast/
 pip install signalp-6-package/
 
 # move distilled_model_signalp6.pt
-cp /home/.../signalp6_fast/signalp-6-package/models/distilled_model_signalp6.pt /home/.../miniconda3/envs/deeplysin/lib/python3.7/site-packages/signalp/model_weights/distilled_model_signalp6.pt
+cp /home/.../signalp6_fast/signalp-6-package/models/distilled_model_signalp6.pt /home/.../miniconda3/envs/deeplysin/lib/python3.7/site-packages/signalp/model_weights/
 
 # test
 signalp6 --help
