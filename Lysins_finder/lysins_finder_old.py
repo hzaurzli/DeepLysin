@@ -23,16 +23,16 @@
 
 import argparse
 import os,sys,re
-import subprocess as sub
-from subprocess import *
-import subprocess as sub
-import glob
-import shutil
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
+import subprocess as sub
+from subprocess import *
+import subprocess as sub
+import glob
+import shutil
 
 
 class tools:
