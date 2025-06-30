@@ -51,7 +51,7 @@ source activate deeplysin
 conda install -c anaconda perl=5.22
 ```
 
-***If you don't have SignalP 6.0***, please download from https://services.healthtech.dtu.dk/services/SignalP-6.0/
+***If you don't have SignalP 6.0 (fast)***, please download from https://services.healthtech.dtu.dk/services/SignalP-6.0/
 ```
 # activate env
 source activate deeplysin
