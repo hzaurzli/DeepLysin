@@ -22,12 +22,12 @@
 
 
 import argparse
-import os,sys,re
 from Bio import SeqIO
 from Bio import AlignIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 from Bio.SeqUtils.ProtParam import ProteinAnalysis
+import os,sys,re
 import subprocess as sub
 from subprocess import *
 import subprocess as sub
