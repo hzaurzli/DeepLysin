@@ -92,12 +92,12 @@ if __name__ == '__main__':
     XGB_clf = XGBoost(n_jobs=njob,random_state=Randon_seed)
 
     clf_feature_order = {
-        "BPNC" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
-        "GAAC" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
-        "AAE" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
-        "AAI" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
-        "AAC" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
-        "CTD" : ["ERT_clf","LR_clf","ANN_clf","KNN_clf","XGB_clf"],
+        "AAC": ["AAC_ERT", "AAC_ANN", "AAC_XGB", "AAC_KNN", "AAC_LR"],
+        "BPNC": ["BPNC_ERT", "BPNC_ANN", "BPNC_XGB", "BPNC_KNN", "BPNC_LR"],
+        "CTD": ["CTD_ERT", "CTD_ANN", "CTD_XGB", "CTD_KNN", "CTD_LR"],
+        "AAE": ["AAE_ERT", "AAE_ANN", "AAE_XGB", "AAE_KNN", "AAE_LR"],
+        "AAI": ["AAI_ERT", "AAI_ANN", "AAI_XGB", "AAI_KNN", "AAI_LR"],
+        "GAAC": ["GAAC_ERT", "GAAC_ANN", "GAAC_XGB", "GAAC_KNN", "GAAC_LR"],
     }
 
     meta_features,y = process_train(Args.file, Args.pos_num, Args.neg_num, os.path.abspath(Args.model_path))
