@@ -2,6 +2,12 @@
 #!/usr/bin/env python
 
 import argparse
+from Bio import SeqIO
+from Bio import AlignIO
+from Bio import pairwise2 as pw2
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.SeqUtils.ProtParam import ProteinAnalysis
 import os,sys,re,time
 import random
 import subprocess as sub
