@@ -27,8 +27,10 @@ argparse
 pathlib
 pandas
 numpy
+biopython==1.79
 joblib
 scikit-learn
+xgboost
 ```
 
 
