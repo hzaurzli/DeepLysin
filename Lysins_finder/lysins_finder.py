@@ -24,6 +24,12 @@
 
 import argparse
 import os,sys,re,time
+from Bio import SeqIO
+from Bio import AlignIO
+from Bio import pairwise2 as pw2
+from Bio.Seq import Seq
+from Bio.SeqRecord import SeqRecord
+from Bio.SeqUtils.ProtParam import ProteinAnalysis
 import random
 import subprocess as sub
 from subprocess import *
@@ -31,12 +37,6 @@ import subprocess as sub
 import glob
 import shutil
 import biolib
-from Bio import SeqIO
-from Bio import AlignIO
-from Bio import pairwise2 as pw2
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
-from Bio.SeqUtils.ProtParam import ProteinAnalysis
 
 
 class tools:
