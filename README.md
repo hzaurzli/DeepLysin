@@ -7,10 +7,16 @@ DeepLysin, easy and fast digging lysin from phages and prophages, if you need to
 # Requests
 Python version
 ```
-Python 3.10
+Python 3.8
 
 # Try another channel maybe fast
 -i https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
+Independent env:
+```
+signalp6
+DeepTMHMM (pybiolib)
 ```
 
 Conda env:
@@ -23,18 +29,12 @@ hmmer==3.3.2
 run-dbcan
 ```
 
-Independent env:
-```
-signalp6
-DeepTMHMM (pybiolib)
-```
-
 Python pip install:
 ```
 argparse
 pathlib
 pandas
-numpy
+numpy==1.24.4
 biopython==1.79
 joblib
 scikit-learn
@@ -45,7 +45,7 @@ xgboost
 ## Step 1: Lysins_finder: Find putative lysins
 ### Install the software
 ```
-# install env (recommend Python 3.10)
+# install env (recommend Python 3.8)
 conda env create -f deeplysin.yaml
 
 # activate env
@@ -66,9 +66,6 @@ conda install -c anaconda perl=5.22
 # activate env
 source activate deeplysin
 
-# install torch
-pip install torch
-
 # unzip 
 tar zxvf signalp-6.0g.fast.tar.gz
 cd signalp6_fast/
@@ -77,7 +74,7 @@ cd signalp6_fast/
 pip install signalp-6-package/
 
 # move distilled_model_signalp6.pt
-cp /home/.../signalp6_fast/signalp-6-package/models/distilled_model_signalp6.pt /home/.../miniconda3/envs/deeplysin/lib/python3.10/site-packages/signalp/model_weights/
+cp /home/.../signalp6_fast/signalp-6-package/models/distilled_model_signalp6.pt /home/.../miniconda3/envs/deeplysin/lib/python3.8/site-packages/signalp/model_weights/
 
 # test
 signalp6 --help
