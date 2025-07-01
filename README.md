@@ -5,6 +5,14 @@ DeepLysin, easy and fast digging lysin from phages and prophages, if you need to
 ![DeepLysin](https://github.com/user-attachments/assets/41341e0c-5d89-447c-8ea5-55c1480a6a71)
 
 # Requests
+Python version
+```
+Python 3.10
+
+# Try another channel maybe fast
+-i https://pypi.tuna.tsinghua.edu.cn/simple
+```
+
 Conda env:
 ```
 prokka==1.14.6
@@ -37,7 +45,7 @@ xgboost
 ## Step 1: Lysins_finder: Find putative lysins
 ### Install the software
 ```
-# install env (recommend Python 3.7)
+# install env (recommend Python 3.10)
 conda env create -f deeplysin.yaml
 
 # activate env
@@ -58,8 +66,8 @@ conda install -c anaconda perl=5.22
 # activate env
 source activate deeplysin
 
-# install torch==1.7.1
-pip install torch==1.7.1
+# install torch
+pip install torch
 
 # unzip 
 tar zxvf signalp-6.0g.fast.tar.gz
@@ -69,7 +77,7 @@ cd signalp6_fast/
 pip install signalp-6-package/
 
 # move distilled_model_signalp6.pt
-cp /home/.../signalp6_fast/signalp-6-package/models/distilled_model_signalp6.pt /home/.../miniconda3/envs/deeplysin/lib/python3.7/site-packages/signalp/model_weights/
+cp /home/.../signalp6_fast/signalp-6-package/models/distilled_model_signalp6.pt /home/.../miniconda3/envs/deeplysin/lib/python3.10/site-packages/signalp/model_weights/
 
 # test
 signalp6 --help
@@ -316,6 +324,7 @@ python3 Predict_costom.py -f ./datasets/target_lysin.fa -o data.csv -m ./Models/
 ```--feature_model``` ***is the combination of models and features, please see model type and feature type***
 
 # Tips
+## 1. 'subprocess' error
 If an error occurs:
 ```
 from subprocess import _args_from_interpreter_flags
@@ -329,6 +338,25 @@ vi util.py
 ```
 
 Remove ```from subprocess import _args_from_interpreter_flags```
+
+## 2. 'prokka' or 'DBSCAN-SWA' error
+If an error occurs:
+```
+ValueError: LOCUS line does not contain - at position 75 in date:
+LOCUS       >NZ_CP107468.1       5461990 bp    DNA     linear       01-7月-2025
+```
+Change date format to 'en_US.UTF-8'
+```
+# Edit .bashrc
+vi ~/.bashrc
+
+# Add two line in the end
+export LANG=en_US.UTF-8
+export LC_TIME=en_US.UTF-8
+
+# Active
+source ~/.bashrc
+```
 
 # Reference database download
 Web disk：
