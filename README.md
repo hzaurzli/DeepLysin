@@ -26,7 +26,7 @@ run-dbcan
 Independent env:
 ```
 signalp6
-DeepTMHMM (pybiolib==0.1.275)
+DeepTMHMM (pybiolib)
 ```
 
 Python pip install:
@@ -89,7 +89,7 @@ signalp6 --help
 source activate deeplysin
 
 # install
-pip3 install -U pybiolib==0.1.275
+pip3 install -U pybiolib
 ```
 
 ### Find putative lysins
