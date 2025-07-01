@@ -892,13 +892,18 @@ if __name__ == "__main__":
                   w.close()
                   os.remove('./orf_ffn/' + prefix + '_tmp.ffn')
     
-            
-            if len(os.listdir('./orf_ffn/')) == 0:
+            datasize = []
+            for i in os.listdir('./orf_ffn/'):
+              stats = os.stat('./orf_ffn/' + i)
+              datasize.append(stats.st_size)
+              
+              
+            if all(element==0 for element in datasize) != 0:
               if os.path.isdir('./phispy_out/') == True:
                   os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
                   raise ValueError('No prophages ORFs found!')
               else:
-                  os.system('rm -r ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/')
+                  os.system('rm -r ./orf_ffn/ ./DBSCAN_SWA_out/')
                   raise ValueError('No prophages ORFs found!')
               
        
@@ -934,9 +939,15 @@ if __name__ == "__main__":
                   w.write(line)
                 w.close()
                 
-                os.system('rm -r ./prokka_result/')
+                if os.path.isdir('./phispy_out/') == True:
+                    os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
+                else:
+                    os.system('rm -r ./orf_ffn/ ./DBSCAN_SWA_out/')
+                
                 os.remove('./all_protein.faa')
                 os.remove('./all_protein_ut.faa')
+                os.remove('./all_protein_tmp.txt')
+                
               
               else:
                 # step 7 calculate molecular weight
@@ -1074,7 +1085,7 @@ if __name__ == "__main__":
                   
                 dic_fa = {}
                 with open('./putative_lysins.fa') as f:
-                    lines = f.readlines()  # 读取所有行
+                    lines = f.readlines()
                     first_line = lines[0]
                     if first_line.startswith('>'):
                         state = 'Y'
@@ -1178,7 +1189,6 @@ if __name__ == "__main__":
                     os.chdir(Args.workdir)
                     
                     dic_ref = {}
-                    # 两个fasta文件中的序列两两比较：
                     for t1 in first_dict:
                       t_len = len(first_dict[t1].seq)
                       for t2 in second_dict:
@@ -1222,7 +1232,7 @@ if __name__ == "__main__":
                 if os.path.isdir('./phispy_out/') == True:
                     os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
                 else:
-                    os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./biolib_results/') 
+                    os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
                 os.system('rm -r ./pfam_EAD_cdhit*')
                 os.remove('./all_protein_filter.faa')
                 os.remove('./all_protein.faa')
@@ -1483,7 +1493,7 @@ if __name__ == "__main__":
         
                 dic_fa = {}
                 with open('./putative_lysins.fa') as f:
-                  lines = f.readlines()  # 读取所有行
+                  lines = f.readlines()
                   first_line = lines[0]
                   if first_line.startswith('>'):
                       state = 'Y'
@@ -1586,7 +1596,6 @@ if __name__ == "__main__":
                     os.chdir(Args.workdir)
                     
                     dic_ref = {}
-                    # 两个fasta文件中的序列两两比较：
                     for t1 in first_dict:
                       t_len = len(first_dict[t1].seq)
                       for t2 in second_dict:
@@ -1832,12 +1841,18 @@ if __name__ == "__main__":
                   os.remove('./orf_ffn/' + prefix + '_tmp.ffn')
                 
             
-            if len(os.listdir('./orf_ffn/')) == 0:
+            datasize = []
+            for i in os.listdir('./orf_ffn/'):
+              stats = os.stat('./orf_ffn/' + i)
+              datasize.append(stats.st_size)
+              
+              
+            if all(element==0 for element in datasize) != 0:
               if os.path.isdir('./phispy_out/') == True:
                   os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
                   raise ValueError('No prophages ORFs found!')
               else:
-                  os.system('rm -r ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/')
+                  os.system('rm -r ./orf_ffn/ ./DBSCAN_SWA_out/')
                   raise ValueError('No prophages ORFs found!')
               
        
@@ -1873,9 +1888,14 @@ if __name__ == "__main__":
                   w.write(line)
                 w.close()
                 
-                os.system('rm -r ./prokka_result/')
+                if os.path.isdir('./phispy_out/') == True:
+                    os.system('rm -r ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/')
+                else:
+                    os.system('rm -r ./orf_ffn/ ./DBSCAN_SWA_out/')
+                
                 os.remove('./all_protein.faa')
                 os.remove('./all_protein_ut.faa')
+                os.remove('./all_protein_tmp.txt')
               
               else:
                 # step 7 calculate molecular weight
@@ -1994,7 +2014,7 @@ if __name__ == "__main__":
                   
                 dic_fa = {}
                 with open('./putative_lysins.fa') as f:
-                    lines = f.readlines()  # 读取所有行
+                    lines = f.readlines()
                     first_line = lines[0]
                     if first_line.startswith('>'):
                         state = 'Y'
@@ -2098,7 +2118,6 @@ if __name__ == "__main__":
                     os.chdir(Args.workdir)
                     
                     dic_ref = {}
-                    # 两个fasta文件中的序列两两比较：
                     for t1 in first_dict:
                       t_len = len(first_dict[t1].seq)
                       for t2 in second_dict:
@@ -2141,7 +2160,7 @@ if __name__ == "__main__":
                 if os.path.isdir('./phispy_out/') == True:
                     os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
                 else:
-                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./biolib_results/') 
+                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
                 os.remove('./all_protein_filter.faa')
                 os.remove('./all_protein_tmp.txt')
                 os.remove('./all_protein.faa')
@@ -2385,7 +2404,7 @@ if __name__ == "__main__":
                   
                 dic_fa = {}
                 with open('./putative_lysins.fa') as f:
-                    lines = f.readlines()  # 读取所有行
+                    lines = f.readlines()
                     first_line = lines[0]
                     if first_line.startswith('>'):
                         state = 'Y'
@@ -2489,7 +2508,6 @@ if __name__ == "__main__":
                     os.chdir(Args.workdir)
                     
                     dic_ref = {}
-                    # 两个fasta文件中的序列两两比较：
                     for t1 in first_dict:
                       t_len = len(first_dict[t1].seq)
                       for t2 in second_dict:
