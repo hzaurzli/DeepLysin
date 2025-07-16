@@ -378,6 +378,7 @@ python lysins_finder_super.py
   -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
   -t Bacteria (or 'Virus')                          # prokka kingdom type; Bacteria or Virus (for phages)
   -c 0.95                                           # cdhit cluster cutoff
+  -m hmmer (or rpsblast)                            # searching method 'hmmer' or 'rpsblast'
   -hdc ./db/hmm/lysin_reported_CBD.hmm              # hmmer database path
   -rlc ./db/hmm/lysin_reported_CBD.txt              # reported lysin structures(hmm files)
   -wkdir ./test/                                    # work directory
@@ -409,7 +410,7 @@ python lysins_finder_super.py
   -bp B                                             # 'B' for bacteria, 'P' for phage
   -pp DBSCAN_SWA                                    # prophage predict method ('phispy' or 'DBSCAN-SWA')
   -ds /path/bin/dbscan-swa.py                       # path of dbscan-swa.py, if prophage predict method is 'DBSCAN-SWA'
-  -m hmmer (or rpsblast)                            # searching method 'hmmer' or 'rpsblast'
+  -m rpsblast (or hmmer)                            # searching method 'hmmer' or 'rpsblast'
   -EI /path/EAD_info.csv                            # EAD information(.csv, rpsblast)
   -CI /path/CBD_info.csv                            # CBD information(.csv, rpsblast)
   -rc 1e-5                                          # rpsblast evalue cutoff(rpsblast)
