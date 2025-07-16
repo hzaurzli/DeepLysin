@@ -690,8 +690,8 @@ if __name__ == "__main__":
     parser.add_argument("-m", "--method", default='hmmer', required=True, type=str, help="searching method 'hmmer' or 'rpsblast'")
     
     parser.add_argument("-hc", "--hmmer_cutoff", default=1e-5,required=False, type=float, help="hmmer search evalue cutoff(hmmer)")
-    parser.add_argument("-hd", "--hmmer_db", required=False, type=str, help="reported lysin structures hmmer database path(hmmer)")
-    parser.add_argument("-rl", "--reported_lysin", required=False, type=str, help="reported lysin structures(hmm files,,hmmer)")
+    parser.add_argument("-hdc", "--hmmer_db_CBD", required=False, type=str, help="CBD hmmer database path(hmmer)")
+    parser.add_argument("-rlc", "--reported_lysin_CBD", required=False, type=str, help="reported lysin CBD structures(hmm files,hmmer)")
     parser.add_argument("-hde", "--hmmer_db_EAD", required=False, type=str, help="EAD hmmer database path(hmmer)")
     parser.add_argument("-rle", "--reported_lysin_EAD", required=False, type=str, help="reported lysin EAD structures(hmm files,hmmer)")
     parser.add_argument("-bp", "--bacteriaORphage", required=True, type=str, help="bacteria pipeline or phage pipeline('B' for bacteria, 'P' for phage")
@@ -959,51 +959,35 @@ if __name__ == "__main__":
                     pass
                 else:
                     os.mkdir('./hmmer_out/')
-        
-                hmmer_db = Args.hmmer_db
-                if hmmer_db[0] == '.':
-                    if hmmer_db[1] == '/':
-                        hmmer_db_suffix = hmmer_db[1:]
-                        curr_dir_hmmerdb = curr_dir
-                    elif hmmer_db[1] == '.':
-                        curr_dir_hmmerdb = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                        hmmer_db_suffix = hmmer_db[2:]
+                
+                if os.path.isdir('./hmmer_database/') == True:
+                    pass
                 else:
-                    hmmer_db_suffix = hmmer_db
-                    curr_dir_hmmerdb = ''
+                    os.mkdir('./hmmer_database/')
         
-                cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
-                                         curr_dir_hmmerdb + hmmer_db_suffix,
-                                         './all_protein_filter.faa')
-                tl.run(cmd_5)
+                hmmer_db_CBD = Args.hmmer_db_CBD
+                hmmer_db_EAD = Args.hmmer_db_EAD
+                reported_lysin_CBD = Args.reported_lysin_CBD
+                reported_lysin_EAD = Args.reported_lysin_EAD
                 
-                cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
-                                           curr_dir_hmmerdb + hmmer_db_suffix,
-                                           './all_protein_filter.faa')
-                tl.run(cmd_5_p)
-        
-                reported_lysin = Args.reported_lysin
-                if reported_lysin[0] == '.':
-                    if reported_lysin[1] == '/':
-                        reported_lysin_suffix = reported_lysin[1:]
-                        curr_dir_rp = curr_dir
-                    elif reported_lysin[1] == '.':
-                        curr_dir_rp = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                        reported_lysin_suffix = reported_lysin[2:]
+                
+                if hmmer_db_CBD[0] == '.':
+                    if hmmer_db_CBD[1] == '/':
+                        hmmer_db_CBD_suffix = hmmer_db_CBD[1:]
+                        curr_dir_hmmerdb_CBD = curr_dir
+                    elif hmmer_db_CBD[1] == '.':
+                        curr_dir_hmmerdb_CBD = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                        hmmer_db_CBD_suffix = hmmer_db_CBD[2:]
                 else:
-                    reported_lysin_suffix = reported_lysin
-                    curr_dir_rp = ''
-        
-                find_pfam('./all_protein_filter.faa', curr_dir_rp + reported_lysin_suffix)
-                
-                
-                # step 9 Filter sequences without EAD
+                    hmmer_db_CBD_suffix = hmmer_db_CBD
+                    curr_dir_hmmerdb_CBD = ''
+                    
+                    
                 if os.path.isdir('./hmmer_out_EAD/') == True:
                     pass
                 else:
                     os.mkdir('./hmmer_out_EAD/')
-        
-                hmmer_db_EAD = Args.hmmer_db_EAD
+                
                 if hmmer_db_EAD[0] == '.':
                     if hmmer_db_EAD[1] == '/':
                         hmmer_db_EAD_suffix = hmmer_db_EAD[1:]
@@ -1014,12 +998,19 @@ if __name__ == "__main__":
                 else:
                     hmmer_db_EAD_suffix = hmmer_db_EAD
                     curr_dir_hmmerdb_EAD = ''
-        
-                cmd_6 = tl.run_hmmsearch('./hmmer_out_EAD/all_protein_filter_hmmer_out_EAD.txt', Args.hmmer_cutoff,
-                                         curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
-                                         './all_protein_pfam_protein.fasta')
-                tl.run(cmd_6)
-        
+                    
+                    
+                if reported_lysin_CBD[0] == '.':
+                    if reported_lysin_CBD[1] == '/':
+                        reported_lysin_CBD_suffix = reported_lysin_CBD[1:]
+                        curr_dir_rpc = curr_dir
+                    elif reported_lysin_CBD[1] == '.':
+                        curr_dir_rpc = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                        reported_lysin_CBD_suffix = reported_lysin_CBD[2:]
+                else:
+                    reported_lysin_CBD_suffix = reported_lysin_CBD
+                    curr_dir_rpc = ''
+                    
                 reported_lysin_EAD = Args.reported_lysin_EAD
                 if reported_lysin_EAD[0] == '.':
                     if reported_lysin_EAD[1] == '/':
@@ -1031,6 +1022,33 @@ if __name__ == "__main__":
                 else:
                     reported_lysin_EAD_suffix = reported_lysin_EAD
                     curr_dir_rpe = ''
+                
+                
+                os.system('cat %s %s > %s' % (curr_dir_hmmerdb_CBD + hmmer_db_CBD_suffix, 
+                                              curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
+                                              './hmmer_database/lysin_reported.hmm'))
+                                              
+                os.system('cat %s %s > %s' % (curr_dir_rpc + reported_lysin_CBD_suffix, 
+                                              curr_dir_rpe + reported_lysin_EAD_suffix,
+                                              './hmmer_database/lysin_reported.txt'))
+                                              
+                cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
+                                         './hmmer_database/lysin_reported.hmm',
+                                         './all_protein_filter.faa')
+                tl.run(cmd_5)
+                
+                cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
+                                             './hmmer_database/lysin_reported.hmm',
+                                             './all_protein_filter.faa')
+                tl.run(cmd_5_p)
+                find_pfam('./all_protein_filter.faa',  './hmmer_database/lysin_reported.txt')
+                
+                
+                # step 9 Filter sequences without EAD
+                cmd_6 = tl.run_hmmsearch('./hmmer_out_EAD/all_protein_filter_hmmer_out_EAD.txt', Args.hmmer_cutoff,
+                                         curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
+                                         './all_protein_pfam_protein.fasta')
+                tl.run(cmd_6)
     
                 if not os.path.getsize("./all_protein_pfam_protein.fasta"):
                     raise ValueError('No domain was found and No lysins found!!!')
@@ -1149,15 +1167,28 @@ if __name__ == "__main__":
                     mw_length.append(mw)
                     mw_length.append(length)
                     dic_info[id_1] = mw_length
-                    
+                  
+                  domain_type = {}
+                  f_CBD = open(curr_dir_rpc + reported_lysin_CBD_suffix)
+                  for i in f_CBD:
+                    item = i.strip()
+                    domain_type[item] = 'CBD'
+                  
+                  f_EAD = open(curr_dir_rpe + reported_lysin_EAD_suffix)
+                  for i in f_EAD:
+                    item = i.strip()
+                    domain_type[item] = 'EAD'
+                  
+                  print(domain_type)
                   
                   for lines in f2:
                     line = lines.strip().split('\t')
                     id_2 = line[0]
-                    pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
+                    pf = line[1] + '&' + line[2] + '&' + domain_type[line[2].split('(Length')[0]] + '&' + line[3] + '&' + line[4]
                     if id_2 in dic_info.keys():
                       dic_info[id_2].append(pf)
-                
+                      
+                  
                   a = []
                   b = []
                   for lines in f3:
@@ -1230,9 +1261,9 @@ if __name__ == "__main__":
                 
                 time.sleep(120) 
                 if os.path.isdir('./phispy_out/') == True:
-                    os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
+                    os.system('rm -r ./hmmer_database/ ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
                 else:
-                    os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
+                    os.system('rm -r ./hmmer_database/ ./hmmer_out/ ./hmmer_out_EAD/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./biolib_results/') 
                 os.system('rm -r ./pfam_EAD_cdhit*')
                 os.remove('./all_protein_filter.faa')
                 os.remove('./all_protein.faa')
@@ -1368,51 +1399,35 @@ if __name__ == "__main__":
                     pass
                 else:
                     os.mkdir('./hmmer_out/')
-        
-                hmmer_db = Args.hmmer_db
-                if hmmer_db[0] == '.':
-                    if hmmer_db[1] == '/':
-                        hmmer_db_suffix = hmmer_db[1:]
-                        curr_dir_hmmerdb = curr_dir
-                    elif hmmer_db[1] == '.':
-                        curr_dir_hmmerdb = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                        hmmer_db_suffix = hmmer_db[2:]
+                
+                if os.path.isdir('./hmmer_database/') == True:
+                    pass
                 else:
-                    hmmer_db_suffix = hmmer_db
-                    curr_dir_hmmerdb = ''
+                    os.mkdir('./hmmer_database/')
         
-                cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
-                                         curr_dir_hmmerdb + hmmer_db_suffix,
-                                         './all_protein_filter.faa')
-                tl.run(cmd_5)
+                hmmer_db_CBD = Args.hmmer_db_CBD
+                hmmer_db_EAD = Args.hmmer_db_EAD
+                reported_lysin_CBD = Args.reported_lysin_CBD
+                reported_lysin_EAD = Args.reported_lysin_EAD
                 
-                cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
-                                           curr_dir_hmmerdb + hmmer_db_suffix,
-                                           './all_protein_filter.faa')
-                tl.run(cmd_5_p)
-        
-                reported_lysin = Args.reported_lysin
-                if reported_lysin[0] == '.':
-                    if reported_lysin[1] == '/':
-                        reported_lysin_suffix = reported_lysin[1:]
-                        curr_dir_rp = curr_dir
-                    elif reported_lysin[1] == '.':
-                        curr_dir_rp = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
-                        reported_lysin_suffix = reported_lysin[2:]
+                
+                if hmmer_db_CBD[0] == '.':
+                    if hmmer_db_CBD[1] == '/':
+                        hmmer_db_CBD_suffix = hmmer_db_CBD[1:]
+                        curr_dir_hmmerdb_CBD = curr_dir
+                    elif hmmer_db_CBD[1] == '.':
+                        curr_dir_hmmerdb_CBD = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                        hmmer_db_CBD_suffix = hmmer_db_CBD[2:]
                 else:
-                    reported_lysin_suffix = reported_lysin
-                    curr_dir_rp = ''
-        
-                find_pfam('./all_protein_filter.faa', curr_dir_rp + reported_lysin_suffix)
-                
-                
-                # step 7 Filter sequences without EAD
+                    hmmer_db_CBD_suffix = hmmer_db_CBD
+                    curr_dir_hmmerdb_CBD = ''
+                    
+                    
                 if os.path.isdir('./hmmer_out_EAD/') == True:
                     pass
                 else:
                     os.mkdir('./hmmer_out_EAD/')
-        
-                hmmer_db_EAD = Args.hmmer_db_EAD
+                
                 if hmmer_db_EAD[0] == '.':
                     if hmmer_db_EAD[1] == '/':
                         hmmer_db_EAD_suffix = hmmer_db_EAD[1:]
@@ -1423,13 +1438,18 @@ if __name__ == "__main__":
                 else:
                     hmmer_db_EAD_suffix = hmmer_db_EAD
                     curr_dir_hmmerdb_EAD = ''
-        
-                cmd_6 = tl.run_hmmsearch('./hmmer_out_EAD/all_protein_filter_hmmer_out_EAD.txt', Args.hmmer_cutoff,
-                                         curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
-                                         './all_protein_pfam_protein.fasta')
-                tl.run(cmd_6)
-        
-                reported_lysin_EAD = Args.reported_lysin_EAD
+                    
+                if reported_lysin_CBD[0] == '.':
+                    if reported_lysin_CBD[1] == '/':
+                        reported_lysin_CBD_suffix = reported_lysin_CBD[1:]
+                        curr_dir_rpc = curr_dir
+                    elif reported_lysin_CBD[1] == '.':
+                        curr_dir_rpc = os.path.abspath(os.path.join(os.path.dirname(curr_dir + '/'), os.path.pardir))
+                        reported_lysin_CBD_suffix = reported_lysin_CBD[2:]
+                else:
+                    reported_lysin_CBD_suffix = reported_lysin_CBD
+                    curr_dir_rpc = ''
+                    
                 if reported_lysin_EAD[0] == '.':
                     if reported_lysin_EAD[1] == '/':
                         reported_lysin_EAD_suffix = reported_lysin_EAD[1:]
@@ -1440,6 +1460,33 @@ if __name__ == "__main__":
                 else:
                     reported_lysin_EAD_suffix = reported_lysin_EAD
                     curr_dir_rpe = ''
+                
+                
+                os.system('cat %s %s > %s' % (curr_dir_hmmerdb_CBD + hmmer_db_CBD_suffix, 
+                                              curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
+                                              './hmmer_database/lysin_reported.hmm'))
+                                              
+                os.system('cat %s %s > %s' % (curr_dir_rpc + reported_lysin_CBD_suffix, 
+                                              curr_dir_rpe + reported_lysin_EAD_suffix,
+                                              './hmmer_database/lysin_reported.txt'))
+                                              
+                cmd_5 = tl.run_hmmsearch('./hmmer_out/all_protein_filter_hmmer_out.txt', Args.hmmer_cutoff,
+                                         './hmmer_database/lysin_reported.hmm',
+                                         './all_protein_filter.faa')
+                tl.run(cmd_5)
+                
+                cmd_5_p = tl.run_hmmsearch_2('./hmmer_out/all_protein.txt', Args.hmmer_cutoff,
+                                             './hmmer_database/lysin_reported.hmm',
+                                             './all_protein_filter.faa')
+                tl.run(cmd_5_p)
+                find_pfam('./all_protein_filter.faa',  './hmmer_database/lysin_reported.txt')
+                
+                
+                # step 9 Filter sequences without EAD
+                cmd_6 = tl.run_hmmsearch('./hmmer_out_EAD/all_protein_filter_hmmer_out_EAD.txt', Args.hmmer_cutoff,
+                                         curr_dir_hmmerdb_EAD + hmmer_db_EAD_suffix,
+                                         './all_protein_pfam_protein.fasta')
+                tl.run(cmd_6)
     
                 if not os.path.getsize("./all_protein_pfam_protein.fasta"):
                     raise ValueError('No domain was found and No lysins found!!!')
@@ -1556,14 +1603,26 @@ if __name__ == "__main__":
                     mw_length.append(mw)
                     mw_length.append(length)
                     dic_info[id_1] = mw_length
-                    
+                  
+                  
+                  domain_type = {}
+                  f_CBD = open(curr_dir_rpc + reported_lysin_CBD_suffix)
+                  for i in f_CBD:
+                    item = i.strip()
+                    domain_type[item] = 'CBD'
+                  
+                  f_EAD = open(curr_dir_rpe + reported_lysin_EAD_suffix)
+                  for i in f_EAD:
+                    item = i.strip()
+                    domain_type[item] = 'EAD'
                   
                   for lines in f2:
                     line = lines.strip().split('\t')
                     id_2 = line[0]
-                    pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
+                    pf = line[1] + '&' + line[2] + '&' + domain_type[line[2].split('(Length')[0]] + '&' + line[3] + '&' + line[4]
                     if id_2 in dic_info.keys():
                       dic_info[id_2].append(pf)
+                                       
                 
                   a = []
                   b = []
@@ -1635,7 +1694,7 @@ if __name__ == "__main__":
                   
                   
                 time.sleep(120) 
-                os.system('rm -r ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
+                os.system('rm -r ./hmmer_database/ ./hmmer_out/ ./hmmer_out_EAD/ ./prokka_result/ ./biolib_results/ ./phage_faa/')
                 os.system('rm -r ./pfam_EAD_cdhit*')
                 os.remove('./all_protein_filter.faa')
                 os.remove('./all_protein.faa')
@@ -2160,7 +2219,7 @@ if __name__ == "__main__":
                 if os.path.isdir('./phispy_out/') == True:
                     os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./phispy_out/ ./ppn/ ./prokka_result/ ./biolib_results/')
                 else:
-                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./prokka_result/ ./biolib_results/') 
+                    os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./orf_ffn/ ./DBSCAN_SWA_out/ ./biolib_results/') 
                 os.remove('./all_protein_filter.faa')
                 os.remove('./all_protein_tmp.txt')
                 os.remove('./all_protein.faa')
