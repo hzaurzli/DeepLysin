@@ -1,7 +1,8 @@
 import os
 
 a = './putative_lysins_info.txt'
-b = './domain.txt'
+b = './ead.txt'
+c = './cbd.txt'
 coverage = 0.8
 
 def is_overlap(interval1, interval2):
@@ -10,27 +11,41 @@ def is_overlap(interval1, interval2):
 f = open(a)
 next(f)
 
-dict_domain_new = {}
+dict_cbd_new = {}
+dict_ead_new = {}
 for i in f:
   ii = i.strip().split('\t')[3].split(';')
   name = i.strip().split('\t')[0]
-  dict_domain = {}
-  for j in ii:   
-    lis_domain = []
-    domain = j.split('&')[2]
-    domain_posi = j.split('&')[3]
+  dict_ead = {}
+  dict_cbd = {}
+  for j in ii:
+    if 'EAD' in j:
+      lis_ead = []
+      ead = j.split('&')[3]
+      ead_posi = j.split('&')[4].split(':')[0]
+      
+      if name in dict_ead:
+        dict_ead[name].append(j.split('&')[0] + '&' + ead + '&' + ead_posi)
+      else:
+        lis_ead.append(j.split('&')[0] + '&' + ead + '&' + ead_posi)
+        dict_ead[name] = lis_ead
     
-    if name in dict_domain:
-      dict_domain[name].append(j.split('&')[0] + '&' + domain + '&' + domain_posi)
-    else:
-      lis_domain.append(j.split('&')[0] + '&' + domain + '&' + domain_posi)
-      dict_domain[name] = lis_domain
+    if 'CBD' in j:
+      lis_cbd = []
+      cbd = j.split('&')[3]
+      cbd_posi = j.split('&')[4].split(':')[0]
+      
+      if name in dict_cbd:
+        dict_cbd[name].append(j.split('&')[0] + '&' + cbd + '&' + cbd_posi)
+      else:
+        lis_cbd.append(j.split('&')[0] + '&' + cbd + '&' + cbd_posi)
+        dict_cbd[name] = lis_cbd
         
-    for key in dict_domain:
+    for key in dict_ead:
       lis = []
       dict_s = {}
       dict_id = {}
-      for kk in dict_domain[key]:
+      for kk in dict_ead[key]:
         length = int(kk.split('&')[0].split('Length:')[1].strip(')'))
         start = kk.split('&')[2].split('-')[0]
         end = kk.split('&')[2].split('-')[1]
@@ -44,7 +59,7 @@ for i in f:
           lis.append(ll)
       
       if len(lis) == 1:
-        dict_domain_new[name] = [id]
+        dict_ead_new[name] = [id]
       
       else:
         lis_new = []
@@ -58,20 +73,70 @@ for i in f:
             else:
               for uu in lis:
                 lis_new.append(dict_id[str(uu)])
-        
-        dict_domain_new[name] = list(set(lis_new))
+          
+        dict_ead_new[name] = list(set(lis_new))
+    
+                
+    for key in dict_cbd:
+      lis = []
+      dict_s = {}
+      dict_id = {}
+      for kk in dict_cbd[key]:
+        length = int(kk.split('&')[0].split('Length:')[1].strip(')'))
+        start = kk.split('&')[2].split('-')[0]
+        end = kk.split('&')[2].split('-')[1]
+        inv = int(end) - int(start)
+        s = float(kk.split('&')[1])
+        id = kk.split('&')[0]
+        if inv /length > float(coverage):
+          ll = (start,end)
+          dict_s[str(ll)] = s
+          dict_id[str(ll)] = id
+          lis.append(ll)
+      
+      if len(lis) == 1:
+        dict_cbd_new[name] = [id]
+      
+      else:
+        lis_new = []
+        for jj in range(0,len(lis)):
+          for n in range(1,len(lis) - jj):
+            if is_overlap(lis[jj], lis[jj + n]) == True:
+              if dict_s[str(lis[jj])] > dict_s[str(lis[jj + n])]:
+                lis_new.append(dict_id[str(lis[jj])])
+              else:
+                lis_new.append(dict_id[str(lis[jj + n])])
+            else:
+              for uu in lis:
+                lis_new.append(dict_id[str(uu)])
+          
+        dict_cbd_new[name] = list(set(lis_new))  
         
 
 with open(b, 'w') as w:
-  for key in dict_domain_new:
-    if len(dict_domain_new[key]) == 0:
+  for key in dict_ead_new:
+    if len(dict_ead_new[key]) == 0:
       line = key + '\t' + 'Coverage not meeting the threshold' + '\n'
       w.write(line)
-    elif len(dict_domain_new[key]) == 1:
-      line = key + '\t' + dict_domain_new[key][0] + '\n'
+    elif len(dict_ead_new[key]) == 1:
+      line = key + '\t' + dict_ead_new[key][0] + '\n'
       w.write(line) 
     else:
-      for i in dict_domain_new[key]:
+      for i in dict_ead_new[key]:
+        line = key + '\t' + i + '\n'
+        w.write(line)
+w.close()
+
+with open(c, 'w') as w:
+  for key in dict_cbd_new:
+    if len(dict_cbd_new[key]) == 0:
+      line = key + '\t' + 'Coverage not meeting the threshold' + '\n'
+      w.write(line)
+    elif len(dict_cbd_new[key]) == 1:
+      line = key + '\t' + dict_cbd_new[key][0] + '\n'
+      w.write(line) 
+    else:
+      for i in dict_cbd_new[key]:
         line = key + '\t' + i + '\n'
         w.write(line)
 w.close()
