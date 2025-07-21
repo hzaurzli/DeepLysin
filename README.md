@@ -379,8 +379,8 @@ python lysins_finder_super.py
   -t Bacteria (or 'Virus')                          # prokka kingdom type; Bacteria or Virus (for phages)
   -c 0.95                                           # cdhit cluster cutoff
   -m hmmer (or rpsblast)                            # searching method 'hmmer' or 'rpsblast'
-  -hdc ./db/hmm/lysin_reported_CBD.hmm              # hmmer database path
-  -rlc ./db/hmm/lysin_reported_CBD.txt              # reported lysin structures(hmm files)
+  -hdc ./db/hmm/lysin_reported_CBD.hmm              # CBD hmmer database path
+  -rlc ./db/hmm/lysin_reported_CBD.txt              # reported lysin CBD structures(hmm files)
   -wkdir ./test/                                    # work directory
   -ml 10000                                         # lower proteins molecular weight
   -mu 50000                                         # upper proteins molecular weight
