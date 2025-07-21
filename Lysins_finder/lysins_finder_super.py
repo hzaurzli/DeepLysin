@@ -184,7 +184,7 @@ def blast_filter(out_folder, coverage):
             key_use = (id)
             
             position_lis = []
-            position_element = Domain_ID + '&' + str(contig_start) + '-' + str(contig_end) + ':' + F_R
+            position_element = Domain_ID + '&' + str(contig_start) + '-' + str(contig_end) + ':' + F_R + '&' + str(identical_percent)
             if Contig_ID_info in position_info:
               position_info[Contig_ID_info].append(position_element)
             else:
@@ -1756,13 +1756,7 @@ if __name__ == "__main__":
                         pass
                     else:
                         os.mkdir('./DBSCAN_SWA_out/')
-                        
-                    if os.path.isdir('./DBSCAN_SWA_out/') == True:
-                        pass
-                    else:
-                        os.mkdir('./DBSCAN_SWA_out/')
-                    
-                    
+                                    
                     for i in os.listdir(curr_dir_target + target_suffix):
                         lis = i.split('.')[:-1]
                         prefix = '.'.join(lis)
@@ -2010,6 +2004,7 @@ if __name__ == "__main__":
                                                                           ident, coverage, over_lap)
                 
                 rpsblast_item = []
+                ll_position = []
                 with open('./putative_lysin_domain_info.csv','w') as w:
                   for key in Domain_location_use_dict:
                     for i in Domain_location_use_dict[key]:
@@ -2019,15 +2014,22 @@ if __name__ == "__main__":
                             for k in position_info[i[5]]:
                               if i[0] in k:
                                 position = k.split('&')[1]
-                            line = i[5] + ',' + i[0] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + dict_domain[i[0]][0] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + dict_domain[i[0]][1] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + 'EAD' + ',' + i[1] + ',' + position +'\n'
-                            rpsblast_item.append(i[5])
-                            w.write(line)
+                                ident_p = k.split('&')[2]
+                                ll = i[5] + ',' + i[0] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + dict_domain[i[0]][0] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + dict_domain[i[0]][1] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + 'EAD' + ',' + ident_p + ',' + position +'\n'
+                                ll_position.append(ll)
+                            rpsblast_item.append(i[5])                       
                           elif i[0] in dict_cbd:
                             for k in position_info[i[5]]:
-                                if i[0] in k:
-                                  position = k.split('&')[1]
-                            line = i[5] + ',' + i[0] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + dict_domain[i[0]][0] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + dict_domain[i[0]][1] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + 'CBD' + ',' + i[1] + ',' + position +'\n'
-                            w.write(line)
+                              if i[0] in k:
+                                position = k.split('&')[1]
+                                ident_p = k.split('&')[2]
+                                ll = i[5] + ',' + i[0] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + dict_domain[i[0]][0] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + dict_domain[i[0]][1] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + 'CBD' + ',' + ident_p + ',' + position +'\n'
+                                ll_position.append(ll)
+                                
+                  ll_list = list(set(ll_position))           
+                  for i in ll_list:
+                     line = i
+                     w.write(line)            
                 w.close()
                 
                 
@@ -2398,7 +2400,9 @@ if __name__ == "__main__":
                                                                           isolates_list,
                                                                           ident, coverage, over_lap)
                 
+                
                 rpsblast_item = []
+                ll_position = []
                 with open('./putative_lysin_domain_info.csv','w') as w:
                   for key in Domain_location_use_dict:
                     for i in Domain_location_use_dict[key]:
@@ -2408,15 +2412,22 @@ if __name__ == "__main__":
                             for k in position_info[i[5]]:
                               if i[0] in k:
                                 position = k.split('&')[1]
-                            line = i[5] + ',' + i[0] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + dict_domain[i[0]][0] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + dict_domain[i[0]][1] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + 'EAD' + ',' + i[1] + ',' + position +'\n'
-                            rpsblast_item.append(i[5])
-                            w.write(line)
+                                ident_p = k.split('&')[2]
+                                ll = i[5] + ',' + i[0] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + dict_domain[i[0]][0] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + dict_domain[i[0]][1] + '(Length:' + dict_ead[i[0]][2] + ')' + ',' + 'EAD' + ',' + ident_p + ',' + position +'\n'
+                                ll_position.append(ll)
+                            rpsblast_item.append(i[5])                       
                           elif i[0] in dict_cbd:
                             for k in position_info[i[5]]:
-                                if i[0] in k:
-                                  position = k.split('&')[1]
-                            line = i[5] + ',' + i[0] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + dict_domain[i[0]][0] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + dict_domain[i[0]][1] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + 'CBD' + ',' + i[1] + ',' + position +'\n'
-                            w.write(line)
+                              if i[0] in k:
+                                position = k.split('&')[1]
+                                ident_p = k.split('&')[2]
+                                ll = i[5] + ',' + i[0] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + dict_domain[i[0]][0] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + dict_domain[i[0]][1] + '(Length:' + dict_cbd[i[0]][2] + ')' + ',' + 'CBD' + ',' + ident_p + ',' + position +'\n'
+                                ll_position.append(ll)
+                                
+                  ll_list = list(set(ll_position))           
+                  for i in ll_list:
+                     line = i
+                     w.write(line)            
                 w.close()
                 
                 
