@@ -392,7 +392,8 @@ python lysins_finder_super.py
   -r ./ref.fasta                                    # reported lysin reference fasta (optional parammeter, comparative similarity with known reported sequences)
 ```
 For **'lysin_reported_CBD.txt'** and **'lysin_reported_EAD.txt'**, the first colum is **'.hmm'** file prefix, Pfam ID.
-
+<br>
+<br>
 ***3.lysins_finder_super.py (for 'method to scan lysin domain', 2025.5)***
 
 **Two method to scan lysin domain ('hmmer' or 'rpsblast')**
