@@ -371,7 +371,7 @@ if __name__ == "__main__":
     method = 'hmmer'
     reported_lysin_CBD_suffix = '/home/user/deeplysin/database/hmm/lysin_reported_CBD.txt'
     reported_lysin_EAD_suffix = '/home/user/deeplysin/database/hmm/lysin_reported_EAD.txt'
-    main('./pfam_EAD_cdhit.fasta', method = method, ref = './hh.fa', cbd = reported_lysin_CBD_suffix, ead = reported_lysin_EAD_suffix)
+    main('./pfam_EAD_cdhit.fasta', method = method, ref = '', cbd = reported_lysin_CBD_suffix, ead = reported_lysin_EAD_suffix)
     
 # rpsblast method:
     # method = 'rpsblast'
