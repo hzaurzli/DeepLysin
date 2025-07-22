@@ -255,18 +255,12 @@ def Split_fa_rps(fasta_name,tot, num_1, num_2):
           line = key + '\n' + dic[key] + '\n'
           w.write(line)
       w.close()
-
-
-if __name__ == "__main__":
-    
-    file = 'rpsblast_cdhit.fasta'
-    method = 'rpsblast'
-    ref = ''
+      
+def main(file, method, ref = '', cbd = '', ead = ''):
+    tl = tools()
     
     lis = file.split('.')[:-1]
     prefix_file = '.'.join(lis)
-
-    tl = tools()
     
     if method == 'hmmer':
         # step 12 remove TMhelix
@@ -320,9 +314,6 @@ if __name__ == "__main__":
                 w1.write(line)
           w1.close()
           
-          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))
-          
-          
           Domain_Info_lis = []
           with open('./Domain_Info.txt', 'w') as w2:
             for line in f2:
@@ -340,8 +331,6 @@ if __name__ == "__main__":
               w2.write(line)
           w2.close()
           
-          # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
-          
           f1 = open('./MW_Length.txt')
           f2 = open('./Domain_Info.txt')
           f3 = open('./signaltmp/output.gff3')
@@ -358,14 +347,25 @@ if __name__ == "__main__":
             mw_length.append(length)
             dic_info[id_1] = mw_length
             
+          domain_type = {}
+          f_CBD = open(cbd)
+          for i in f_CBD:
+            item = i.strip()
+            domain_type[item] = 'CBD'
+          
+          f_EAD = open(ead)
+          for i in f_EAD:
+            item = i.strip()
+            domain_type[item] = 'EAD'
           
           for lines in f2:
             line = lines.strip().split('\t')
             id_2 = line[0]
-            pf = line[1] + '&' + line[2] + '&' + line[3] + '&'  + line[4]
+            pf = line[1] + '&' + line[2] + '&' + domain_type[line[2].split('(Length')[0]] + '&' + line[3] + '&' + line[4]
             if id_2 in dic_info.keys():
               dic_info[id_2].append(pf)
-
+                               
+        
           a = []
           b = []
           for lines in f3:
@@ -388,13 +388,10 @@ if __name__ == "__main__":
                   
           print(dic_info)
           
-          
           if ref != '':
             first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
-            os.chdir(curr_dir)
-            ref_lysins = os.path.abspath(str(Args.ref))
+            ref_lysins = os.path.abspath(str(ref))
             second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
-            os.chdir(Args.workdir)
             
             dic_ref = {}
             for t1 in first_dict:
@@ -410,8 +407,8 @@ if __name__ == "__main__":
                   dic_ref[t1] = score
                 elif t1 in dic_ref.keys():
                   dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
-
-
+    
+    
             with open('./putative_lysins_info.txt','w') as w:
               line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
               w.write(line)
@@ -429,10 +426,7 @@ if __name__ == "__main__":
                 line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
                 w.write(line)
             w.close()
-            
                 
-        else:
-          print(state)
 
     elif method == 'rpsblast':
         tot = sub.getoutput("grep '>' %s | wc -l" % ('./' + file))
@@ -474,7 +468,6 @@ if __name__ == "__main__":
         f2 = open('./putative_lysin_domain_info.csv')
         
         if state == 'Y':
-        
           with open('./MW_Length.txt', 'w') as w1:
             for i in f1:
               name = i.strip().split('\t')[0]
@@ -530,7 +523,7 @@ if __name__ == "__main__":
             pf = line[1]
             if id_2 in dic_info.keys():
               dic_info[id_2].append(pf)
-        
+          
           a = []
           b = []
           for lines in f3:
@@ -553,15 +546,13 @@ if __name__ == "__main__":
                   
           print(dic_info)
           
-          
           if ref != '':
             first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
-            os.chdir(curr_dir)
-            ref_lysins = os.path.abspath(str(Args.ref))
+            ref_lysins = os.path.abspath(str(ref))
             second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
-            os.chdir(Args.workdir)
             
             dic_ref = {}
+            # 两个fasta文件中的序列两两比较：
             for t1 in first_dict:
               t_len = len(first_dict[t1].seq)
               for t2 in second_dict:
@@ -575,8 +566,8 @@ if __name__ == "__main__":
                   dic_ref[t1] = score
                 elif t1 in dic_ref.keys():
                   dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
-
-
+        
+        
             with open('./putative_lysins_info.txt','w') as w:
               line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
               w.write(line)
@@ -586,9 +577,7 @@ if __name__ == "__main__":
             w.close()
             
                     
-          elif ref == '':
-            print('aaaaa')
-            
+          elif ref == '': 
             with open('./putative_lysins_info.txt','w') as w:
               line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
               w.write(line)
@@ -596,6 +585,19 @@ if __name__ == "__main__":
                 line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\n'
                 w.write(line)
             w.close()
-              
-        else:
-          print(state)
+
+
+if __name__ == "__main__":
+# hmmer method: 
+    #file = './pfam_EAD_cdhit.fasta'
+    #method = 'hmmer'
+    #reported_lysin_CBD_suffix = '/home/user/deeplysin/database/hmm/lysin_reported_CBD.txt'
+    #reported_lysin_EAD_suffix = '/home/user/deeplysin/database/hmm/lysin_reported_EAD.txt'
+    #main(file, method = method, ref = '', cbd = reported_lysin_CBD_suffix, ead = reported_lysin_EAD_suffix)
+
+
+# rpsblast method: 
+    file = './rpsblast_cdhit.fasta'
+    method = 'rpsblast'
+    main(file, method = method, ref = '')
+     
