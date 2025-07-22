@@ -95,7 +95,7 @@ def fasta2dict_2(fasta_name):
 
 
 
-def main(path, ref):
+def main(path, ref, method= '', cbd='', ead=''):
     tl = tools()
     dic_fa = {}
     with open(path) as f:
@@ -116,133 +116,263 @@ def main(path, ref):
          w.write(line)
     w.close()
     
-    f1 = open('./molecular_weight.txt')
-    f2 = open('./putative_lysin_domain_info.csv')
-    
-    f1 = open('./molecular_weight.txt')
-    f2 = open('./putative_lysin_domain_info.csv')
-    
-    
-    with open('./MW_Length.txt', 'w') as w1:
-      for i in f1:
-        name = i.strip().split('\t')[0]
-        mw = i.strip().split('\t')[1]
-        if name in dic_fa.keys():
-          line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
-          w1.write(line)
-    w1.close()
-    
-    # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))   
-    
-    Domain_Info_dict = {}
-    with open('./Domain_Info.txt', 'w') as w2:
-      for line in f2:
-          orf_id = line.strip().split(',')[0]
-          info_lis = []
-          info = '&'.join(line.strip().split(',')[1:])
-          info_lis.append(info)
-          if orf_id in Domain_Info_dict:
-            Domain_Info_dict[orf_id].append(info)
-          else:
+    if method == 'rpsblast':
+      f1 = open('./molecular_weight.txt')
+      f2 = open('./putative_lysin_domain_info.csv')
+      
+      with open('./MW_Length.txt', 'w') as w1:
+        for i in f1:
+          name = i.strip().split('\t')[0]
+          mw = i.strip().split('\t')[1]
+          if name in dic_fa.keys():
+            line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
+            w1.write(line)
+      w1.close()
+      
+      # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/MW_Length.txt'))   
+      
+      Domain_Info_dict = {}
+      with open('./Domain_Info.txt', 'w') as w2:
+        for line in f2:
+            orf_id = line.strip().split(',')[0]
+            info_lis = []
+            info = '&'.join(line.strip().split(',')[1:])
             info_lis.append(info)
-            Domain_Info_dict[orf_id] = info_lis
-      for key in Domain_Info_dict:
-          list_tmp = list(set(Domain_Info_dict[key]))
-          line = key + '\t' + ';'.join(list_tmp) + '\n'
-          w2.write(line)
-    w2.close()
-              
-    # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
-    
-    
-    f1 = open('./MW_Length.txt')
-    f2 = open('./Domain_Info.txt')
-    f3 = open('./signaltmp/output.gff3')
-    
-    
-    dic_info = {}
-    for lines in f1:
-      line = lines.strip().split('\t')
-      id_1 = line[0]
-      mw = line[1]
-      length = line[2]
-      mw_length = []
-      mw_length.append(mw)
-      mw_length.append(length)
-      dic_info[id_1] = mw_length
+            if orf_id in Domain_Info_dict:
+              Domain_Info_dict[orf_id].append(info)
+            else:
+              info_lis.append(info)
+              Domain_Info_dict[orf_id] = info_lis
+        for key in Domain_Info_dict:
+            list_tmp = list(set(Domain_Info_dict[key]))
+            line = key + '\t' + ';'.join(list_tmp) + '\n'
+            w2.write(line)
+      w2.close()
+                
+      # os.system("sed -i '$d' %s" % ('/home/runzeli/rzli/zy/result/Domain_Info.txt'))
       
-    
-    for lines in f2:
-      line = lines.strip().split('\t')
-      id_2 = line[0]
-      pf = line[1]
-      if id_2 in dic_info.keys():
-        dic_info[id_2].append(pf)
-    
-    a = []
-    b = []
-    for lines in f3:
-      if lines[0] != "#":
+      
+      f1 = open('./MW_Length.txt')
+      f2 = open('./Domain_Info.txt')
+      f3 = open('./signaltmp/output.gff3')
+      
+      
+      dic_info = {}
+      for lines in f1:
         line = lines.strip().split('\t')
-        id_3 = line[0]
-        if float(line[5]) > 0.5:
-          li = line[0] + ':' + line[3] + '-' + line[4]
-          print(li)
-          if id_3 in dic_info.keys():
-            dic_info[id_3].append(li)
-            a.append(id_3)
-    
-    for key in dic_info:
-      b.append(key)    
-    c = list(set(b).difference(set(a)))
-    
-    for i in c:
-      dic_info[i].append('NULL')
-            
-    print(dic_info)
-    
-    if ref != '':
-      first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
-      os.chdir(curr_dir)
-      ref_lysins = os.path.abspath(str(ref))
-      second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
-      os.chdir(Args.workdir)
+        id_1 = line[0]
+        mw = line[1]
+        length = line[2]
+        mw_length = []
+        mw_length.append(mw)
+        mw_length.append(length)
+        dic_info[id_1] = mw_length
+        
       
-      dic_ref = {}
-      # 两个fasta文件中的序列两两比较：
-      for t1 in first_dict:
-        t_len = len(first_dict[t1].seq)
-        for t2 in second_dict:
-          global_align = pw2.align.globalxx(first_dict[t1].seq, second_dict[t2].seq)
-          matched = global_align[0][2]
-          percent_match = (matched / t_len) * 100
-          
-          if t1 not in dic_ref.keys():
-            score = []
-            score.append(t2 + ':' + str(round(percent_match,2)))
-            dic_ref[t1] = score
-          elif t1 in dic_ref.keys():
-            dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
-  
-  
-      with open('./putative_lysins_info.txt','w') as w:
-        line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
-        w.write(line)
-        for key in dic_info:
-          line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
-          w.write(line)
-      w.close()
+      for lines in f2:
+        line = lines.strip().split('\t')
+        id_2 = line[0]
+        pf = line[1]
+        if id_2 in dic_info.keys():
+          dic_info[id_2].append(pf)
       
+      a = []
+      b = []
+      for lines in f3:
+        if lines[0] != "#":
+          line = lines.strip().split('\t')
+          id_3 = line[0]
+          if float(line[5]) > 0.5:
+            li = line[0] + ':' + line[3] + '-' + line[4]
+            print(li)
+            if id_3 in dic_info.keys():
+              dic_info[id_3].append(li)
+              a.append(id_3)
+      
+      for key in dic_info:
+        b.append(key)    
+      c = list(set(b).difference(set(a)))
+      
+      for i in c:
+        dic_info[i].append('NULL')
               
-    elif ref == '': 
-      with open('./putative_lysins_info.txt','w') as w:
-        line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
-        w.write(line)
-        for key in dic_info:
-          line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\n'
+      print(dic_info)
+      
+      if ref != '':
+        first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+        ref_lysins = os.path.abspath(str(ref))
+        second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+        
+        dic_ref = {}
+        # 两个fasta文件中的序列两两比较：
+        for t1 in first_dict:
+          t_len = len(first_dict[t1].seq)
+          for t2 in second_dict:
+            global_align = pw2.align.globalxx(first_dict[t1].seq, second_dict[t2].seq)
+            matched = global_align[0][2]
+            percent_match = (matched / t_len) * 100
+            
+            if t1 not in dic_ref.keys():
+              score = []
+              score.append(t2 + ':' + str(round(percent_match,2)))
+              dic_ref[t1] = score
+            elif t1 in dic_ref.keys():
+              dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
+    
+    
+        with open('./putative_lysins_info.txt','w') as w:
+          line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
           w.write(line)
-      w.close()
-  
+          for key in dic_info:
+            line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+            w.write(line)
+        w.close()
+        
+                
+      elif ref == '': 
+        with open('./putative_lysins_info.txt','w') as w:
+          line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
+          w.write(line)
+          for key in dic_info:
+            line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\n'
+            w.write(line)
+        w.close()
+    
+    
+    if method == 'hmmer':
+      f1 = open('./molecular_weight.txt')
+      f2 = open('./hmmer_out/all_protein.txt')
+      
+      with open('./MW_Length.txt', 'w') as w1:
+        for i in f1:
+          name = i.strip().split('\t')[0]
+          mw = i.strip().split('\t')[1]
+          if name in dic_fa.keys():
+            line = name + '\t' + mw + '\t' + str(len(dic_fa[name])) + '\n'
+            w1.write(line)
+      w1.close()
+      
+      Domain_Info_lis = []
+      with open('./Domain_Info.txt', 'w') as w2:
+        for line in f2:
+          if line[0] != "#" and len(line.split())!=0:
+            arr = line.strip().split(" ")
+            arr = list(filter(None, arr))
+            name = arr[0]
+            if name in dic_fa.keys():
+              li = arr[0] + '\t' + arr[3] + '(Length:' + arr[5] + ')' + '\t' + arr[4].split('.')[0] + '(Length:' + arr[5] + ')' + '\t' + arr[21] + '\t' + arr[19] + '-' + arr[20] + '\n'
+              print(li)
+              Domain_Info_lis.append(li)
+       
+        Domain_Info_lis_new = list(set(Domain_Info_lis))
+        for line in Domain_Info_lis_new:
+          w2.write(line)
+      w2.close()
+      
+      f1 = open('./MW_Length.txt')
+      f2 = open('./Domain_Info.txt')
+      f3 = open('./signaltmp/output.gff3')
+      
+      
+      dic_info = {}
+      for lines in f1:
+        line = lines.strip().split('\t')
+        id_1 = line[0]
+        mw = line[1]
+        length = line[2]
+        mw_length = []
+        mw_length.append(mw)
+        mw_length.append(length)
+        dic_info[id_1] = mw_length
+        
+      domain_type = {}
+      f_CBD = open(cbd)
+      for i in f_CBD:
+        item = i.strip()
+        domain_type[item] = 'CBD'
+      
+      f_EAD = open(ead)
+      for i in f_EAD:
+        item = i.strip()
+        domain_type[item] = 'EAD'
+      
+      for lines in f2:
+        line = lines.strip().split('\t')
+        id_2 = line[0]
+        pf = line[1] + '&' + line[2] + '&' + domain_type[line[2].split('(Length')[0]] + '&' + line[3] + '&' + line[4]
+        if id_2 in dic_info.keys():
+          dic_info[id_2].append(pf)
+                           
+    
+      a = []
+      b = []
+      for lines in f3:
+        if lines[0] != "#":
+          line = lines.strip().split('\t')
+          id_3 = line[0]
+          if float(line[5]) > 0.5:
+            li = line[0] + ':' + line[3] + '-' + line[4]
+            print(li)
+            if id_3 in dic_info.keys():
+              dic_info[id_3].append(li)
+              a.append(id_3)
+      
+      for key in dic_info:
+        b.append(key)
+      c = list(set(b).difference(set(a)))
+      
+      for i in c:
+        dic_info[i].append('NULL')
+              
+      print(dic_info)
+      
+      if ref != '':
+        first_dict = SeqIO.to_dict(SeqIO.parse(open('./putative_lysins.fa'),'fasta'))
+        ref_lysins = os.path.abspath(str(ref))
+        second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
+        
+        dic_ref = {}
+        for t1 in first_dict:
+          t_len = len(first_dict[t1].seq)
+          for t2 in second_dict:
+            global_align = pw2.align.globalxx(first_dict[t1].seq, second_dict[t2].seq)
+            matched = global_align[0][2]
+            percent_match = (matched / t_len) * 100
+            
+            if t1 not in dic_ref.keys():
+              score = []
+              score.append(t2 + ':' + str(round(percent_match,2)))
+              dic_ref[t1] = score
+            elif t1 in dic_ref.keys():
+              dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
+
+
+        with open('./putative_lysins_info.txt','w') as w:
+          line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
+          w.write(line)
+          for key in dic_info:
+            line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+            w.write(line)
+        w.close()
+        
+                
+      elif ref == '':
+        with open('./putative_lysins_info.txt','w') as w:
+          line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
+          w.write(line)
+          for key in dic_info:
+            line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
+            w.write(line)
+        w.close()
+        
   
 if __name__ == "__main__":
-    main('./rpsblast_cdhit.fasta', ref = '')
+# hmmer method:
+    method = 'hmmer'
+    reported_lysin_CBD_suffix = '/home/user/deeplysin/database/hmm/lysin_reported_CBD.txt'
+    reported_lysin_EAD_suffix = '/home/user/deeplysin/database/hmm/lysin_reported_EAD.txt'
+    main('./pfam_EAD_cdhit.fasta', method = method, ref = './hh.fa', cbd = reported_lysin_CBD_suffix, ead = reported_lysin_EAD_suffix)
+    
+# rpsblast method:
+    # method = 'rpsblast'
+    # main('./rpsblast_cdhit.fasta', method = method, ref = '')
