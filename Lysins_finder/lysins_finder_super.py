@@ -750,13 +750,7 @@ if __name__ == "__main__":
                         pass
                     else:
                         os.mkdir('./DBSCAN_SWA_out/')
-                        
-                    if os.path.isdir('./DBSCAN_SWA_out/') == True:
-                        pass
-                    else:
-                        os.mkdir('./DBSCAN_SWA_out/')
-                    
-                    
+                                   
                     for i in os.listdir(curr_dir_target + target_suffix):
                         lis = i.split('.')[:-1]
                         prefix = '.'.join(lis)
