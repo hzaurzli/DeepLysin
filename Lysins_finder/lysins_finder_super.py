@@ -686,7 +686,7 @@ if __name__ == "__main__":
     parser.add_argument("-wkdir", "--workdir", required=True, type=str, help="work directory")
     parser.add_argument("-mu", "--MWU", required=False, default=50000, type=float, help="upper proteins molecular weight")
     parser.add_argument("-ml", "--MWL", required=False, default=10000, type=float, help="lower proteins molecular weight")
-    parser.add_argument("-r", "--ref", default='', required=False, type=str, help="Reference lysins sequences")
+    parser.add_argument("-r", "--ref", default='', required=False, type=str, help="reference lysins sequences")
     parser.add_argument("-m", "--method", default='hmmer', required=True, type=str, help="searching method 'hmmer' or 'rpsblast'")
     parser.add_argument("-bp", "--bacteriaORphage", required=True, type=str, help="bacteria pipeline or phage pipeline('B' for bacteria, 'P' for phage")
     
