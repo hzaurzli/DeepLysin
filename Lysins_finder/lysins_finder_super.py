@@ -688,13 +688,13 @@ if __name__ == "__main__":
     parser.add_argument("-ml", "--MWL", required=False, default=10000, type=float, help="lower proteins molecular weight")
     parser.add_argument("-r", "--ref", default='', required=False, type=str, help="Reference lysins sequences")
     parser.add_argument("-m", "--method", default='hmmer', required=True, type=str, help="searching method 'hmmer' or 'rpsblast'")
+    parser.add_argument("-bp", "--bacteriaORphage", required=True, type=str, help="bacteria pipeline or phage pipeline('B' for bacteria, 'P' for phage")
     
     parser.add_argument("-hc", "--hmmer_cutoff", default=1e-5,required=False, type=float, help="hmmer search evalue cutoff(hmmer)")
     parser.add_argument("-hdc", "--hmmer_db_CBD", required=False, type=str, help="CBD hmmer database path(hmmer)")
     parser.add_argument("-rlc", "--reported_lysin_CBD", required=False, type=str, help="reported lysin CBD structures(hmm files,hmmer)")
     parser.add_argument("-hde", "--hmmer_db_EAD", required=False, type=str, help="EAD hmmer database path(hmmer)")
     parser.add_argument("-rle", "--reported_lysin_EAD", required=False, type=str, help="reported lysin EAD structures(hmm files,hmmer)")
-    parser.add_argument("-bp", "--bacteriaORphage", required=True, type=str, help="bacteria pipeline or phage pipeline('B' for bacteria, 'P' for phage")
     
     parser.add_argument("-EI", "--EAD_info", required=False, type=str, help="EAD information(rpsblast)")
     parser.add_argument("-CI", "--CBD_info", required=False, type=str, help="CBD information(rpsblast)")
