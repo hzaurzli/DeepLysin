@@ -1551,5 +1551,4 @@ if __name__ == "__main__":
           os.remove('./MW_Length.txt') 
           os.remove('./Domain_Info.txt')
           os.system('rm -r ./signaltmp/')
-
           os.remove(os.path.basename(input_file))
