@@ -551,7 +551,7 @@ def main(file, method, ref = '', cbd = '', ead = '', hmmer_coverage = 80, hmmer_
         w.close()
         
                 
-      elif Args.ref == '':
+      elif ref == '':
         print('aaaaa')
         
         with open('./putative_lysins_info_tmp.txt','w') as w:
