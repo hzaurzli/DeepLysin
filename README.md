@@ -386,6 +386,9 @@ python lysins_finder_super.py
   -mu 50000                                         # upper proteins molecular weight
   -hde ./db/hmm/lysin_reported_EAD.hmm              # EAD hmmer database path
   -rle ./db/hmm/lysin_reported_EAD.txt              # reported lysin EAD structures(hmm files)
+  -hcov 80                                          # hmmer region coverage(hmmer)
+  -hacc 50                                          # hmmer accuracy(hmmer)
+  -hol 80                                           # hmmer cutoff of overlap in the same region(hmmer)
   -bp B                                             # 'B' for bacteria, 'P' for phage
   -pp DBSCAN_SWA                                    # prophage predict method ('phispy' or 'DBSCAN-SWA')
   -ds /path/bin/dbscan-swa.py                       # path of dbscan-swa.py, if prophage predict method is 'DBSCAN-SWA'
