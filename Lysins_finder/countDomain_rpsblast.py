@@ -52,7 +52,7 @@ for i in f:
         inv = int(end) - int(start)
         s = float(kk.split('&')[1])
         id = kk.split('&')[0]
-        if inv /length > float(coverage):
+        if (inv + 1) /length > float(coverage):
           ll = (start,end)
           dict_s[str(ll)] = s
           dict_id[str(ll)] = id
@@ -88,7 +88,7 @@ for i in f:
         inv = int(end) - int(start)
         s = float(kk.split('&')[1])
         id = kk.split('&')[0]
-        if inv /length > float(coverage):
+        if (inv + 1) /length > float(coverage):
           ll = (start,end)
           dict_s[str(ll)] = s
           dict_id[str(ll)] = id
@@ -140,3 +140,4 @@ with open(c, 'w') as w:
         line = key + '\t' + i + '\n'
         w.write(line)
 w.close()
+
