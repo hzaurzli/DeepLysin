@@ -25,9 +25,9 @@ for i in f:
       ead_posi = j.split('&')[4].split(':')[0]
       
       if name in dict_ead:
-        dict_ead[name].append(j.split('&')[0] + '&' + ead + '&' + ead_posi)
+        dict_ead[name].append(j.split('&')[1] + '&' + ead + '&' + ead_posi)
       else:
-        lis_ead.append(j.split('&')[0] + '&' + ead + '&' + ead_posi)
+        lis_ead.append(j.split('&')[1] + '&' + ead + '&' + ead_posi)
         dict_ead[name] = lis_ead
     
     if 'CBD' in j:
@@ -36,9 +36,9 @@ for i in f:
       cbd_posi = j.split('&')[4].split(':')[0]
       
       if name in dict_cbd:
-        dict_cbd[name].append(j.split('&')[0] + '&' + cbd + '&' + cbd_posi)
+        dict_cbd[name].append(j.split('&')[1] + '&' + cbd + '&' + cbd_posi)
       else:
-        lis_cbd.append(j.split('&')[0] + '&' + cbd + '&' + cbd_posi)
+        lis_cbd.append(j.split('&')[1] + '&' + cbd + '&' + cbd_posi)
         dict_cbd[name] = lis_cbd
         
     for key in dict_ead:
@@ -52,7 +52,7 @@ for i in f:
         inv = int(end) - int(start)
         s = float(kk.split('&')[1])
         id = kk.split('&')[0]
-        if inv /length > float(coverage):
+        if (inv + 1) /length > float(coverage):
           ll = (start,end)
           dict_s[str(ll)] = s
           dict_id[str(ll)] = id
@@ -88,7 +88,7 @@ for i in f:
         inv = int(end) - int(start)
         s = float(kk.split('&')[1])
         id = kk.split('&')[0]
-        if inv /length > float(coverage):
+        if (inv + 1) / length > float(coverage):
           ll = (start,end)
           dict_s[str(ll)] = s
           dict_id[str(ll)] = id
@@ -140,3 +140,4 @@ with open(c, 'w') as w:
         line = key + '\t' + i + '\n'
         w.write(line)
 w.close()
+
