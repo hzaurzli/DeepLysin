@@ -1,3 +1,4 @@
+
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
@@ -676,6 +677,132 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
       w.close()
 
 
+def Domain_filter_hmmer_withoutRef(Domain_location_dict, ident, coverage, over_lap):
+    Domain_location_filter_dict = {}
+    Domain_list_get = []
+    for item in Domain_location_dict.items():
+        key_data = item[0]
+        Domain_list = item[1]
+        Domain_list.sort(key=operator.itemgetter(1))
+        start_initial = 0
+        ii_keep = 0
+        Domain_filter_list = []
+        for ii in range(len(Domain_list)):
+            if int(Domain_list[ii][2]) >= start_initial:
+                Domain_filter_list.append((Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
+                                           Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
+                                           Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
+                                           Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11]))
+                start_initial = Domain_list[ii][3]
+                ii_keep = ii
+            elif int(Domain_list[ii][2]) < start_initial and int(Domain_list[ii][3]) > start_initial and float(
+                int(Domain_list[ii][3]) - start_initial) / float(
+                int(Domain_list[ii][3]) - Domain_list[ii][2]) > over_lap / 100 and float(
+                start_initial - int(Domain_list[ii][2])) / float(int(Domain_list[ii][9])) < (100 - over_lap) / 100:
+                Domain_filter_list.append((Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
+                                           Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
+                                           Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
+                                           Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11]))
+                start_initial = Domain_list[ii][3]
+                ii_keep = ii
+            else:
+                if float(Domain_list[ii][5]) > float(Domain_list[ii_keep][5]):
+                    sss = (Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
+                           Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
+                           Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
+                           Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11])
+                    if sss in Domain_filter_list:
+                        Domain_filter_list.remove(sss)
+                    Domain_filter_list.append(((Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
+                                                Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
+                                                Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
+                                                Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11])))
+                    start_initial = Domain_list[ii][3]
+                    ii_keep = ii
+                else:
+                    continue
+        Domain_filter_list_use = list(set(Domain_filter_list))
+        for j in Domain_filter_list_use:
+            if j not in Domain_list_get:
+                Domain_list_get.append(j[0])
+                Domain_list_get = list(set(Domain_list_get))
+        Domain_location_filter_dict[key_data] = Domain_filter_list_use
+    Domain_location_use_dict = {}
+    for kk in Domain_location_filter_dict.items():
+        ID_filter = kk[0]
+        Domain_list = kk[1]
+        for i in Domain_list:
+            if float(i[5]) >= float(ident) / 100 and float(i[6]) >= float(coverage) / 100:  
+                Domain_location_use_dict.setdefault(ID_filter, []).append(i)
+
+    return Domain_location_use_dict
+
+
+def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap):
+    Domain_location_filter_dict = {}
+    Domain_list_get = []
+    for item in Domain_location_dict.items():
+        key_data = item[0]
+        Domain_list = item[1]
+        Domain_list.sort(key=operator.itemgetter(1))
+        start_initial = 0
+        ii_keep = 0
+        Domain_filter_list = []
+        for ii in range(len(Domain_list)):
+            if int(Domain_list[ii][2]) >= start_initial:
+                Domain_filter_list.append((Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
+                                           Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
+                                           Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
+                                           Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11],
+                                           Domain_list[ii][12]))
+                start_initial = Domain_list[ii][3]
+                ii_keep = ii
+            elif int(Domain_list[ii][2]) < start_initial and int(Domain_list[ii][3]) > start_initial and float(
+                int(Domain_list[ii][3]) - start_initial) / float(
+                int(Domain_list[ii][3]) - Domain_list[ii][2]) > over_lap / 100 and float(
+                start_initial - int(Domain_list[ii][2])) / float(int(Domain_list[ii][9])) < (100 - over_lap) / 100:
+                Domain_filter_list.append((Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
+                                           Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
+                                           Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
+                                           Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11],
+                                           Domain_list[ii][12]))
+                start_initial = Domain_list[ii][3]
+                ii_keep = ii
+            else:
+                if float(Domain_list[ii][5]) > float(Domain_list[ii_keep][5]):
+                    sss = (Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
+                           Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
+                           Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
+                           Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11],
+                           Domain_list[ii][12])
+                    if sss in Domain_filter_list:
+                        Domain_filter_list.remove(sss)
+                    Domain_filter_list.append(((Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
+                                                Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
+                                                Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
+                                                Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11],
+                                                Domain_list[ii][12])))
+                    start_initial = Domain_list[ii][3]
+                    ii_keep = ii
+                else:
+                    continue
+        Domain_filter_list_use = list(set(Domain_filter_list))
+        for j in Domain_filter_list_use:
+            if j not in Domain_list_get:
+                Domain_list_get.append(j[0])
+                Domain_list_get = list(set(Domain_list_get))
+        Domain_location_filter_dict[key_data] = Domain_filter_list_use
+    Domain_location_use_dict = {}
+    for kk in Domain_location_filter_dict.items():
+        ID_filter = kk[0]
+        Domain_list = kk[1]
+        for i in Domain_list:
+            if float(i[5]) >= float(ident) / 100 and float(i[6]) >= float(coverage) / 100:  
+                Domain_location_use_dict.setdefault(ID_filter, []).append(i)
+
+    return Domain_location_use_dict
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Lysin finder")
     parser.add_argument("-p", "--path", required=True, type=str, help="genome sequnce path")
@@ -695,13 +822,16 @@ if __name__ == "__main__":
     parser.add_argument("-rlc", "--reported_lysin_CBD", required=False, type=str, help="reported lysin CBD structures(hmm files,hmmer)")
     parser.add_argument("-hde", "--hmmer_db_EAD", required=False, type=str, help="EAD hmmer database path(hmmer)")
     parser.add_argument("-rle", "--reported_lysin_EAD", required=False, type=str, help="reported lysin EAD structures(hmm files,hmmer)")
+    parser.add_argument("-hcov", "--hmmer_coverage", required=False, default=80, type=float, help="hmmer region coverage(hmmer)")
+    parser.add_argument("-hacc", "--hmmer_accuracy", required=False, default=50, type=float, help="hmmer accuracy(hmmer)")
+    parser.add_argument("-hol", "--hmmer_over_lap", required=False, default=80, type=float, help="hmmer cutoff of overlap in the same region(hmmer)")
     
     parser.add_argument("-EI", "--EAD_info", required=False, type=str, help="EAD information(rpsblast)")
     parser.add_argument("-CI", "--CBD_info", required=False, type=str, help="CBD information(rpsblast)")
     parser.add_argument("-rc", "--rpsblast_cutoff", default=1e-5,required=False, type=float, help="rpsblast evalue cutoff(rpsblast)")
     parser.add_argument("-rcov", "--rpsblast_coverage", required=False, default=80, type=float, help="rpbblast region coverage(rpsblast)")
     parser.add_argument("-rident", "--rpsblast_identity", required=False, default=20, type=float, help="rpbblast identity(rpsblast)")
-    parser.add_argument("-rol", "--rpsblast_over_lap", default=80,required=False, type=float, help="rpsblast cutoff of overlap in the same region(rpsblast)")
+    parser.add_argument("-rol", "--rpsblast_over_lap", required=False, default=80, type=float, help="rpsblast cutoff of overlap in the same region(rpsblast)")
     parser.add_argument("-rpsdb", "--rpsblast_db", required=False, type=str, help="reported lysin rpsblast database path(need db index, rpsblast)")
     Args = parser.parse_args()
     
@@ -1229,26 +1359,165 @@ if __name__ == "__main__":
                           dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
         
         
-                    with open('./putative_lysins_info.txt','w') as w:
+                    with open('./putative_lysins_info_tmp.txt','w') as w:
                       line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
                       w.write(line)
                       for key in dic_info:
-                        line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                        line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '&'.join(dic_ref[key]) + '\n'
                         w.write(line)
+                    w.close()
+                    
+                    f = open('./putative_lysins_info_tmp.txt')
+                    next(f)
+                    putative_lysin_dict = {}
+                    for i in f:
+                      id = i.strip().split('\t')[0]
+                      info = i.strip().split('\t')[3].split(';')
+                      print(info)
+                      for j in info:
+                        j_name = j.split('&')[0]
+                        j_id = j.split('&')[1]
+                        j_type = j.split('&')[2]
+                        j_ident = j.split('&')[3]
+                        j_start = int(j.split('&')[4].split('-')[0])
+                        j_end = int(j.split('&')[4].split('-')[1])
+                        j_mw = i.strip().split('\t')[1]
+                        j_length = i.strip().split('\t')[2]
+                        Domain_len = int(j.split('&')[0].split('(Length:')[1].replace(')',''))
+                        align_percent = '%.2f' % (float(j_end - j_start + 1) / float(Domain_len) * 100)
+                        signalp = i.strip().split('\t')[4]
+                        ref = i.strip().split('\t')[5]
+                        protein_length = i.strip().split('\t')[2]
+                      
+                        putative_lysin_dict.setdefault(id, []).append(
+                                          (j_id, j_name, j_start,
+                                           j_end, j_type,
+                                           j_ident, align_percent,
+                                           id, j_mw, Domain_len,signalp, protein_length, ref))
+                      
+                    coverage = Args.hmmer_coverage
+                    over_lap = Args.hmmer_over_lap
+                    ident = Args.hmmer_accuracy
+                    Domain_location_use_dict = Domain_filter_hmmer(putative_lysin_dict, ident, coverage, over_lap)
+                    
+                    fa_id = []
+                    with open('./putative_lysins_info.txt','w') as w:
+                      line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
+                      w.write(line)
+                      for key in Domain_location_use_dict:
+                        lis = []
+                        lis_2 = []
+                        if len(Domain_location_use_dict[key]) == 1:
+                          inv = str(Domain_location_use_dict[key][0][2]) + '-' + str(Domain_location_use_dict[key][0][3])
+                          lis = [Domain_location_use_dict[key][0][0], Domain_location_use_dict[key][0][1], Domain_location_use_dict[key][0][4], Domain_location_use_dict[key][0][5], inv]
+                          if 'EAD' in line:
+                            line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + '&'.join(lis) + '\t' + Domain_location_use_dict[key][0][10] + '\t' + Domain_location_use_dict[key][0][12] + '\n'
+                            w.write(line)
+                            fa_id.append(key)
+                        elif len(Domain_location_use_dict[key]) > 1:
+                          for j in Domain_location_use_dict[key]:
+                            inv = str(j[2]) + '-' + str(j[3])
+                            lis = [j[0], j[1], j[4], j[5], inv]
+                            lis_2.append('&'.join(lis))
+                          
+                          line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + ';'.join(lis_2) + '\t' + Domain_location_use_dict[key][0][10] + '\t' + Domain_location_use_dict[key][0][12] + '\n'
+                          if 'EAD' in line:
+                            w.write(line)
+                            fa_id.append(key)
+                    w.close()
+                    
+                    os.system('mv ./putative_lysins.fa ./putative_lysins_tmp.fa')
+                    
+                    putative_fa = fasta2dict_2('./putative_lysins_tmp.fa')
+                    
+                    with open('./putative_lysins.fa', 'w') as w:
+                      for key in putative_fa:
+                        if key in fa_id:
+                          line = '> ' + key + '\n' + putative_fa[key] + '\n'
+                          w.write(line)
                     w.close()
                     
                             
                   elif Args.ref == '':
                     print('aaaaa')
                     
-                    with open('./putative_lysins_info.txt','w') as w:
+                    with open('./putative_lysins_info_tmp.txt','w') as w:
                       line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
                       w.write(line)
                       for key in dic_info:
                         line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\n'
                         w.write(line)
                     w.close()
+                    
+                    f = open('./putative_lysins_info_tmp.txt')
+                    next(f)
+                    putative_lysin_dict = {}
+                    for i in f:
+                      id = i.strip().split('\t')[0]
+                      info = i.strip().split('\t')[3].split(';')
+                      print(info)
+                      for j in info:
+                        j_name = j.split('&')[0]
+                        j_id = j.split('&')[1]
+                        j_type = j.split('&')[2]
+                        j_ident = j.split('&')[3]
+                        j_start = int(j.split('&')[4].split('-')[0])
+                        j_end = int(j.split('&')[4].split('-')[1])
+                        j_mw = i.strip().split('\t')[1]
+                        j_length = i.strip().split('\t')[2]
+                        Domain_len = int(j.split('&')[0].split('(Length:')[1].replace(')',''))
+                        align_percent = '%.2f' % (float(j_end - j_start + 1) / float(Domain_len) * 100)
+                        signalp = i.strip().split('\t')[4]
+                        protein_length = i.strip().split('\t')[2]
                       
+                        putative_lysin_dict.setdefault(id, []).append(
+                                          (j_id, j_name, j_start,
+                                           j_end, j_type,
+                                           j_ident, align_percent,
+                                           id, j_mw, Domain_len,signalp, protein_length))
+                      
+                    coverage = Args.hmmer_coverage
+                    over_lap = Args.hmmer_over_lap
+                    ident = Args.hmmer_accuracy
+                    Domain_location_use_dict = Domain_filter_hmmer(putative_lysin_dict, ident, coverage, over_lap)
+                    
+                    fa_id = []
+                    with open('./putative_lysins_info.txt','w') as w:
+                      line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
+                      w.write(line)
+                      for key in Domain_location_use_dict:
+                        lis = []
+                        lis_2 = []
+                        if len(Domain_location_use_dict[key]) == 1:
+                          inv = str(Domain_location_use_dict[key][0][2]) + '-' + str(Domain_location_use_dict[key][0][3])
+                          lis = [Domain_location_use_dict[key][0][0], Domain_location_use_dict[key][0][1], Domain_location_use_dict[key][0][4], Domain_location_use_dict[key][0][5], inv]
+                          line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + '&'.join(lis) + '\t' + Domain_location_use_dict[key][0][10] + '\n'
+                          if 'EAD' in line:
+                            w.write(line)
+                            fa_id.append(key)
+                        elif len(Domain_location_use_dict[key]) > 1:
+                          for j in Domain_location_use_dict[key]:
+                            inv = str(j[2]) + '-' + str(j[3])
+                            lis = [j[0], j[1], j[4], j[5], inv]
+                            lis_2.append('&'.join(lis))
+                          
+                          line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + ';'.join(lis_2) + '\t' + Domain_location_use_dict[key][0][10] + '\n'
+                          if 'EAD' in line:
+                            w.write(line)
+                            fa_id.append(key)
+                    w.close()
+                    
+                    os.system('mv ./putative_lysins.fa ./putative_lysins_tmp.fa')
+                    
+                    putative_fa = fasta2dict_2('./putative_lysins_tmp.fa')
+                    
+                    with open('./putative_lysins.fa', 'w') as w:
+                      for key in putative_fa:
+                        if key in fa_id:
+                          line = '> ' + key + '\n' + putative_fa[key] + '\n'
+                          w.write(line)
+                    w.close()
+                                          
                 else:
                   print(state)
                 
@@ -1270,7 +1539,7 @@ if __name__ == "__main__":
                 os.remove('./molecular_weight.txt')
                 os.remove('./MW_Length.txt') 
                 os.remove('./Domain_Info.txt')
-                os.system('rm -r ./signaltmp/')
+                os.system('rm -r ./signaltmp/ ./putative_lysins_info_tmp.txt ./putative_lysins_tmp.fa')
     
         elif Args.bacteriaORphage == 'P':
             if Args.workdir[-1] == '/':
@@ -1664,17 +1933,90 @@ if __name__ == "__main__":
                           dic_ref[t1].append(t2 + ':' + str(round(percent_match,2)))
         
         
-                    with open('./putative_lysins_info.txt','w') as w:
+                    with open('./putative_lysins_info_tmp.txt','w') as w:
                       line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
                       w.write(line)
                       for key in dic_info:
-                        line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                        line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + ';'.join(dic_info[key][2:len(dic_info[key])-1]) + '\t' + dic_info[key][-1] + '\t' + '&'.join(dic_ref[key]) + '\n'
                         w.write(line)
                     w.close()
                     
                             
-                  elif Args.ref == '':
+                    f = open('./putative_lysins_info_tmp.txt')
+                    next(f)
+                    putative_lysin_dict = {}
+                    for i in f:
+                      id = i.strip().split('\t')[0]
+                      info = i.strip().split('\t')[3].split(';')
+                      print(info)
+                      for j in info:
+                        j_name = j.split('&')[0]
+                        j_id = j.split('&')[1]
+                        j_type = j.split('&')[2]
+                        j_ident = j.split('&')[3]
+                        j_start = int(j.split('&')[4].split('-')[0])
+                        j_end = int(j.split('&')[4].split('-')[1])
+                        j_mw = i.strip().split('\t')[1]
+                        j_length = i.strip().split('\t')[2]
+                        Domain_len = int(j.split('&')[0].split('(Length:')[1].replace(')',''))
+                        align_percent = '%.2f' % (float(j_end - j_start + 1) / float(Domain_len) * 100)
+                        signalp = i.strip().split('\t')[4]
+                        ref = i.strip().split('\t')[5]
+                        protein_length = i.strip().split('\t')[2]
+                      
+                        putative_lysin_dict.setdefault(id, []).append(
+                                          (j_id, j_name, j_start,
+                                           j_end, j_type,
+                                           j_ident, align_percent,
+                                           id, j_mw, Domain_len,signalp, protein_length, ref))
+                      
+                    coverage = Args.hmmer_coverage
+                    over_lap = Args.hmmer_over_lap
+                    ident = Args.hmmer_accuracy
+                    Domain_location_use_dict = Domain_filter_hmmer_withRef(putative_lysin_dict, ident, coverage, over_lap)
+                    
+                    fa_id = []
                     with open('./putative_lysins_info.txt','w') as w:
+                      line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
+                      w.write(line)
+                      for key in Domain_location_use_dict:
+                        lis = []
+                        lis_2 = []
+                        if len(Domain_location_use_dict[key]) == 1:
+                          inv = str(Domain_location_use_dict[key][0][2]) + '-' + str(Domain_location_use_dict[key][0][3])
+                          lis = [Domain_location_use_dict[key][0][0], Domain_location_use_dict[key][0][1], Domain_location_use_dict[key][0][4], Domain_location_use_dict[key][0][5], inv]
+                          line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + '&'.join(lis) + '\t' + Domain_location_use_dict[key][0][10] + '\t' + Domain_location_use_dict[key][0][12] + '\n'
+                          if 'EAD' in line:
+                            w.write(line)
+                            fa_id.append(key)
+                        elif len(Domain_location_use_dict[key]) > 1:
+                          for j in Domain_location_use_dict[key]:
+                            inv = str(j[2]) + '-' + str(j[3])
+                            lis = [j[0], j[1], j[4], j[5], inv]
+                            lis_2.append('&'.join(lis))
+                          
+                          line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + ';'.join(lis_2) + '\t' + Domain_location_use_dict[key][0][10] + '\t' + Domain_location_use_dict[key][0][12] + '\n'
+                          if 'EAD' in line:
+                            w.write(line)
+                            fa_id.append(key)
+                    w.close()
+                    
+                    os.system('mv ./putative_lysins.fa ./putative_lysins_tmp.fa')
+                    
+                    putative_fa = fasta2dict_2('./putative_lysins_tmp.fa')
+                    
+                    with open('./putative_lysins.fa', 'w') as w:
+                      for key in putative_fa:
+                        if key in fa_id:
+                          line = '> ' + key + '\n' + putative_fa[key] + '\n'
+                          w.write(line)
+                    w.close()
+                    
+                            
+                  elif Args.ref == '':
+                    print('aaaaa')
+                    
+                    with open('./putative_lysins_info_tmp.txt','w') as w:
                       line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
                       w.write(line)
                       for key in dic_info:
@@ -1682,6 +2024,74 @@ if __name__ == "__main__":
                         w.write(line)
                     w.close()
                     
+                    f = open('./putative_lysins_info_tmp.txt')
+                    next(f)
+                    putative_lysin_dict = {}
+                    for i in f:
+                      id = i.strip().split('\t')[0]
+                      info = i.strip().split('\t')[3].split(';')
+                      print(info)
+                      for j in info:
+                        j_name = j.split('&')[0]
+                        j_id = j.split('&')[1]
+                        j_type = j.split('&')[2]
+                        j_ident = j.split('&')[3]
+                        j_start = int(j.split('&')[4].split('-')[0])
+                        j_end = int(j.split('&')[4].split('-')[1])
+                        j_mw = i.strip().split('\t')[1]
+                        j_length = i.strip().split('\t')[2]
+                        Domain_len = int(j.split('&')[0].split('(Length:')[1].replace(')',''))
+                        align_percent = '%.2f' % (float(j_end - j_start + 1) / float(Domain_len) * 100)
+                        signalp = i.strip().split('\t')[4]
+                        protein_length = i.strip().split('\t')[2]
+                      
+                        putative_lysin_dict.setdefault(id, []).append(
+                                          (j_id, j_name, j_start,
+                                           j_end, j_type,
+                                           j_ident, align_percent,
+                                           id, j_mw, Domain_len,signalp, protein_length))
+                      
+                    coverage = Args.hmmer_coverage
+                    over_lap = Args.hmmer_over_lap
+                    ident = Args.hmmer_accuracy
+                    Domain_location_use_dict = Domain_filter_hmmer_withoutRef(putative_lysin_dict, ident, coverage, over_lap)
+                    
+                    fa_id = []
+                    with open('./putative_lysins_info.txt','w') as w:
+                      line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\n'
+                      w.write(line)
+                      for key in Domain_location_use_dict:
+                        lis = []
+                        lis_2 = []
+                        if len(Domain_location_use_dict[key]) == 1:
+                          inv = str(Domain_location_use_dict[key][0][2]) + '-' + str(Domain_location_use_dict[key][0][3])
+                          lis = [Domain_location_use_dict[key][0][0], Domain_location_use_dict[key][0][1], Domain_location_use_dict[key][0][4], Domain_location_use_dict[key][0][5], inv]
+                          line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + '&'.join(lis) + '\t' + Domain_location_use_dict[key][0][10] + '\n' 
+                          if 'EAD' in line:
+                            w.write(line)
+                            fa_id.append(key)
+                        elif len(Domain_location_use_dict[key]) > 1:
+                          for j in Domain_location_use_dict[key]:
+                            inv = str(j[2]) + '-' + str(j[3])
+                            lis = [j[0], j[1], j[4], j[5], inv]
+                            lis_2.append('&'.join(lis))
+                          
+                          line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + ';'.join(lis_2) + '\t' + Domain_location_use_dict[key][0][10] + '\n'
+                          if 'EAD' in line:
+                            w.write(line)
+                            fa_id.append(key)
+                    w.close()
+                    
+                    os.system('mv ./putative_lysins.fa ./putative_lysins_tmp.fa')
+                    
+                    putative_fa = fasta2dict_2('./putative_lysins_tmp.fa')
+                    
+                    with open('./putative_lysins.fa', 'w') as w:
+                      for key in putative_fa:
+                        if key in fa_id:
+                          line = '> ' + key + '\n' + putative_fa[key] + '\n'
+                          w.write(line)
+                    w.close()
                         
                 else:
                   print(state)
@@ -1700,7 +2110,7 @@ if __name__ == "__main__":
                 os.remove('./molecular_weight.txt')
                 os.remove('./MW_Length.txt') 
                 os.remove('./Domain_Info.txt')
-                os.system('rm -r ./signaltmp/')
+                os.system('rm -r ./signaltmp/ ./putative_lysins_info_tmp.txt ./putative_lysins_tmp.fa')
     
         else:
             raise ValueError('Error, please check parameter "--bp"')
@@ -2192,7 +2602,7 @@ if __name__ == "__main__":
                       line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
                       w.write(line)
                       for key in dic_info:
-                        line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                        line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\t' + '&'.join(dic_ref[key]) + '\n'
                         w.write(line)
                     w.close()
                     
@@ -2591,7 +3001,7 @@ if __name__ == "__main__":
                       line = 'ID' + '\t' + 'MW' + '\t' + 'Length' + '\t' + 'Domains' + '\t' + 'Signalp' + '\t' + 'Reference similarity' + '\n'
                       w.write(line)
                       for key in dic_info:
-                        line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\t' + '\t'.join(dic_ref[key]) + '\n'
+                        line = key + '\t' + '\t'.join(dic_info[key][0:2]) + '\t' + dic_info[key][2] + '\t' + dic_info[key][-1] + '\t' + '&'.join(dic_ref[key]) + '\n'
                         w.write(line)
                     w.close()
                     
