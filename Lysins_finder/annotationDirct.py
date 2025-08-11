@@ -1079,7 +1079,7 @@ if __name__ == "__main__":
               coverage = Args.hmmer_coverage
               over_lap = Args.hmmer_over_lap
               ident = Args.hmmer_accuracy
-              Domain_location_use_dict = Domain_filter_hmmer(putative_lysin_dict, ident, coverage, over_lap)
+              Domain_location_use_dict = Domain_filter_hmmer_withRef(putative_lysin_dict, ident, coverage, over_lap)
               
               fa_id = []
               with open('./putative_lysins_info.txt','w') as w:
@@ -1160,7 +1160,7 @@ if __name__ == "__main__":
               coverage = Args.hmmer_coverage
               over_lap = Args.hmmer_over_lap
               ident = Args.hmmer_accuracy
-              Domain_location_use_dict = Domain_filter_hmmer(putative_lysin_dict, ident, coverage, over_lap)
+              Domain_location_use_dict = Domain_filter_hmmer_withoutRef(putative_lysin_dict, ident, coverage, over_lap)
               
               fa_id = []
               with open('./putative_lysins_info.txt','w') as w:
@@ -1551,4 +1551,5 @@ if __name__ == "__main__":
           os.remove('./MW_Length.txt') 
           os.remove('./Domain_Info.txt')
           os.system('rm -r ./signaltmp/')
+
           os.remove(os.path.basename(input_file))
