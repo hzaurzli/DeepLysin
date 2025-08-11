@@ -1398,7 +1398,7 @@ if __name__ == "__main__":
                     coverage = Args.hmmer_coverage
                     over_lap = Args.hmmer_over_lap
                     ident = Args.hmmer_accuracy
-                    Domain_location_use_dict = Domain_filter_hmmer(putative_lysin_dict, ident, coverage, over_lap)
+                    Domain_location_use_dict = Domain_filter_hmmer_withRef(putative_lysin_dict, ident, coverage, over_lap)
                     
                     fa_id = []
                     with open('./putative_lysins_info.txt','w') as w:
@@ -1410,8 +1410,8 @@ if __name__ == "__main__":
                         if len(Domain_location_use_dict[key]) == 1:
                           inv = str(Domain_location_use_dict[key][0][2]) + '-' + str(Domain_location_use_dict[key][0][3])
                           lis = [Domain_location_use_dict[key][0][0], Domain_location_use_dict[key][0][1], Domain_location_use_dict[key][0][4], Domain_location_use_dict[key][0][5], inv]
+                          line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + '&'.join(lis) + '\t' + Domain_location_use_dict[key][0][10] + '\t' + Domain_location_use_dict[key][0][12] + '\n'
                           if 'EAD' in line:
-                            line = key + '\t' + Domain_location_use_dict[key][0][8] + '\t' + Domain_location_use_dict[key][0][11] + '\t' + '&'.join(lis) + '\t' + Domain_location_use_dict[key][0][10] + '\t' + Domain_location_use_dict[key][0][12] + '\n'
                             w.write(line)
                             fa_id.append(key)
                         elif len(Domain_location_use_dict[key]) > 1:
@@ -1479,7 +1479,7 @@ if __name__ == "__main__":
                     coverage = Args.hmmer_coverage
                     over_lap = Args.hmmer_over_lap
                     ident = Args.hmmer_accuracy
-                    Domain_location_use_dict = Domain_filter_hmmer(putative_lysin_dict, ident, coverage, over_lap)
+                    Domain_location_use_dict = Domain_filter_hmmer_withoutRef(putative_lysin_dict, ident, coverage, over_lap)
                     
                     fa_id = []
                     with open('./putative_lysins_info.txt','w') as w:
