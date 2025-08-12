@@ -220,7 +220,7 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
     return Domain_location_use_dict
 
 
-def main(file, method, ref = '', cbd = '', ead = '', hmmer_coverage = 80, hmmer_over_lap = 80, hmmer_accuracy = 50):
+def main(file, method, ref = '', cbd = '', ead = '', hmmer_coverage, hmmer_over_lap, hmmer_accuracy):
     tl = tools()
     dic_fa = {}
     with open(path) as f:
