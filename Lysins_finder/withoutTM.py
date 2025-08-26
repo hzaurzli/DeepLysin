@@ -223,14 +223,14 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
 def main(file, method, ref = '', cbd = '', ead = '', hmmer_coverage, hmmer_over_lap, hmmer_accuracy):
     tl = tools()
     dic_fa = {}
-    with open(path) as f:
+    with open(file) as f:
         lines = f.readlines()
         first_line = lines[0]
         if first_line.startswith('>'):
-            cmd_9 = tl.run_signal(path,'./signaltmp')
+            cmd_9 = tl.run_signal(file,'./signaltmp')
             tl.run(cmd_9)
             
-            dic_fa = fasta2dict_2(path)
+            dic_fa = fasta2dict_2(file)
         else:
             state = 'N'
     f.close()
