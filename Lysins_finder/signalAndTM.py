@@ -383,7 +383,7 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
     return Domain_location_use_dict
 
 
-def main(file, method, ref = '', cbd = '', ead = '', hmmer_coverage, hmmer_over_lap, hmmer_accuracy):
+def main(file, method, hmmer_coverage = 80, hmmer_over_lap = 80, hmmer_accuracy = 50, ref = '', cbd = '', ead = ''):
     tl = tools()
     
     lis = file.split('.')[:-1]
@@ -872,6 +872,7 @@ if __name__ == "__main__":
     method = 'rpsblast'
     main(file, method = method, ref = '')
      
+
 
 
 
