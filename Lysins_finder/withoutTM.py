@@ -100,7 +100,7 @@ def Domain_filter_hmmer_withoutRef(Domain_location_dict, ident, coverage, over_l
     for item in Domain_location_dict.items():
         key_data = item[0]
         Domain_list = item[1]
-        Domain_list.sort(key=operator.itemgetter(1))
+        Domain_list.sort(key=operator.itemgetter(2))
         start_initial = 0
         ii_keep = 0
         Domain_filter_list = []
@@ -161,7 +161,7 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
     for item in Domain_location_dict.items():
         key_data = item[0]
         Domain_list = item[1]
-        Domain_list.sort(key=operator.itemgetter(1))
+        Domain_list.sort(key=operator.itemgetter(2))
         start_initial = 0
         ii_keep = 0
         Domain_filter_list = []
