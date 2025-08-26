@@ -220,7 +220,7 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
     return Domain_location_use_dict
 
 
-def main(file, method, ref = '', cbd = '', ead = '', hmmer_coverage, hmmer_over_lap, hmmer_accuracy):
+def main(file, method, hmmer_coverage = 80, hmmer_over_lap = 80, hmmer_accuracy = 50, ref = '', cbd = '', ead = ''):
     tl = tools()
     dic_fa = {}
     with open(file) as f:
@@ -634,6 +634,7 @@ def main(file, method, ref = '', cbd = '', ead = '', hmmer_coverage, hmmer_over_
   
 if __name__ == "__main__":
 # hmmer method:
+    file = './pfam_EAD_cdhit.fasta'
     method = 'hmmer'
     reported_lysin_CBD_suffix = '/home/user/deeplysin/database/hmm/lysin_reported_CBD.txt'
     reported_lysin_EAD_suffix = '/home/user/deeplysin/database/hmm/lysin_reported_EAD.txt'
@@ -643,5 +644,6 @@ if __name__ == "__main__":
     main(file, method = method, ref = '', cbd = reported_lysin_CBD_suffix, ead = reported_lysin_EAD_suffix, hmmer_coverage = hmmer_coverage, hmmer_over_lap = hmmer_over_lap, hmmer_accuracy = hmmer_accuracy)
 
 # rpsblast method:
+    # file = './rpsblast_cdhit.fasta'
     # method = 'rpsblast'
     # main('./rpsblast_cdhit.fasta', method = method, ref = '')
