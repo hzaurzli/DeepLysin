@@ -6,7 +6,7 @@ cd06525,GH25_Lyc-like(Glyco_hydro_25),119385,184
 pfam01374,Glyco_hydro_46,460179,210
 cd14844,Zn-DD-carbo(Peptidase_M15),350619,108
 cd00978,chitosanase(Glyco_hydro_46),381600,222
-pfam00959,Phage_lysozyme,395766,107
+pfam00959,Phage_lysozyme(Glyco_hydro_24),395766,107
 pfam10908,DUF2778(YkuD),431533,120
 cd00735,T4-like_lys(Glyco_hydro_24),381597,146
 pfam12385,Peptidase_C70,403550,143
@@ -88,6 +88,6 @@ pfam05951,Peptidase_M15_2,428687,152
 pfam10294,Methyltransf_16,313513,172
 pfam11790,Glyco_hydro_cc,432075,231
 pfam16754,Pesticin,435562,155
-pfam11814,DUF3335,432095,206
+pfam11814,DUF3335(Peptidase_C39 like family),432095,206
 pfam16499,Melibiase_2,374582,284
 pfam13406,SLT_2,404311,292
