@@ -16,7 +16,7 @@ Python 3.8
 Independent env:
 ```
 signalp6
-DeepTMHMM (pybiolib)
+DeepTMHMM (pybiolib, version==1.0.24)
 ```
 
 Conda env:
