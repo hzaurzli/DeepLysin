@@ -15,7 +15,7 @@ Python 3.8
 
 Independent env:
 ```
-signalp6
+signalp6 (fast)
 DeepTMHMM (pybiolib, version==1.0.24)
 ```
 
