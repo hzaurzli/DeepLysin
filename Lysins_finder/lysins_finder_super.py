@@ -804,7 +804,7 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Lysin finder")
-    parser.add_argument("-p", "--path", required=True, type=str, help="genome sequnce path")
+    parser.add_argument("-p", "--path", required=True, type=str, help="genome sequence path")
     parser.add_argument("-t", "--type", required=False, default='', type=str, help="prokka kingdom type")
     parser.add_argument("-pp", "--prophage_method", required=False, default='phispy', type=str, help="prophage predict method")
     parser.add_argument("-ds", "--dbscan_swa", required=False, type=str, default='', help="path of dbscan-swa.py")
@@ -3035,5 +3035,6 @@ if __name__ == "__main__":
     
         else:
             raise ValueError('Error, please check parameter "--bp"')
+
 
 
