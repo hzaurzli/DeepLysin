@@ -227,8 +227,8 @@ def Domain_filter(Domain_location_dict, isolates_list, ident, coverage, over_lap
                 ii_keep = ii
             else:
                 if Domain_list[ii][3] > Domain_list[ii_keep][3]:
-                    sss = (Domain_list[ii_keep][0], Domain_list[ii_keep][4], Domain_list[ii_keep][5], Domain_list[ii][1],
-                           Domain_list[ii][2], Domain_list[ii][6], Domain_list[ii][7])
+                    sss = (Domain_list[ii_keep][0], Domain_list[ii_keep][4], Domain_list[ii_keep][5], Domain_list[ii_keep][1],
+                           Domain_list[ii_keep][2], Domain_list[ii_keep][6], Domain_list[ii_keep][7])
                     if sss in Domain_filter_list:
                         Domain_filter_list.remove(sss)
                     Domain_filter_list.append((Domain_list[ii][0], Domain_list[ii][4], Domain_list[ii][5], Domain_list[ii][1],
@@ -682,7 +682,7 @@ def Domain_filter_hmmer_withoutRef(Domain_location_dict, ident, coverage, over_l
     for item in Domain_location_dict.items():
         key_data = item[0]
         Domain_list = item[1]
-        Domain_list.sort(key=operator.itemgetter(2))
+        Domain_list.sort(key=operator.itemgetter(1))
         start_initial = 0
         ii_keep = 0
         Domain_filter_list = []
@@ -706,10 +706,10 @@ def Domain_filter_hmmer_withoutRef(Domain_location_dict, ident, coverage, over_l
                 ii_keep = ii
             else:
                 if float(Domain_list[ii][5]) > float(Domain_list[ii_keep][5]):
-                    sss = (Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
-                           Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
-                           Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
-                           Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11])
+                    sss = (Domain_list[ii_keep][0], Domain_list[ii_keep][1], Domain_list[ii_keep][2], 
+                           Domain_list[ii_keep][3], Domain_list[ii_keep][4], Domain_list[ii_keep][5], 
+                           Domain_list[ii_keep][6], Domain_list[ii_keep][7], Domain_list[ii_keep][8], 
+                           Domain_list[ii_keep][9], Domain_list[ii_keep][10], Domain_list[ii_keep][11])
                     if sss in Domain_filter_list:
                         Domain_filter_list.remove(sss)
                     Domain_filter_list.append(((Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
@@ -743,7 +743,7 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
     for item in Domain_location_dict.items():
         key_data = item[0]
         Domain_list = item[1]
-        Domain_list.sort(key=operator.itemgetter(2))
+        Domain_list.sort(key=operator.itemgetter(1))
         start_initial = 0
         ii_keep = 0
         Domain_filter_list = []
@@ -804,7 +804,7 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Lysin finder")
-    parser.add_argument("-p", "--path", required=True, type=str, help="genome sequence path")
+    parser.add_argument("-p", "--path", required=True, type=str, help="genome sequnce path")
     parser.add_argument("-t", "--type", required=False, default='', type=str, help="prokka kingdom type")
     parser.add_argument("-pp", "--prophage_method", required=False, default='phispy', type=str, help="prophage predict method")
     parser.add_argument("-ds", "--dbscan_swa", required=False, type=str, default='', help="path of dbscan-swa.py")
@@ -3035,6 +3035,3 @@ if __name__ == "__main__":
     
         else:
             raise ValueError('Error, please check parameter "--bp"')
-
-
-

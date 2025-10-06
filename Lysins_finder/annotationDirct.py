@@ -212,8 +212,8 @@ def Domain_filter(Domain_location_dict, isolates_list, ident, coverage, over_lap
                 ii_keep = ii
             else:
                 if Domain_list[ii][3] > Domain_list[ii_keep][3]:
-                    sss = (Domain_list[ii_keep][0], Domain_list[ii_keep][4], Domain_list[ii_keep][5], Domain_list[ii][1],
-                           Domain_list[ii][2], Domain_list[ii][6], Domain_list[ii][7])
+                    sss = (Domain_list[ii_keep][0], Domain_list[ii_keep][4], Domain_list[ii_keep][5], Domain_list[ii_keep][1],
+                           Domain_list[ii_keep][2], Domain_list[ii_keep][6], Domain_list[ii_keep][7])
                     if sss in Domain_filter_list:
                         Domain_filter_list.remove(sss)
                     Domain_filter_list.append((Domain_list[ii][0], Domain_list[ii][4], Domain_list[ii][5], Domain_list[ii][1],
@@ -585,10 +585,10 @@ def Domain_filter_hmmer_withoutRef(Domain_location_dict, ident, coverage, over_l
                 ii_keep = ii
             else:
                 if float(Domain_list[ii][5]) > float(Domain_list[ii_keep][5]):
-                    sss = (Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
-                           Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
-                           Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
-                           Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11])
+                    sss = (Domain_list[ii_keep][0], Domain_list[ii_keep][1], Domain_list[ii_keep][2], 
+                           Domain_list[ii_keep][3], Domain_list[ii_keep][4], Domain_list[ii_keep][5], 
+                           Domain_list[ii_keep][6], Domain_list[ii_keep][7], Domain_list[ii_keep][8], 
+                           Domain_list[ii_keep][9], Domain_list[ii_keep][10], Domain_list[ii_keep][11])
                     if sss in Domain_filter_list:
                         Domain_filter_list.remove(sss)
                     Domain_filter_list.append(((Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
@@ -648,11 +648,11 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
                 ii_keep = ii
             else:
                 if float(Domain_list[ii][5]) > float(Domain_list[ii_keep][5]):
-                    sss = (Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
-                           Domain_list[ii][3], Domain_list[ii][4], Domain_list[ii][5], 
-                           Domain_list[ii][6], Domain_list[ii][7], Domain_list[ii][8], 
-                           Domain_list[ii][9], Domain_list[ii][10], Domain_list[ii][11],
-                           Domain_list[ii][12])
+                    sss = (Domain_list[ii_keep][0], Domain_list[ii_keep][1], Domain_list[ii_keep][2], 
+                           Domain_list[ii_keep][3], Domain_list[ii_keep][4], Domain_list[ii_keep][5], 
+                           Domain_list[ii_keep][6], Domain_list[ii_keep][7], Domain_list[ii_keep][8], 
+                           Domain_list[ii_keep][9], Domain_list[ii_keep][10], Domain_list[ii_keep][11],
+                           Domain_list[ii_keep][12])
                     if sss in Domain_filter_list:
                         Domain_filter_list.remove(sss)
                     Domain_filter_list.append(((Domain_list[ii][0], Domain_list[ii][1], Domain_list[ii][2], 
@@ -1552,4 +1552,3 @@ if __name__ == "__main__":
           os.remove('./Domain_Info.txt')
           os.system('rm -r ./signaltmp/')
           os.remove(os.path.basename(input_file))
-
