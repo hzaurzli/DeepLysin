@@ -655,9 +655,9 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
   lis = []
   for i in f:
     if i.startswith('>'):
-      type = i.strip().split('|')[-1].strip()
+      type = i.strip().split(' | ')[-1].strip()
       if type != 'TM':
-        id = i[1::].strip().split('|')[0].strip()
+        id = i[1::].strip().split(' | ')[0].strip()
         lis.append(id)
 
   fi = fasta2dict_2(fa)
@@ -674,7 +674,6 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
               line = '>' + key + '\n' + fi[key] + '\n'
               w.write(line)
       w.close()
-
 
 def Domain_filter_hmmer_withoutRef(Domain_location_dict, ident, coverage, over_lap):
     Domain_location_filter_dict = {}
@@ -3035,3 +3034,4 @@ if __name__ == "__main__":
     
         else:
             raise ValueError('Error, please check parameter "--bp"')
+
