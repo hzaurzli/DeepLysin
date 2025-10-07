@@ -655,12 +655,12 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
   lis = []
   for i in f:
     if i.startswith('>'):
-      type = i.strip().split(' ')[-1]
+      type = i.strip().split('|')[-1].strip()
       if type != 'TM':
-        id = i[1::].strip().split(' ')[0]
+        id = i[1::].strip().split('|')[0].strip()
         lis.append(id)
 
-  fi = fasta2dict(fa)
+  fi = fasta2dict_2(fa)
   if len(lis) == 0:
       with open(fa_out,'w') as w:
           line = 'All lysins have TMhelix'
@@ -670,8 +670,8 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
       with open(fa_out,'w') as w:
         for key in fi:
           for id in lis:
-            if id in key:
-              line = key + '\n' + fi[key] + '\n'
+            if id == key:
+              line = '>' + key + '\n' + fi[key] + '\n'
               w.write(line)
       w.close()
 
