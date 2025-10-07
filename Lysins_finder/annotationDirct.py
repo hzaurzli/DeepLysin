@@ -534,9 +534,9 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
   lis = []
   for i in f:
     if i.startswith('>'):
-      type = i.strip().split('|')[-1].strip()
+      type = i.strip().split(' | ')[-1].strip()
       if type != 'TM':
-        id = i[1::].strip().split('|')[0].strip()
+        id = i[1::].strip().split(' | ')[0].strip()
         lis.append(id)
 
   fi = fasta2dict_2(fa)
@@ -1552,3 +1552,4 @@ if __name__ == "__main__":
           os.remove('./Domain_Info.txt')
           os.system('rm -r ./signaltmp/')
           os.remove(os.path.basename(input_file))
+
