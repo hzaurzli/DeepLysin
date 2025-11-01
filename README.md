@@ -426,6 +426,12 @@ python lysins_finder_super.py
 ```
 For **'CBD_info.csv'** and **'EAD_info.csv'**, the first colum is **'.smp'** file prefix, the second colum is domain name, the third colum is CDD id number and the fourth colum is domain length
 
+For result protein ID explainer:
+<br>
+<br>
+<img width="680" height="506" alt="image" src="https://github.com/user-attachments/assets/1ba29171-b241-4cdf-b116-9f308a7de77a" />
+
+
 # Cition
 If this software is useful, please cite:
 
