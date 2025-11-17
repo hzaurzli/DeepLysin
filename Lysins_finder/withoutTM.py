@@ -223,14 +223,15 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
 def main_hmmer(file, method, hmmer_coverage, hmmer_over_lap, hmmer_accuracy, ref, cbd, ead, wkdir):
     tl = tools()
     dic_fa = {}
-    with open(file) as f:
+    filename = os.path.basename(file)
+    with open('./' + filename) as f:
         lines = f.readlines()
         first_line = lines[0]
         if first_line.startswith('>'):
-            cmd_9 = tl.run_signal(file,'./signaltmp')
+            cmd_9 = tl.run_signal('./' + filename,'./signaltmp')
             tl.run(cmd_9)
             
-            dic_fa = fasta2dict_2(file)
+            dic_fa = fasta2dict_2('./' + filename)
         else:
             state = 'N'
     f.close()
@@ -511,14 +512,15 @@ def main_hmmer(file, method, hmmer_coverage, hmmer_over_lap, hmmer_accuracy, ref
 def main_rpsblast(file, method, wkdir, ref):
     tl = tools()
     dic_fa = {}
-    with open(file) as f:
+    filename = os.path.basename(file)
+    with open('./' + filename) as f:
         lines = f.readlines()
         first_line = lines[0]
         if first_line.startswith('>'):
-            cmd_9 = tl.run_signal(file,'./signaltmp')
+            cmd_9 = tl.run_signal('./' + filename,'./signaltmp')
             tl.run(cmd_9)
             
-            dic_fa = fasta2dict_2(file)
+            dic_fa = fasta2dict_2('./' + filename)
         else:
             state = 'N'
     f.close()
@@ -616,7 +618,6 @@ def main_rpsblast(file, method, wkdir, ref):
       second_dict = SeqIO.to_dict(SeqIO.parse(open(ref_lysins),'fasta'))
       
       dic_ref = {}
-      # 两个fasta文件中的序列两两比较：
       for t1 in first_dict:
         t_len = len(first_dict[t1].seq)
         for t2 in second_dict:
@@ -680,8 +681,8 @@ if __name__ == "__main__":
         if os.path.isdir(wkdir) == True:
           pass
         else:
-          os.mkdir(wkdir)
-        os.system('mv %s %s' % (file, wkdir))
+          raise('No workfolder found!')
+        os.system('cp %s %s' % (file, wkdir))
         os.chdir(wkdir)
         
         if ref_seq != '':
@@ -698,8 +699,8 @@ if __name__ == "__main__":
         if os.path.isdir(wkdir) == True:
           pass
         else:
-          os.mkdir(wkdir)
-        os.system('mv %s %s' % (file, wkdir))
+          raise('No workfolder found!')
+        os.system('cp %s %s' % (file, wkdir))
         os.chdir(wkdir)
         
         if ref_seq != '':

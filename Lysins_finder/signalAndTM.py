@@ -400,7 +400,7 @@ def main_hmmer(file, method, hmmer_coverage, hmmer_over_lap, hmmer_accuracy, ref
     if int(tot) > 100:
         num_1 = int(tot)//100
         num_2 = int(tot)%100
-        Split_fa('./' + file, tot, num_1, num_2)
+        Split_fa('./' + filename, tot, num_1, num_2)
       
         for i in range(1, int(num_1) + 1):
            time_sleep = random.uniform(60, 180)
@@ -412,7 +412,7 @@ def main_hmmer(file, method, hmmer_coverage, hmmer_over_lap, hmmer_accuracy, ref
         remove_TMhelix('./biolib_results/predicted_topologies.line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
       
     else:
-        cmd_8 = tl.run_deeptmhmm('./' + file)
+        cmd_8 = tl.run_deeptmhmm('./' + filename)
         tl.run(cmd_8)
         remove_TMhelix('./biolib_results/predicted_topologies.3line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
 
@@ -711,7 +711,7 @@ def main_rpsblast(file, method, wkdir, ref):
     if int(tot) > 100:
         num_1 = int(tot)//100
         num_2 = int(tot)%100
-        Split_fa_rps('./' + file, tot, num_1, num_2)
+        Split_fa_rps('./' + filename, tot, num_1, num_2)
       
         for i in range(1, int(num_1) + 1):
            time_sleep = random.uniform(60, 180)
@@ -723,7 +723,7 @@ def main_rpsblast(file, method, wkdir, ref):
         remove_TMhelix('./biolib_results/predicted_topologies.line','./rpsblast_cdhit.fasta','./putative_lysins.fa')
       
     else:
-        cmd_8 = tl.run_deeptmhmm('./' + file)
+        cmd_8 = tl.run_deeptmhmm('./' + filename)
         tl.run(cmd_8)
         remove_TMhelix('./biolib_results/predicted_topologies.3line','./rpsblast_cdhit.fasta','./putative_lysins.fa')
       
@@ -893,7 +893,7 @@ if __name__ == "__main__":
         pass
       else:
         os.mkdir(wkdir)
-      os.system('mv %s %s' % (file, wkdir))
+      os.system('cp %s %s' % (file, wkdir))
       os.chdir(wkdir)
       
       if ref_seq != '':
@@ -911,7 +911,7 @@ if __name__ == "__main__":
         pass
       else:
         os.mkdir(wkdir)
-      os.system('mv %s %s' % (file, wkdir))
+      os.system('cp %s %s' % (file, wkdir))
       os.chdir(wkdir)
       
       if ref_seq != '':
