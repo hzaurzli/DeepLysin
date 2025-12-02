@@ -715,6 +715,12 @@ if __name__ == "__main__":
         input_file = os.path.abspath(Args.file)
         print(input_file)
         workdir_path = os.path.abspath(Args.workdir)
+        
+        if os.path.isdir(workdir_path) == True:
+            pass
+        else:
+            os.mkdir('./prokka_result/')
+            
         os.system('cp %s %s' % (input_file,workdir_path))
         curr_dir = sub.getoutput('pwd')
         os.chdir(Args.workdir)
@@ -1230,6 +1236,12 @@ if __name__ == "__main__":
         input_file = os.path.abspath(Args.file)
         print(input_file)
         workdir_path = os.path.abspath(Args.workdir)
+
+        if os.path.isdir(workdir_path) == True:
+            pass
+        else:
+            os.mkdir('./prokka_result/')
+            
         os.system('cp %s %s' % (input_file, workdir_path))
         curr_dir = sub.getoutput('pwd')
         os.chdir(Args.workdir)
@@ -1552,4 +1564,5 @@ if __name__ == "__main__":
           os.remove('./Domain_Info.txt')
           os.system('rm -r ./signaltmp/')
           os.remove(os.path.basename(input_file))
+
 
