@@ -719,7 +719,7 @@ if __name__ == "__main__":
         if os.path.isdir(workdir_path) == True:
             pass
         else:
-            os.mkdir('./prokka_result/')
+            os.mkdir(workdir_path)
             
         os.system('cp %s %s' % (input_file,workdir_path))
         curr_dir = sub.getoutput('pwd')
@@ -1240,7 +1240,7 @@ if __name__ == "__main__":
         if os.path.isdir(workdir_path) == True:
             pass
         else:
-            os.mkdir('./prokka_result/')
+            os.mkdir(workdir_path)
             
         os.system('cp %s %s' % (input_file, workdir_path))
         curr_dir = sub.getoutput('pwd')
@@ -1564,5 +1564,6 @@ if __name__ == "__main__":
           os.remove('./Domain_Info.txt')
           os.system('rm -r ./signaltmp/')
           os.remove(os.path.basename(input_file))
+
 
 
