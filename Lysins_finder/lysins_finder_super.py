@@ -1208,7 +1208,7 @@ if __name__ == "__main__":
                     num_2 = int(tot)%100
                     Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
                   
-                    for i in range(1, int(num_1) + 1):
+                    for i in range(1, int(num_1) + 2):
                        time_sleep = random.uniform(60, 180)
                        time.sleep(time_sleep)
                        cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
@@ -1784,7 +1784,7 @@ if __name__ == "__main__":
                     num_2 = int(tot)%100
                     Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
                   
-                    for i in range(1, int(num_1) + 1):
+                    for i in range(1, int(num_1) + 2):
                        time_sleep = random.uniform(60, 180)
                        time.sleep(time_sleep)
                        cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
@@ -2460,7 +2460,7 @@ if __name__ == "__main__":
                     num_2 = int(tot)%100
                     Split_fa_rps('./rpsblast_cdhit.fasta', tot, num_1, num_2)
                   
-                    for i in range(1, int(num_1) + 1):
+                    for i in range(1, int(num_1) + 2):
                        time_sleep = random.uniform(60, 180)
                        time.sleep(time_sleep)
                        cmd_8 = tl.run_deeptmhmm('./rpsblast_cdhit-' + str(i) + '00.fasta')
@@ -2859,7 +2859,7 @@ if __name__ == "__main__":
                     num_2 = int(tot)%100
                     Split_fa_rps('./rpsblast_cdhit.fasta', tot, num_1, num_2)
                   
-                    for i in range(1, int(num_1) + 1):
+                    for i in range(1, int(num_1) + 2):
                        time_sleep = random.uniform(60, 180)
                        time.sleep(time_sleep)
                        cmd_8 = tl.run_deeptmhmm('./rpsblast_cdhit-' + str(i) + '00.fasta')
@@ -3034,5 +3034,6 @@ if __name__ == "__main__":
     
         else:
             raise ValueError('Error, please check parameter "--bp"')
+
 
 
