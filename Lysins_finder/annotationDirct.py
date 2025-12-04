@@ -897,11 +897,18 @@ if __name__ == "__main__":
               num_2 = int(tot)%100
               Split_fa('./pfam_EAD_cdhit.fasta', tot, num_1, num_2)
             
-              for i in range(1, int(num_1) + 2):
-                 time_sleep = random.uniform(60, 180)
-                 time.sleep(time_sleep)
-                 cmd_8 = tl.run_deeptmhmm('./pfam_EAD_cdhit-' + str(i) + '00.fasta')
-                 tl.run(cmd_8)
+              if num_2 == 0:
+                  for i in range(1, int(num_1) + 1):
+                     time_sleep = random.uniform(60, 180)
+                     time.sleep(time_sleep)
+                     cmd_8 = tl.run_deeptmhmm('./rpsblast_cdhit-' + str(i) + '00.fasta')
+                     tl.run(cmd_8)
+              else:
+                  for i in range(1, int(num_1) + 2):
+                     time_sleep = random.uniform(60, 180)
+                     time.sleep(time_sleep)
+                     cmd_8 = tl.run_deeptmhmm('./rpsblast_cdhit-' + str(i) + '00.fasta')
+                     tl.run(cmd_8)
                  
               os.system('cat ./biolib_results/predicted_topologies.3line* > ./biolib_results/predicted_topologies.line')
               remove_TMhelix('./biolib_results/predicted_topologies.line','./pfam_EAD_cdhit.fasta','./putative_lysins.fa')
@@ -1387,12 +1394,19 @@ if __name__ == "__main__":
               num_1 = int(tot)//100
               num_2 = int(tot)%100
               Split_fa_rps('./rpsblast_cdhit.fasta', tot, num_1, num_2)
-            
-              for i in range(1, int(num_1) + 2):
-                 time_sleep = random.uniform(60, 180)
-                 time.sleep(time_sleep)
-                 cmd_8 = tl.run_deeptmhmm('./rpsblast_cdhit-' + str(i) + '00.fasta')
-                 tl.run(cmd_8)
+
+              if num_2 == 0:
+                  for i in range(1, int(num_1) + 1):
+                     time_sleep = random.uniform(60, 180)
+                     time.sleep(time_sleep)
+                     cmd_8 = tl.run_deeptmhmm('./rpsblast_cdhit-' + str(i) + '00.fasta')
+                     tl.run(cmd_8)
+              else:
+                  for i in range(1, int(num_1) + 2):
+                     time_sleep = random.uniform(60, 180)
+                     time.sleep(time_sleep)
+                     cmd_8 = tl.run_deeptmhmm('./rpsblast_cdhit-' + str(i) + '00.fasta')
+                     tl.run(cmd_8)
                  
               os.system('cat ./biolib_results/predicted_topologies.3line* > ./biolib_results/predicted_topologies.line')
               remove_TMhelix('./biolib_results/predicted_topologies.line','./rpsblast_cdhit.fasta','./putative_lysins.fa')
@@ -1564,6 +1578,7 @@ if __name__ == "__main__":
           os.remove('./Domain_Info.txt')
           os.system('rm -r ./signaltmp/')
           os.remove(os.path.basename(input_file))
+
 
 
 
