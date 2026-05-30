@@ -429,8 +429,7 @@ For **'CBD_info.csv'** and **'EAD_info.csv'**, the first colum is **'.smp'** fil
 For result protein ID explainer:
 <br>
 <br>
-<img width="680" height="506" alt="image" src="https://github.com/user-attachments/assets/1ba29171-b241-4cdf-b116-9f308a7de77a" />
-
+<img width="1013" height="741" alt="image" src="https://github.com/user-attachments/assets/afac48c5-d86b-44be-b055-7ffc4e6419ef" />
 
 # Cition
 If this software is useful, please cite:
