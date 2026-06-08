@@ -426,6 +426,30 @@ python lysins_finder_super.py
 ```
 For **'CBD_info.csv'** and **'EAD_info.csv'**, the first colum is **'.smp'** file prefix, the second colum is domain name, the third colum is CDD id number and the fourth colum is domain length
 
+***3.lysins_finder_super.py (for 'method to predict ppn', 2026.6)***
+## rapid detection of phage process ('ORFipy')
+```
+# please install ORFipy
+pip install orfipy
+
+# usage
+python lysins_finder_super.py
+  -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
+  -c 0.95                                           # cdhit cluster cutoff
+  -wkdir ./test/                                    # work directory
+  -ml 10000                                         # lower proteins molecular weight
+  -mu 50000                                         # upper proteins molecular weight
+  -m rpsblast (or hmmer)                            # searching method 'hmmer' or 'rpsblast'
+  -EI /path/EAD_info.csv                            # EAD information(.csv, rpsblast)
+  -CI /path/CBD_info.csv                            # CBD information(.csv, rpsblast)
+  -rc 1e-5                                          # rpsblast evalue cutoff(rpsblast)
+  -rcov 80                                          # rpsblast region coverage(%, rpsblast)
+  -rident 40                                        # rpsblast identity(%, rpsblast)
+  -rol 80                                           # rpsblast cutoff of overlap in the same region(%, rpsblast)
+  -rpsdb /path/pldb/pldb (index path)               # reported lysin rpsblast database path(need db index, rpsblast)
+  -r ./ref.fasta                                    # reported lysin reference fasta (optional parammeter, comparative similarity with known reported sequences)
+```
+
 For result protein ID explainer:
 <br>
 <br>
