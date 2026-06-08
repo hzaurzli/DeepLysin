@@ -450,7 +450,7 @@ python lysins_finder_super.py
   -r ./ref.fasta                                    # reported lysin reference fasta (optional parammeter, comparative similarity with known reported sequences)
 ```
 
-For result protein ID explainer:
+# For result protein ID explainer:
 <br>
 <br>
 <img width="1013" height="741" alt="image" src="https://github.com/user-attachments/assets/afac48c5-d86b-44be-b055-7ffc4e6419ef" />
