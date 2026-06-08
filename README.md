@@ -426,8 +426,8 @@ python lysins_finder_super.py
 ```
 For **'CBD_info.csv'** and **'EAD_info.csv'**, the first colum is **'.smp'** file prefix, the second colum is domain name, the third colum is CDD id number and the fourth colum is domain length
 
-***3.lysins_finder_super.py (for 'method to predict ppn', 2026.6)***
-## rapid detection of phage process ('ORFipy')
+***3.lysins_finder_PhageToFast.py (phage rapid mode, 2026.6)***
+**rapid detection of phage process ('ORFipy')**
 ```
 # please install ORFipy
 pip install orfipy
