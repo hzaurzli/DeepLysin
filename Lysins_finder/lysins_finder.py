@@ -496,7 +496,7 @@ def remove_TMhelix(TMhelix_path,fa,fa_out):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Lysin finder")
-    parser.add_argument("-p", "--path", required=True, type=str, help="genome sequnce path")
+    parser.add_argument("-p", "--path", required=True, type=str, help="genome sequence folder path")
     parser.add_argument("-t", "--type", required=True, type=str, help="prokka kingdom type")
     parser.add_argument("-c", "--cdhit_cutoff", default=0.95,required=False, type=float, help="cdhit cluster cutoff")
     parser.add_argument("-hc", "--hmmer_cutoff", default=1e-5,required=False, type=float, help="hmmer search cutoff")
