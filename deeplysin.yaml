@@ -1,6 +1,9 @@
 name: deeplysin
 channels:
   - conda-forge
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
   - bioconda
   - defaults
 dependencies:
@@ -316,6 +319,8 @@ dependencies:
       - appdirs==1.4.4
       - biopython==1.79
       - click==8.1.8
+      - colorama==0.4.6
+      - cython==3.2.5
       - docker==7.1.0
       - fonttools==4.57.0
       - importlib-metadata==8.5.0
@@ -328,7 +333,11 @@ dependencies:
       - nvidia-cuda-runtime-cu11==11.7.99
       - nvidia-cudnn-cu11==8.5.0.96
       - nvidia-nccl-cu12==2.27.5
+      - orfipy==0.0.4
+      - psutil==7.2.2
+      - pyahocorasick==2.1.0
       - pybiolib==1.2.947
+      - pyfastx==2.3.0
       - pygments==2.19.2
       - python-dateutil==2.9.0.post0
       - pyyaml==6.0.2
