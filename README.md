@@ -454,7 +454,7 @@ python lysins_finder_super.py
 # For result protein ID explainer:
 <br>
 <br>
-<img width="818" height="759" alt="image" src="https://github.com/user-attachments/assets/d8470f9b-2d25-4e5c-89df-6270e52d9f9b" />
+<img width="781" height="750" alt="image" src="https://github.com/user-attachments/assets/367b9df0-5492-4418-81e3-cd2df77d5da0" />
 
 # Cition
 If this software is useful, please cite:
