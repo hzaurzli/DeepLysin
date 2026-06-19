@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #
-#  Lysins_finder_super.py 
+#  Lysins_finder_PhageToFast.py 
 #
-#  Copyright 2025 Small runze
+#  Copyright 2026 Small runze
 #  <small.runze@gmail.com> Small runze
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -37,11 +37,14 @@ import glob
 import shutil
 import biolib
 import operator
+import pyrodigal_gv
 
 
 class tools:
     def __init__(self):
         self.cdHit = 'cd-hit'
+        self.orfipy = 'orfipy'
+        self.prodigal_gv = 'prodigal-gv'
         self.rundbcan = 'run_dbcan.py'
         self.hmmsearch = 'hmmsearch'
         self.rpsblast = 'rpsblast'
@@ -55,6 +58,18 @@ class tools:
         p = Popen(cmd, shell=True, cwd=wkdir)
         p.wait()
         return p.returncode
+    
+    def run_orfipy(self,inputfile, out):
+        cmd = '%s %s --pep %s' % (self.orfipy, inputfile, out)
+        return cmd
+        
+    def run_prodigal_gv_meta(self,inputfile, out):
+        cmd = '%s -i %s -a %s -p meta' % (self.prodigal_gv, inputfile, out)
+        return cmd
+        
+    def run_prodigal_gv(self,inputfile, out):
+        cmd = '%s -i %s -a %s' % (self.prodigal_gv, inputfile, out)
+        return cmd    
 
     def run_cdhit(self,inputfile, out, cutoff):
         cmd = '%s -i %s -o %s -c %s -M 0' % (self.cdHit, inputfile, out, cutoff)
@@ -787,7 +802,7 @@ def Domain_filter_hmmer_withRef(Domain_location_dict, ident, coverage, over_lap)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Lysin finder")
+    parser = argparse.ArgumentParser(description="Lysin finder phage fast mode")
     parser.add_argument("-p", "--path", required=True, type=str, help="genome sequence folder path")
     parser.add_argument("-c", "--cdhit_cutoff", default=0.95,required=False, type=float, help="cdhit cluster cutoff")
     parser.add_argument("-wkdir", "--workdir", required=True, type=str, help="work directory")
@@ -795,6 +810,8 @@ if __name__ == "__main__":
     parser.add_argument("-ml", "--MWL", required=False, default=10000, type=float, help="lower proteins molecular weight")
     parser.add_argument("-r", "--ref", default='', required=False, type=str, help="reference lysins sequences")
     parser.add_argument("-m", "--method", default='hmmer', required=True, type=str, help="searching method 'hmmer' or 'rpsblast'")
+    parser.add_argument("--orf_method", type=str, required=True, default='orfipy', help="ORFs prediction method (Add: orfipy; Not: prodigal-gv)")
+    parser.add_argument("--meta_mode", action="store_true", required=False, default=True, help="Use metagenomic mode (default: True; Only in prodigal-gv mode)")
     
     parser.add_argument("-hc", "--hmmer_cutoff", default=1e-5,required=False, type=float, help="hmmer search evalue cutoff(hmmer)")
     parser.add_argument("-hdc", "--hmmer_db_CBD", required=False, type=str, help="CBD hmmer database path(hmmer)")
@@ -834,24 +851,57 @@ if __name__ == "__main__":
         genome_path = os.path.abspath(Args.path)
         work_path = os.path.abspath(Args.workdir)
         os.system('cat %s > %s' % (genome_path + '/*', work_path + '/all_phage_genome.fa'))
-
-        # step 2 predict ORF by ORFipy
         os.chdir(Args.workdir)
-        os.system('orfipy ./all_phage_genome.fa --pep ./all_protein_ut_ori.faa')
-        os.system('mv ./orfipy_all_phage_genome.fa_out/all_protein_ut_ori.faa ./')
-        # step 3 filter
-        f = open('./all_protein_ut_ori.faa')
-        with open('./all_protein_ut.faa', 'w') as w:
-          for i in f:
-            if i.startswith('>'):
-              id = i.strip().split('type')[0].strip().split('[')[0].strip() + '_' + i.strip().split('type')[0].strip().split('[')[1].split('](')[0] + '_' + i.strip().split('type')[0].strip().split('[')[1].split('](')[1].replace(')', '') + '\n'
-              w.write(id)
+        
+        # step 2 predict ORF by ORFipy
+        if Args.orf_method == 'orfipy':
+            cmd_o = tl.run_orfipy('./all_phage_genome.fa',
+                                  './all_protein_ut_ori.faa')
+            tl.run(cmd_o)
+            os.system('mv ./orfipy_all_phage_genome.fa_out/all_protein_ut_ori.faa ./')
+            
+        # step 2 predict ORF by pyrodigal-gv
+        elif Args.orf_method == 'prodigal_gv':
+            if Args.meta_mode != True:
+                cmd_p1 = tl.run_prodigal_gv('./all_phage_genome.fa',
+                                            './all_protein_ut_ori.faa')
+                
+                tl.run(cmd_p1)
             else:
-              w.write(i)
-        w.close()
+                cmd_p2 = tl.run_prodigal_gv_meta('./all_phage_genome.fa',
+                                                 './all_protein_ut_ori.faa')
+                
+                tl.run(cmd_p2)
+            
+        else:
+            raise('Error: check "--orf_method" content!')
+            
+          
+        # step 3 filter
+        if Args.orf_method == 'orfipy':
+            f = open('./all_protein_ut_ori.faa')
+            with open('./all_protein_ut.faa', 'w') as w:
+              for i in f:
+                if i.startswith('>'):
+                  id = i.strip().split('type')[0].strip().split('[')[0].strip() + '_' + i.strip().split('type')[0].strip().split('[')[1].split('](')[0] + '_' + i.strip().split('type')[0].strip().split('[')[1].split('](')[1].replace(')', '') + '\n'
+                  w.write(id)
+                else:
+                  w.write(i)     
+            w.close()
+            
+        elif Args.orf_method == 'prodigal_gv':
+            f = open('./all_protein_ut_ori.faa')
+            with open('./all_protein_ut.faa', 'w') as w:
+              for i in f:
+                if i.startswith('>'):
+                  id = i.strip().split('#')[0].strip() + '_' + i.strip().split('#')[1].strip() + ':' + i.strip().split('#')[2].strip() + '\n'
+                  w.write(id)
+                else:
+                  line = i.replace('*', '')
+                  w.write(line)   
+            w.close()      
         
         fa_dict = fasta2dict('./all_protein_ut.faa')
-
         filters = ["B","Z","J","O","U","X",'*']
         with open('./all_protein.faa','w') as f:
           for key in fa_dict:
@@ -865,8 +915,9 @@ if __name__ == "__main__":
             line = 'No lysins found!'
             w.write(line)
           w.close()
-  
-          os.system('rm -r ./prokka_result/')
+          
+          if Args.orf_method == 'orfipy':
+            os.system('rm -r ./orfipy_all_phage_genome.fa_out/')
           os.remove('./all_protein.faa')
           os.remove('./all_protein_ut.faa')
 
@@ -1322,7 +1373,9 @@ if __name__ == "__main__":
           
           
         time.sleep(120) 
-        os.system('rm -r ./hmmer_database/ ./hmmer_out/ ./hmmer_out_EAD/ ./biolib_results/ ./orfipy_all_phage_genome.fa_out/')
+        os.system('rm -r ./hmmer_database/ ./hmmer_out/ ./hmmer_out_EAD/ ./biolib_results/')
+        if Args.orf_method == 'orfipy':
+            os.system('rm -r ./orfipy_all_phage_genome.fa_out/')
         os.system('rm -r ./pfam_EAD_cdhit*')
         os.remove('./all_protein_filter.faa')
         os.remove('./all_protein_ut_ori.faa')
@@ -1358,24 +1411,58 @@ if __name__ == "__main__":
         genome_path = os.path.abspath(Args.path)
         work_path = os.path.abspath(Args.workdir)
         os.system('cat %s > %s' % (genome_path + '/*', work_path + '/all_phage_genome.fa'))
-
-        # step 2 predict ORF by ORFipy
+        
         os.chdir(Args.workdir)
-        os.system('orfipy ./all_phage_genome.fa --pep ./all_protein_ut_ori.faa')
-        os.system('mv ./orfipy_all_phage_genome.fa_out/all_protein_ut_ori.faa ./')
-        # step 3 filter
-        f = open('./all_protein_ut_ori.faa')
-        with open('./all_protein_ut.faa', 'w') as w:
-          for i in f:
-            if i.startswith('>'):
-              id = i.strip().split('type')[0].strip().split('[')[0].strip() + '_' + i.strip().split('type')[0].strip().split('[')[1].split('](')[0] + '_' + i.strip().split('type')[0].strip().split('[')[1].split('](')[1].replace(')', '') + '\n'
-              w.write(id)
+        
+        # step 2 predict ORF by ORFipy
+        if Args.orf_method == 'orfipy':
+            cmd_o = tl.run_orfipy('./all_phage_genome.fa',
+                                  './all_protein_ut_ori.faa')
+            tl.run(cmd_o)
+            os.system('mv ./orfipy_all_phage_genome.fa_out/all_protein_ut_ori.faa ./')
+            
+        # step 2 predict ORF by pyrodigal-gv
+        elif Args.orf_method == 'prodigal_gv':
+            if Args.meta_mode != True:
+                cmd_p1 = tl.run_prodigal_gv('./all_phage_genome.fa',
+                                            './all_protein_ut_ori.faa')
+                
+                tl.run(cmd_p1)
             else:
-              w.write(i)
-        w.close()
+                cmd_p2 = tl.run_prodigal_gv_meta('./all_phage_genome.fa',
+                                                 './all_protein_ut_ori.faa')
+                
+                tl.run(cmd_p2)
+            
+        else:
+            raise('Error: check "--orf_method" content!')
+            
           
+        # step 3 filter
+        if Args.orf_method == 'orfipy':
+            f = open('./all_protein_ut_ori.faa')
+            with open('./all_protein_ut.faa', 'w') as w:
+              for i in f:
+                if i.startswith('>'):
+                  id = i.strip().split('type')[0].strip().split('[')[0].strip() + '_' + i.strip().split('type')[0].strip().split('[')[1].split('](')[0] + '_' + i.strip().split('type')[0].strip().split('[')[1].split('](')[1].replace(')', '') + '\n'
+                  w.write(id)
+                else:
+                  w.write(i)     
+            w.close()
+            
+        elif Args.orf_method == 'prodigal_gv':
+            f = open('./all_protein_ut_ori.faa')
+            with open('./all_protein_ut.faa', 'w') as w:
+              for i in f:
+                if i.startswith('>'):
+                  id = i.strip().split('#')[0].strip() + '_' + i.strip().split('#')[1].strip() + ':' + i.strip().split('#')[2].strip() + '\n'
+                  w.write(id)
+                else:
+                  line = i.replace('*', '')
+                  w.write(line)   
+            w.close()      
+            
         fa_dict = fasta2dict('./all_protein_ut.faa')
-
         filters = ["B","Z","J","O","U","X",'*']
         with open('./all_protein.faa','w') as f:
             for key in fa_dict:
@@ -1390,7 +1477,8 @@ if __name__ == "__main__":
             w.write(line)
           w.close()
           
-          os.system('rm -r ./prokka_result/')
+          if Args.orf_method == 'orfipy':
+            os.system('rm -r ./orfipy_all_phage_genome.fa_out/')
           os.remove('./all_protein.faa')
           os.remove('./all_protein_ut.faa')
         
@@ -1446,8 +1534,7 @@ if __name__ == "__main__":
           Domain_location_use_dict, Domain_list_get = Domain_filter(Domain_location_dict,
                                                                     isolates_list,
                                                                     ident, coverage, over_lap)
-          
-          
+                                                                    
           rpsblast_item = []
           ll_position = []
           with open('./putative_lysin_domain_info.csv','w') as w:
@@ -1672,7 +1759,9 @@ if __name__ == "__main__":
             
             
           time.sleep(120) 
-          os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./biolib_results/ ./orfipy_all_phage_genome.fa_out/')
+          os.system('rm -r ./rps_input/ ./rps_output/ ./add_rps_output/ ./biolib_results/')
+          if Args.orf_method == 'orfipy':
+            os.system('rm -r ./orfipy_all_phage_genome.fa_out/')
           os.system('rm -r rpsblast_cdhit*')
           os.system('rm -r rpsblast_tmp.fasta all_phage_genome.fa all_protein_ut_ori.faa')
           os.remove('./all_protein.faa')
@@ -1683,4 +1772,3 @@ if __name__ == "__main__":
           os.remove('./MW_Length.txt') 
           os.remove('./Domain_Info.txt')
           os.system('rm -r ./signaltmp/')
-
