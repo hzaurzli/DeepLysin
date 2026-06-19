@@ -456,7 +456,7 @@ python lysins_finder_PhageToFast.py
 # For result protein ID explainer:
 <br>
 <br>
-<img width="552" height="683" alt="image" src="https://github.com/user-attachments/assets/dddaf7d8-52be-4e8d-a2e0-68658a8a7d23" />
+<img width="555" height="681" alt="image" src="https://github.com/user-attachments/assets/3399a12b-700b-4882-a072-0780644d86f6" />
 
 # Cition
 If this software is useful, please cite:
