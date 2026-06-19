@@ -434,7 +434,7 @@ For **'CBD_info.csv'** and **'EAD_info.csv'**, the first colum is **'.smp'** fil
 pip install orfipy
 
 # usage
-python lysins_finder_p.py
+python lysins_finder_PhageToFast.py
   -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
   -c 0.95                                           # cdhit cluster cutoff
   -wkdir ./test/                                    # work directory
