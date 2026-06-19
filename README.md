@@ -428,10 +428,11 @@ For **'CBD_info.csv'** and **'EAD_info.csv'**, the first colum is **'.smp'** fil
 
 ***3.lysins_finder_PhageToFast.py (phage rapid mode, 2026.6)***
 
-**rapid detection of phage process ('ORFipy')**
+**rapid detection of phage process ('ORFipy or prodigal-gv')**
 ```
-# please install ORFipy
+# please install ORFipy and prodigal-gv
 pip install orfipy
+conda install -c bioconda prodigal-gv
 
 # usage
 python lysins_finder_PhageToFast.py
