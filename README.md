@@ -434,10 +434,12 @@ For **'CBD_info.csv'** and **'EAD_info.csv'**, the first colum is **'.smp'** fil
 pip install orfipy
 
 # usage
-python lysins_finder_super.py
+python lysins_finder_p.py
   -p /.../input_path/                               # genome sequence path, genome fasta file suffix is '.fna'
   -c 0.95                                           # cdhit cluster cutoff
   -wkdir ./test/                                    # work directory
+  --orf_method prodigal_gv                          # ORFs prediction method (Add: orfipy; Not: prodigal-gv)
+  --meta_mode                                       # Use metagenomic mode (default: True; Only in prodigal-gv mode)
   -ml 10000                                         # lower proteins molecular weight
   -mu 50000                                         # upper proteins molecular weight
   -m rpsblast (or hmmer)                            # searching method 'hmmer' or 'rpsblast'
