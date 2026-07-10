@@ -54,8 +54,8 @@ if __name__ == '__main__':
     parser.add_argument("--pos_num", "-p", required=True, help="positive sample number")
     parser.add_argument("--neg_num", "-n", required=True, help="negative sample number")
     parser.add_argument("--model_path", "-m", required=True, help="Model path")
-    parser.add_argument('--model_list', nargs='+', help='<Required> Base model', required=True)
-    parser.add_argument('--feature_list', nargs='+', help='<Required> Base feature', required=True)
+    parser.add_argument('--model_list', nargs='+', help='<Required> Base model (space-delimited)', required=True)
+    parser.add_argument('--feature_list', nargs='+', help='<Required> Base feature (space-delimited)', required=True)
     Args = parser.parse_args()
     
     start_time = time.time()
