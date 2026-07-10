@@ -48,7 +48,7 @@ def input_args():
     parser.add_argument("--pos_test_num", "-pe", required=False, help="Test positive sample number")
     parser.add_argument("--neg_test_num", "-ne", required=False, help="Test negative sample number")
     parser.add_argument("--model_path", "-m", required=True, help="Model path")
-    parser.add_argument('--feature_model', nargs='+', help='<Required> Base feature model', required=True)
+    parser.add_argument('--feature_model', nargs='+', help='<Required> Base feature model (space-delimited)', required=True)
     return parser.parse_args()
 
 if __name__ == '__main__':
