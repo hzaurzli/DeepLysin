@@ -190,9 +190,9 @@ def CTD(seqs):
                 if (pair[0] in group2[p] and pair[1] in group3[p]) or (pair[0] in group3[p] and pair[1] in group2[p]):
                     c2332 = c2332 + 1
             code2 = code2 + [c1221 / len(aaPair), c1331 / len(aaPair), c2332 / len(aaPair)]
-            CTDD1 = CTDD1 + [value / float(len(seq)) for value in Count_D(group1[p], seq)]
-            CTDD2 = CTDD2 + [value / float(len(seq)) for value in Count_D(group2[p], seq)]
-            CTDD3 = CTDD3 + [value / float(len(seq)) for value in Count_D(group3[p], seq)]
+            CTDD1 = CTDD1 + [value for value in Count_D(group1[p], seq)]
+            CTDD2 = CTDD2 + [value for value in Count_D(group2[p], seq)]
+            CTDD3 = CTDD3 + [value for value in Count_D(group3[p], seq)]
         encodings.append(code + code2 + CTDD1 + CTDD2 + CTDD3)
     return encodings
 
