@@ -901,13 +901,13 @@ if __name__ == "__main__":
                   for i in range(1, int(num_1) + 1):
                      time_sleep = random.uniform(60, 180)
                      time.sleep(time_sleep)
-                     cmd_8 = tl.run_deeptmhmm('./rpsblast_cdhit-' + str(i) + '00.fasta')
+                     cmd_8 = tl.run_deeptmhmm('./pfam_ead_cdhit-' + str(i) + '00.fasta')
                      tl.run(cmd_8)
               else:
                   for i in range(1, int(num_1) + 2):
                      time_sleep = random.uniform(60, 180)
                      time.sleep(time_sleep)
-                     cmd_8 = tl.run_deeptmhmm('./rpsblast_cdhit-' + str(i) + '00.fasta')
+                     cmd_8 = tl.run_deeptmhmm('./pfam_ead_cdhit-' + str(i) + '00.fasta')
                      tl.run(cmd_8)
                  
               os.system('cat ./biolib_results/predicted_topologies.3line* > ./biolib_results/predicted_topologies.line')
